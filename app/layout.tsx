@@ -16,6 +16,7 @@ export const metadata: Metadata = {
 };
 
 import Navbar from "@/components/sections/Navbar";
+import SystemHUD from "@/components/ui/SystemHUD";
 
 // ... (imports remain mostly same, just add Navbar import if not auto-added, though I will be explicit)
 
@@ -31,6 +32,7 @@ export default function RootLayout({
       >
         <SmoothScroll>
           <Navbar />
+          <SystemHUD />
           {children}
           <Footer />
         </SmoothScroll>
