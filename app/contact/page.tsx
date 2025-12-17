@@ -6,13 +6,6 @@ import Logo from '@/components/ui/Logo'
 export default function ContactPage() {
     return (
         <main className="min-h-screen bg-deep-carbon text-stark-white selection:bg-int-orange selection:text-deep-carbon flex flex-col">
-            <nav className="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 mix-blend-difference">
-                <Link href="/"><Logo className="w-12 h-12" /></Link>
-                <div className="font-technical text-xs tracking-widest text-stark-white">
-                    Menu / Contact
-                </div>
-            </nav>
-
             <div className="flex-1 flex flex-col justify-center px-6 md:px-20 pt-32">
                 <header className="mb-20">
                     <h1 className="text-6xl md:text-9xl font-bold uppercase tracking-tighter mb-8">
