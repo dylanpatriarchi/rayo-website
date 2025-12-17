@@ -16,10 +16,8 @@ export const metadata: Metadata = {
 };
 
 import Navbar from "@/components/sections/Navbar";
-import SystemHUD from "@/components/ui/SystemHUD";
 import FogBackground from "@/components/ui/FogBackground";
 import CustomCursor from "@/components/ui/CustomCursor";
-import Preloader from "@/components/ui/Preloader";
 
 // ... (imports remain mostly same, just add Navbar import if not auto-added, though I will be explicit)
 
@@ -34,9 +32,7 @@ export default function RootLayout({
         className={`${jetbrainsMono.variable} antialiased bg-deep-carbon text-stark-white font-primary cursor-none`}
       >
         <SmoothScroll>
-          <Preloader />
           <Navbar />
-          <SystemHUD />
           <FogBackground />
           <CustomCursor />
           {children}

@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Magnetic from '@/components/ui/Magnetic'
-import GlitchText from '@/components/ui/GlitchText'
 import Link from 'next/link'
 import Logo from '@/components/ui/Logo'
 import gsap from 'gsap'
@@ -65,14 +64,14 @@ export default function Navbar() {
                                 href={link.href}
                                 className="relative group hover:text-int-orange transition-colors p-2"
                             >
-                                <GlitchText text={link.name} />
+                                {link.name}
                                 <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-int-orange group-hover:w-full transition-all duration-300"></span>
                             </Link>
                         </Magnetic>
                     ))}
                     <Magnetic>
                         <Link href="/contact" className="px-4 py-2 border border-stark-white/20 hover:bg-int-orange hover:border-int-orange hover:text-deep-carbon transition-all">
-                            <GlitchText text="Start Project" />
+                            Start Project
                         </Link>
                     </Magnetic>
                 </div>
