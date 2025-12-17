@@ -1,6 +1,8 @@
 import Hero from '@/components/sections/Hero'
 import Manifesto from '@/components/sections/Manifesto'
 import DigitalWorkforce from '@/components/sections/DigitalWorkforce'
+import ServicesPreview from '@/components/sections/ServicesPreview'
+import SelectedWorkPreview from '@/components/sections/SelectedWorkPreview'
 import Logo from '@/components/ui/Logo'
 
 export default function Home() {
@@ -15,12 +17,9 @@ export default function Home() {
 
       <Hero />
       <Manifesto />
+      <ServicesPreview />
+      <SelectedWorkPreview />
       <DigitalWorkforce />
-
-      {/* Footer Placeholder for now */}
-      <div className="py-20 text-center font-technical text-concrete-grey/50">
-        Rayo Consulting © 2025
-      </div>
     </main>
   );
 }

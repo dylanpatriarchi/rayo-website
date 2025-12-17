@@ -1,13 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
-
-const inter = Inter({
-  variable: "--font-primary",
-  subsets: ["latin"],
-  display: "swap",
-});
+import Footer from "@/components/sections/Footer";
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-technical",
@@ -28,10 +23,11 @@ export default function RootLayout({
   return (
     <html lang="it">
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-deep-carbon text-stark-white`}
+        className={`${jetbrainsMono.variable} antialiased bg-deep-carbon text-stark-white font-primary`}
       >
         <SmoothScroll>
           {children}
+          <Footer />
         </SmoothScroll>
       </body>
     </html>

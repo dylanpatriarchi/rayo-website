@@ -10,6 +10,9 @@
   /* Semantic Mappings */
   --background: var(--deep-carbon);
   --foreground: var(--stark-white);
+
+  /* Font Stack - Helvetica Now approximation */
+  --font-primary-stack: "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 @theme inline {
@@ -20,7 +23,7 @@
   --color-int-orange: var(--int-orange);
   --color-stark-white: var(--stark-white);
 
-  --font-primary: var(--font-primary);
+  --font-primary: var(--font-primary-stack);
   --font-technical: var(--font-technical);
 }
 
@@ -28,7 +31,8 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-primary), sans-serif;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden;
+  /* Prevent horizontal scroll */
 }
 
 ::selection {
