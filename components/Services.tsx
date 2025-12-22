@@ -33,6 +33,15 @@ const services = [
         tags: ["Docker", "vLLM"],
         className: "md:col-span-1 md:row-span-1",
         image: "/images/service_infra_server_1766431924398.png"
+    },
+    {
+        title: "Siti Web & Piattaforme Digitali",
+        description: "Non semplici siti vetrina, ma asset digitali ad alte prestazioni. Sviluppo custom con tecnologie moderne per un posizionamento SEO dominante.",
+        price: "Da €450",
+        detail: "Design & Performance",
+        tags: ["Next.js", "React", "SEO Native", "GSAP"],
+        className: "md:col-span-3 md:row-span-1",
+        image: "/images/web-dev-abstract.png"
     }
 ];
 

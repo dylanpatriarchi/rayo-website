@@ -84,6 +84,32 @@ export default function ServicesPage() {
                         <div className="text-lg font-bold">Supporto Mensile Personalizzato</div>
                     </div>
                 </section>
+
+                {/* Web Development Section */}
+                <section className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-start border-t border-foreground/10 pt-24">
+                    <div>
+                        <h3 className="text-4xl font-bold mb-6">Siti Web & Piattaforme Digitali</h3>
+                        <p className="text-xl font-light text-foreground/70 leading-relaxed mb-8">
+                            Il tuo sito web è la tua sede digitale. Non ci accontentiamo di template pronti.
+                            Sviluppiamo soluzioni custom ultra-performanti, ottimizzate per convertire visitatori in clienti
+                            e scalare sui motori di ricerca. Design svizzero, animazioni fluide, codice solidissimo.
+                        </p>
+                        <ul className="space-y-4 text-sm font-medium border-l-2 border-primary pl-6">
+                            <li>Sviluppo Next.js / React per performance top (Score 100/100)</li>
+                            <li>SEO Tecnico nativo (Schema.org, SSR)</li>
+                            <li>Design System curati e animazioni GSAP</li>
+                        </ul>
+                    </div>
+                    <div className="bg-foreground/5 p-8 md:p-12 rounded-lg">
+                        <div className="text-sm uppercase tracking-wide opacity-50 mb-2">Fasi di Lavoro</div>
+                        <ul className="list-disc list-inside space-y-2 mb-8">
+                            <li>Wireframing & UI/UX Design</li>
+                            <li>Sviluppo Frontend & Integrazione CMS</li>
+                            <li>Ottimizzazione SEO & Analytics Setup</li>
+                        </ul>
+                        <div className="text-lg font-bold">Da €450</div>
+                    </div>
+                </section>
             </div>
         </main>
     );
