@@ -22,7 +22,7 @@ export default function ContactForm() {
         };
 
         try {
-            const response = await fetch("https://chat.rayo.consulting/webhook/contact-form", {
+            const response = await fetch("/api/contact", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export default function ContactForm() {
 
     return (
         <section id="contact-form" className="py-24 px-6 md:px-12 bg-background border-t border-foreground/10">
-            <div className="max-w-3xl mx-auto">
+            <div className="max-w-6xl mx-auto">
                 <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">Parla con un Ingegnere</h2>
                 <p className="text-lg text-foreground/60 font-light mb-12">Nessun commerciale. Solo soluzioni tecniche.</p>
 

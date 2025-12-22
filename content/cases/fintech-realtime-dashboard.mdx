@@ -1,0 +1,31 @@
+---
+title: "Dashboard Fintech Real-Time"
+industry: "Fintech"
+stat: "< 50ms"
+statLabel: "Latenza Dati"
+summary: "Costruzione di una pipeline di dati in tempo reale per una piattaforma di trading istituzionale, gestendo milioni di eventi al secondo."
+image: "/images/fintech_pipeline.png"
+---
+
+## La Sfida
+
+Un importante player nel trading istituzionale soffriva di latenza critica nella visualizzazione dei dati di mercato. I sistemi legacy introducevano ritardi fino a 2 secondi, inaccettabili per il trading ad alta frequenza.
+
+## La Soluzione
+
+Abbiamo riprogettato l'intera pipeline di ingestione e visualizzazione dati utilizzando tecnologie cutting-edge.
+
+### Architettura a Eventi
+Utilizzo di **Apache Kafka** per lo streaming di eventi ad alto throughput, garantendo la consegna dei messaggi without-loss.
+
+### WebSocket Ottimizzati
+Implementazione di server WebSocket custom in **Go** per gestire migliaia di connessioni concorrenti con un overhead minimo.
+
+### Frontend Reattivo
+Dashboard sviluppata in **React** con rendering canvas ottimizzato per visualizzare tick-by-tick updates senza bloccare il main thread.
+
+## Risultati
+
+- **Riduzione Latenza**: Da 2000ms a < 50ms end-to-end.
+- **Scalabilità**: Gestione dimostrata di 500k eventi/secondo.
+- **Affidabilità**: 99.999% uptime durante i picchi di mercato.

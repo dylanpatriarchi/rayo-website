@@ -1,0 +1,31 @@
+---
+title: "Privacy-Preserving AI Healthcare"
+industry: "Healthcare"
+stat: "100%"
+statLabel: "Compliance GDPR"
+summary: "Implementazione di un sistema di analisi diagnostica AI-driven che garantisce la totale anonimizzazione dei dati pazienti on-premise."
+image: "/images/healthcare_ai.png"
+---
+
+## La Necessità
+
+Un gruppo ospedaliero voleva sfruttare l'AI per il supporto alla diagnosi radiologica, ma i vincoli normativi (GDPR e trattamento dati sensibili) rendevano impossibile l'uso di API cloud standard.
+
+## La Soluzione
+
+Abbiamo sviluppato una soluzione "Edge AI" che processa i dati sensibili interamente all'interno dell'infrastruttura ospedaliera.
+
+### Federated Learning
+Il modello AI viene addestrato su dati distribuiti senza che questi lascino mai i server locali dei singoli ospedali. Solo i pesi del modello vengono centralizzati.
+
+### Local Inference
+Distribuzione di nodi di inferenza locali su hardware GPU on-premise, garantendo che le immagini DICOM non vengano mai trasmesse su internet.
+
+### Audit Trail Immutabile
+Registrazione di ogni accesso e predizione su una blockchain privata per garantire la totale tracciabilità e immutabilità dei log per fini di compliance.
+
+## Risultati
+
+- **Sicurezza**: Zero esfiltrazione di dati sensibili.
+- **Compliance**: Piena conformità GDPR e HIPAA.
+- **Efficienza**: Riduzione del 40% dei falsi positivi nelle diagnosi preliminari.
