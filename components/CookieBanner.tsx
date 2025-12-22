@@ -15,11 +15,13 @@ export default function CookieBanner() {
     const handleAccept = () => {
         localStorage.setItem("rayo-cookie-consent", "accepted");
         setShow(false);
+        window.dispatchEvent(new Event("cookie-consent-updated"));
     };
 
     const handleDecline = () => {
         localStorage.setItem("rayo-cookie-consent", "declined");
         setShow(false);
+        window.dispatchEvent(new Event("cookie-consent-updated"));
     };
 
     if (!show) return null;
