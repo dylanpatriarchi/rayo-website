@@ -51,7 +51,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
             </header>
 
             <div className="px-6 md:px-12 max-w-4xl mx-auto pb-24">
-                <div className="prose prose-lg md:prose-xl prose-slate dark:prose-invert max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary hover:prose-a:text-blue-600 prose-img:rounded-xl">
+                <div className="prose prose-lg md:prose-xl prose-slate dark:prose-invert max-w-none prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-li:text-foreground prose-a:text-primary hover:prose-a:text-blue-600 prose-img:rounded-xl">
                     <MDXRemote source={post.content} />
                 </div>
             </div>

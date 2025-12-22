@@ -100,7 +100,7 @@ export default function ChatWidget() {
                                 "px-5 py-3 text-sm leading-relaxed",
                                 msg.role === 'user'
                                     ? "bg-primary text-white rounded-2xl rounded-tr-sm"
-                                    : "bg-foreground/5 text-foreground rounded-2xl rounded-tl-sm prose prose-sm max-w-none dark:prose-invert"
+                                    : "bg-foreground/5 text-foreground rounded-2xl rounded-tl-sm prose prose-sm max-w-none prose-p:text-foreground prose-strong:text-foreground prose-headings:text-foreground dark:prose-invert"
                             )}>
                                 {msg.role === 'user' ? (
                                     msg.content

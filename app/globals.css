@@ -14,6 +14,13 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --font-sans: var(--font-helvetica), Helvetica, Arial, sans-serif;
+
+  /* Typography Overrides for better contrast */
+  --typography-color-body: var(--foreground);
+  --typography-color-headings: var(--foreground);
+  --typography-color-links: var(--primary);
+  --typography-color-bold: var(--foreground);
+  --typography-color-quotes: var(--foreground);
 }
 
 body {
