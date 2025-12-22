@@ -27,10 +27,10 @@ export default function Hero() {
             </div>
 
             <div className="relative z-10 max-w-7xl mx-auto w-full">
-                <div className="overflow-hidden">
+                <div className="overflow-visible pb-2">
                     <h1
                         ref={titleRef}
-                        className="text-6xl md:text-8xl lg:text-[9rem] font-bold tracking-tighter leading-[0.9] text-foreground opacity-0 translate-y-full"
+                        className="text-5xl md:text-8xl lg:text-[9rem] font-bold tracking-tighter leading-tight md:leading-[0.9] text-foreground opacity-0 translate-y-full"
                     >
                         L&apos;intelligenza <br className="hidden md:block" />
                         artificiale, <br />
