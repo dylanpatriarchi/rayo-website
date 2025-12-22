@@ -1,8 +1,19 @@
+import Image from "next/image";
+
 export default function Footer() {
     return (
         <footer id="contact" className="py-24 px-6 md:px-12 bg-background border-t border-foreground/10">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
                 <div>
+                    <div className="mb-12">
+                        <Image
+                            src="/logo.svg"
+                            alt="Rayo Consulting Logo"
+                            width={280}
+                            height={96}
+                            className="h-24 w-auto"
+                        />
+                    </div>
                     <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-8">
                         Let&apos;s build <br />
                         intelligence.

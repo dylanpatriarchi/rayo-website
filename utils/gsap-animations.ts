@@ -70,20 +70,23 @@ export const animateHeader = (header: HTMLElement | null) => {
         onUpdate: (self) => {
             if (self.direction === 1 && self.scroll() > 50) {
                 gsap.to(header, {
-                    paddingTop: "1rem",
-                    paddingBottom: "1rem",
-                    backgroundColor: "rgba(255, 255, 255, 0.8)",
-                    backdropFilter: "blur(12px)",
+                    paddingTop: "0.75rem",
+                    paddingBottom: "0.75rem",
+                    backgroundColor: "rgba(255, 255, 255, 0.65)", // More transparent for 'glass' feel
+                    backdropFilter: "blur(20px) saturate(180%)", // High blur + saturation for 'liquid' look
+                    borderColor: "rgba(255, 255, 255, 0.5)",
+                    borderWidth: "1px",
                     duration: 0.4,
                     ease: "power2.out",
-                    boxShadow: "0 1px 0 0 rgba(0,0,0,0.05)"
+                    boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.07)" // Soft, deep shadow
                 });
             } else if (self.scroll() < 50) {
                 gsap.to(header, {
-                    paddingTop: "2rem",
-                    paddingBottom: "2rem",
+                    paddingTop: "1.25rem",
+                    paddingBottom: "1.25rem",
                     backgroundColor: "rgba(255, 255, 255, 0)",
                     backdropFilter: "blur(0px)",
+                    borderColor: "transparent",
                     duration: 0.4,
                     ease: "power2.out",
                     boxShadow: "none"

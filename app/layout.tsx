@@ -27,6 +27,9 @@ const helvetica = localFont({
 export const metadata: Metadata = {
   title: "Rayo Consulting | AI Agency",
   description: "Soluzioni AI verticali per aziende che esigono precisione.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
