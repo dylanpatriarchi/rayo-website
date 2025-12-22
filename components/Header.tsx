@@ -35,7 +35,7 @@ export default function Header() {
         <>
             <header
                 ref={headerRef}
-                className="fixed top-6 left-1/2 -translate-x-1/2 z-50 text-foreground px-6 md:px-8 py-4 flex justify-between items-center bg-transparent transition-all rounded-full w-[90%] md:w-auto md:min-w-[600px] lg:min-w-[800px] border border-transparent"
+                className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] text-foreground px-6 md:px-8 py-4 flex justify-between items-center bg-transparent transition-all rounded-full w-[90%] md:w-auto md:min-w-[600px] lg:min-w-[800px] border border-transparent"
             >
                 <div className="flex items-center relative z-[60]">
                     <Link href="/">
@@ -77,7 +77,7 @@ export default function Header() {
             </header>
 
             {/* Mobile Menu Overlay */}
-            <div className={`fixed inset-0 bg-foreground z-50 flex flex-col items-center justify-center transition-all duration-500 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+            <div className={`fixed inset-0 bg-foreground z-[90] flex flex-col items-center justify-center transition-all duration-500 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
                 <nav className="flex flex-col gap-8 text-center text-background">
                     <MenuLink href="/services" onClick={toggleMenu}>Servizi</MenuLink>
                     <MenuLink href="/cases" onClick={toggleMenu}>Casi Studio</MenuLink>

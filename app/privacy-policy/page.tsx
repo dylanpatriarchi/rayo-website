@@ -3,7 +3,7 @@ export default function PrivacyPolicy() {
         <main className="pt-32 pb-24 px-6 md:px-12 max-w-4xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-bold mb-12">Privacy Policy</h1>
 
-            <div className="prose prose-lg dark:prose-invert">
+            <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-li:text-foreground prose-a:text-primary hover:prose-a:text-blue-600">
                 <p><strong>Ultimo aggiornamento: {new Date().toLocaleDateString('it-IT')}</strong></p>
 
                 <h3>1. Titolare del Trattamento</h3>
