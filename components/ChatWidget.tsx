@@ -2,9 +2,10 @@
 
 import { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
+import ReactMarkdown from 'react-markdown';
 
 interface ChatResponse {
-    response: string;
+    output: string;
 }
 
 export default function ChatWidget() {
@@ -44,8 +45,12 @@ export default function ChatWidget() {
 
             if (!res.ok) throw new Error('Network response was not ok');
 
-            const data: ChatResponse = await res.json();
-            setMessages(prev => [...prev, { role: 'bot', content: data.response }]);
+            const data: ChatResponse[] = await res.json();
+
+            // Handle the array response [{ output: "..." }]
+            const botResponse = data[0]?.output || "Mi dispiace, non ho ricevuto una risposta valida.";
+
+            setMessages(prev => [...prev, { role: 'bot', content: botResponse }]);
         } catch (error) {
             console.error(error);
             setMessages(prev => [...prev, { role: 'bot', content: 'Mi dispiace, si è verificato un errore di connessione.' }]);
@@ -56,7 +61,6 @@ export default function ChatWidget() {
 
     return (
         <>
-            {/* Toggle Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className={clsx(
@@ -76,15 +80,13 @@ export default function ChatWidget() {
                 )}
             </button>
 
-            {/* Chat Window */}
             <div
                 className={clsx(
-                    "fixed bottom-28 right-8 z-40 w-[90%] md:w-[400px] bg-white/80 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl overflow-hidden transition-all duration-300 transform origin-bottom-right",
+                    "fixed bottom-28 right-8 z-40 w-[90%] md:w-[400px] bg-white/90 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl overflow-hidden transition-all duration-300 transform origin-bottom-right",
                     isOpen ? "scale-100 opacity-100 translate-y-0" : "scale-95 opacity-0 translate-y-4 pointer-events-none"
                 )}
                 style={{ height: '600px', maxHeight: 'calc(100vh - 150px)' }}
             >
-                {/* Header */}
                 <div className="bg-primary/5 p-6 border-b border-foreground/5 backdrop-blur-md">
                     <div className="flex items-center gap-3">
                         <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -92,17 +94,20 @@ export default function ChatWidget() {
                     </div>
                 </div>
 
-                {/* Messages */}
-                <div className="p-6 overflow-y-auto h-[cale(100%-140px)] flex flex-col gap-4" style={{ height: 'calc(100% - 130px)' }}>
+                <div className="p-6 overflow-y-auto flex flex-col gap-4" style={{ height: 'calc(100% - 130px)' }}>
                     {messages.map((msg, idx) => (
                         <div key={idx} className={clsx("flex flex-col max-w-[85%]", msg.role === 'user' ? "self-end items-end" : "self-start items-start")}>
                             <div className={clsx(
                                 "px-5 py-3 text-sm leading-relaxed",
                                 msg.role === 'user'
                                     ? "bg-primary text-white rounded-2xl rounded-tr-sm"
-                                    : "bg-foreground/5 text-foreground rounded-2xl rounded-tl-sm"
+                                    : "bg-foreground/5 text-foreground rounded-2xl rounded-tl-sm prose prose-sm max-w-none dark:prose-invert"
                             )}>
-                                {msg.content}
+                                {msg.role === 'user' ? (
+                                    msg.content
+                                ) : (
+                                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                )}
                             </div>
                         </div>
                     ))}
@@ -118,7 +123,6 @@ export default function ChatWidget() {
                     <div ref={messagesEndRef} />
                 </div>
 
-                {/* Input */}
                 <div className="absolute bottom-0 w-full p-4 bg-white/50 border-t border-foreground/5 backdrop-blur-md">
                     <form onSubmit={handleSubmit} className="flex gap-2">
                         <input

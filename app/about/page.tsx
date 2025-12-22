@@ -8,7 +8,7 @@ export default function About() {
                     un&apos;altra agenzia.
                 </h2>
 
-                <div className="prose prose-xl dark:prose-invert font-light text-foreground/80 space-y-8 leading-relaxed mb-24">
+                <div className="prose prose-lg md:prose-xl dark:prose-invert font-light text-foreground/80 space-y-8 leading-relaxed mb-24">
                     <p>
                         Il mercato è saturo di &quot;esperti AI&quot; nati ieri, che vendono wrapper di ChatGPT come rivoluzioni industriali.
                         Noi siamo ingegneri. Costruiamo sistemi, non demo.

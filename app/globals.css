@@ -1,9 +1,12 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 :root {
   --background: #FFFFFF;
-  --foreground: #1C1C1E; /* Deep Charcoal */
-  --primary: #0047FF; /* Electric Cobalt Blue */
+  --foreground: #1C1C1E;
+  /* Deep Charcoal */
+  --primary: #0047FF;
+  /* Electric Cobalt Blue */
 }
 
 @theme inline {

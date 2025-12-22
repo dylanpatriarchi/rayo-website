@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { animateTextReveal } from "@/utils/gsap-animations";
 
 export default function Hero() {

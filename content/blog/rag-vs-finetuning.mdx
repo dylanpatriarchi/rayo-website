@@ -1,0 +1,36 @@
+---
+title: "RAG vs Fine-Tuning: La Guida Definitiva per CTO"
+publishedAt: "2024-03-15"
+summary: "Quando usare il retrieval e quando investire nel training. Una disamina tecnica senza fronzoli."
+---
+
+L'eterno dilemma: iniettare conoscenza nel contesto o nei pesi del modello? 
+La risposta breve è: **dipende dalla volatilità dei dati**.
+
+## Il paradosso della memoria
+
+I Large Language Models (LLM) sono congelati nel tempo. GPT-4 non sa cosa è successo stamattina.
+Per colmare questo gap, abbiamo due strade.
+
+### RAG (Retrieval Augmented Generation)
+Immagina di dare al modello un manuale aperto. 
+- **Pro**: Dati sempre freschi, citazioni precise, costi ridotti.
+- **Contro**: Latency più alta, limitato dalla context window.
+
+### Fine-Tuning
+Immagina di mandare il modello a scuola di specializzazione.
+- **Pro**: Cambia il comportamento e lo stile, riduce la necessità di prompt engineering complesso.
+- **Contro**: I dati sono statici post-training, costoso da mantenere aggiornato.
+
+## La nostra strategia ibrida
+
+In Rayo, spesso combiniamo le due cose.
+Usiamo il **Fine-Tuning** per insegnare al modello *come* ragionare o parlare (es. JSON output rigoroso, tono legale).
+Usiamo il **RAG** per fornirgli *cosa* sapere (i contratti di oggi, le email di ieri).
+
+> "Non usare un martello pneumatico (Fine-Tuning) per appendere un quadro (Context Injection)."
+
+## Verdetto
+
+Se i tuoi dati cambiano ogni ora (es. stock market, news), RAG è obbligatorio.
+Se il tuo problema è stilistico o di dominio statico (es. traduzione antico greco), Fine-Tuning vince.
