@@ -26,14 +26,27 @@ export default function Footer() {
                     </a>
                 </div>
 
-                <div className="text-right">
-                    <p className="text-sm font-light text-foreground/50 mb-2">
-                        Rayo Consulting © {new Date().getFullYear()}
-                    </p>
-                    <div className="flex gap-4 text-sm font-medium">
-                        <a href="#" className="hover:opacity-50">LinkedIn</a>
-                        <a href="#" className="hover:opacity-50">Twitter</a>
-                        <a href="#" className="hover:opacity-50">Legal</a>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 text-right md:text-left">
+                    <div className="flex flex-col gap-1 text-sm font-light text-foreground/60">
+                        <p className="font-bold text-foreground">Rayo Consulting di Patriarchi Dylan</p>
+                        <p>P.IVA 03988190546</p>
+                        <p>Vocabolo Marcheggiane 56/C</p>
+                        <p>Breccione Zona Industriale, 06018 PG</p>
+                        <a href="mailto:info@rayo.consulting" className="hover:text-primary transition-colors mt-2">info@rayo.consulting</a>
+                    </div>
+
+                    <div className="flex flex-col items-end md:items-start gap-4">
+                        <div className="flex gap-4 text-sm font-medium">
+                            <a href="https://www.linkedin.com/company/rayoconsulting" target="_blank" rel="noopener noreferrer" className="hover:opacity-50">LinkedIn</a>
+                            <a href="https://www.instagram.com/rayo.consulting/" target="_blank" rel="noopener noreferrer" className="hover:opacity-50">Instagram</a>
+                        </div>
+                        <div className="flex gap-4 text-xs font-light text-foreground/40">
+                            <a href="#" className="hover:opacity-70">Privacy Policy</a>
+                            <a href="#" className="hover:opacity-70">Cookie Policy</a>
+                        </div>
+                        <p className="text-xs font-light text-foreground/30 mt-auto">
+                            © {new Date().getFullYear()} Rayo Consulting. All rights reserved.
+                        </p>
                     </div>
                 </div>
             </div>
