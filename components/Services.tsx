@@ -4,122 +4,125 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import clsx from "clsx";
 
 const services = [
     {
         title: "RAG Enterprise Systems",
-        description: "Non un semplice search. Costruiamo pipeline RAG (Retrieval-Augmented Generation) che comprendono la semantica dei tuoi documenti tecnici, legali o finanziari. Risposte precise, citazioni verificabili, zero allucinazioni.",
+        description: "Non un semplice search. Costruiamo pipeline RAG (Retrieval-Augmented Generation) che comprendono la semantica dei documenti. Risposte precise, niente allucinazioni.",
         price: "Da €4.500",
-        detail: "Setup & Ingestion",
-        tags: ["Vector DB", "Semanic Search", "Python", "LangChain"]
+        detail: "Ingestion & Vector DB",
+        tags: ["Vector DB", "Semanic Search", "LangChain"],
+        className: "md:col-span-2 md:row-span-2", // Big 'Feature' card
     },
     {
         title: "LLM Fine-Tuning",
-        description: "Quando il generalista fallisce, lo specialista vince. Prendiamo modelli open-weights (Llama 3, Mistral) e li addestriamo sul tuo know-how aziendale. Il modello parlerà la tua lingua e seguirà le tue procedure.",
+        description: "Specializza modelli open-weights (Llama 3, Mistral) sul tuo know-how aziendale specifico.",
         price: "Da €8.000",
         detail: "Training Completo",
-        tags: ["LoRA", "PyTorch", "Hugging Face", "Eval"]
+        tags: ["LoRA", "PyTorch"],
+        className: "md:col-span-1 md:row-span-1",
     },
     {
-        title: "Private Infrastructure",
-        description: "La sovranità dei dati non è negoziabile. Progettiamo infrastrutture di inferenza on-premise o su cloud privato (AWS/Azure). I tuoi dati non lasciano mai il tuo perimetro di sicurezza.",
-        price: "Su Preventivo",
-        detail: "Architettura & Deploy",
-        tags: ["Docker", "Kubernetes", "vLLM", "TGI"]
+        title: "Private Infra",
+        description: "Infrastruttura on-premise o cloud privato. I tuoi dati non escono mai.",
+        price: "Custom",
+        detail: "Secure Deploy",
+        tags: ["Docker", "vLLM"],
+        className: "md:col-span-1 md:row-span-1",
     }
 ];
 
 export default function Services() {
     const sectionRef = useRef<HTMLElement>(null);
-    const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
     useEffect(() => {
-        // Register ScrollTrigger
         gsap.registerPlugin(ScrollTrigger);
 
-        if (!sectionRef.current) return;
-
-        const cards = cardsRef.current.filter(Boolean);
-        const totalCards = cards.length;
-
-        // Pin the section
-        const ctx = gsap.context(() => {
-            ScrollTrigger.create({
-                trigger: sectionRef.current,
-                start: "top top",
-                end: `+=${totalCards * 100}%`,
-                pin: true,
-                scrub: 1,
-            });
-
-            // Animate each card
-            cards.forEach((card, i) => {
-                if (i === totalCards - 1) return; // Last card doesn't need to move away
-
-                gsap.to(card, {
-                    scale: 0.9 + (0.05 * i), // Subtle scale down
-                    opacity: 0,
-                    y: -50,
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: `top top+=${i * 100}%`,
-                        end: `top top+=${(i + 1) * 100}%`,
-                        scrub: 1,
-                    }
-                });
-            });
-        }, sectionRef);
-
-        return () => ctx.revert();
+        // Simple entrance animation for the bento grid
+        gsap.fromTo(".bento-card",
+            { y: 50, opacity: 0 },
+            {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top 80%",
+                }
+            }
+        );
     }, []);
 
     return (
-        <section ref={sectionRef} id="services" className="relative h-screen w-full bg-background overflow-hidden flex items-center justify-center">
-            {/* Background Texture */}
-            <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
-                <Image src="/images/services-bg.png" alt="Abstract Network" fill className="object-cover" />
+        <section ref={sectionRef} id="services" className="relative py-32 w-full bg-background overflow-hidden flex flex-col items-center">
+            {/* Background Texture - Liquid Feel */}
+            <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
+                <Image
+                    src="/images/services-bg.png"
+                    alt="Abstract Liquid"
+                    fill
+                    className="object-cover blur-[80px] scale-125 animate-pulse"
+                    style={{ animationDuration: '10s' }}
+                />
             </div>
 
-            <div className="relative z-10 w-full max-w-7xl px-6 md:px-12 h-screen flex flex-col pt-32 pb-12">
-                <div className="mb-12 shrink-0">
-                    <h2 className="text-sm font-bold uppercase tracking-widest mb-2 text-primary">Arsenale Tecnico</h2>
-                    <h3 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">Soluzioni Definitive.</h3>
+            <div className="relative z-10 w-full max-w-7xl px-6 md:px-12">
+                <div className="mb-16 max-w-2xl">
+                    <h2 className="text-sm font-bold uppercase tracking-widest mb-3 text-primary">I Nostri Servizi</h2>
+                    <h3 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-6">
+                        Architettura dell'Intelligence.
+                    </h3>
+                    <p className="text-lg text-foreground/70 leading-relaxed font-light">
+                        Non vendiamo chatbot generici. Costruiamo infrastrutture AI su misura progettate per integrarsi nei tuoi processi business-critical.
+                    </p>
                 </div>
 
-                <div className="relative flex-1 w-full max-w-4xl mx-auto">
+                {/* Bento Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(300px,auto)]">
                     {services.map((service, index) => (
                         <div
                             key={index}
-                            ref={(el) => { cardsRef.current[index] = el; }}
-                            className="absolute top-0 left-0 w-full h-[50vh] md:h-[60vh] bg-white/80 backdrop-blur-xl border border-foreground/5 dark:border-white/10 shadow-2xl rounded-3xl p-8 md:p-12 flex flex-col justify-between"
-                            style={{
-                                top: `${index * 20}px`, // Slight offset for visibility before scrolling
-                                zIndex: services.length - index, // Stack order
-                                transform: `scale(${1 - (index * 0.05)}) translateY(${index * 20}px)` // Initial stack visual
-                            }}
+                            className={clsx(
+                                "bento-card group relative overflow-hidden rounded-[2.5rem] p-8 flex flex-col justify-between transition-all duration-500 hover:scale-[1.01]",
+                                // Liquid Glass Effect
+                                "bg-white/40 backdrop-blur-[40px] border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.05)]",
+                                "hover:bg-white/50 hover:shadow-[0_20px_60px_rgba(0,0,0,0.1)] hover:border-white/80",
+                                service.className
+                            )}
                         >
-                            <div>
+                            {/* Glossy Reflection Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-50 pointer-events-none rounded-[2.5rem]" />
+
+                            <div className="relative z-10">
                                 <div className="flex flex-wrap gap-2 mb-6">
                                     {service.tags.map(tag => (
-                                        <span key={tag} className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wide">
+                                        <span key={tag} className="px-3 py-1 rounded-full bg-background/50 backdrop-blur-md border border-white/20 text-foreground/80 text-[10px] font-bold uppercase tracking-wider">
                                             {tag}
                                         </span>
                                     ))}
                                 </div>
-                                <h4 className="text-3xl md:text-5xl font-bold mb-6 text-foreground">{service.title}</h4>
-                                <p className="text-lg md:text-xl text-foreground/80 font-medium leading-relaxed max-w-2xl">
+                                <h4 className="text-2xl md:text-3xl font-bold mb-4 text-foreground tracking-tight group-hover:text-primary transition-colors">
+                                    {service.title}
+                                </h4>
+                                <p className="text-base md:text-lg text-foreground/70 font-medium leading-relaxed">
                                     {service.description}
                                 </p>
                             </div>
 
-                            <div className="pt-8 border-t border-foreground/10 flex items-end justify-between">
+                            <div className="relative z-10 pt-8 mt-auto flex items-end justify-between border-t border-foreground/5">
                                 <div>
-                                    <div className="text-sm uppercase tracking-wide text-foreground/50 mb-1">{service.detail}</div>
-                                    <div className="text-3xl font-bold tracking-tight text-primary">{service.price}</div>
+                                    <div className="text-[10px] uppercase tracking-widest text-foreground/40 mb-1">{service.detail}</div>
+                                    <div className="text-xl md:text-2xl font-bold tracking-tight text-primary">{service.price}</div>
                                 </div>
-                                <a href="/services" className="px-8 py-4 bg-foreground text-background font-bold rounded-full hover:bg-foreground/80 transition-colors">
-                                    Approfondisci
-                                </a>
+                                <div className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     ))}
