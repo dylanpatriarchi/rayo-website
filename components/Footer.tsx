@@ -26,13 +26,23 @@ export default function Footer() {
                     </a>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 text-left">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-12 text-left">
                     <div className="flex flex-col gap-1 text-sm font-light text-foreground/60">
                         <p className="font-bold text-foreground">Rayo Consulting di Patriarchi Dylan</p>
                         <p>P.IVA 03988190546</p>
                         <p>Vocabolo Marcheggiane 56/C</p>
                         <p>Breccione Zona Industriale, Città di Castello (PG)</p>
                         <a href="mailto:info@rayo.consulting" className="hover:text-primary transition-colors mt-2">info@rayo.consulting</a>
+                    </div>
+
+                    <div className="flex flex-col gap-2 text-sm font-light text-foreground/60">
+                        <p className="font-bold text-foreground mb-2">Menu</p>
+                        <a href="/services" className="hover:text-primary transition-colors">Servizi</a>
+                        <a href="/cases" className="hover:text-primary transition-colors">Casi Studio</a>
+                        <a href="/methodology" className="hover:text-primary transition-colors">Metodologia</a>
+                        <a href="/blog" className="hover:text-primary transition-colors">Blog</a>
+                        <a href="/about" className="hover:text-primary transition-colors">Chi Siamo</a>
+                        <a href="/contact" className="hover:text-primary transition-colors">Contatti</a>
                     </div>
 
                     <div className="flex flex-col items-start gap-4">
