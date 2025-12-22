@@ -30,16 +30,14 @@ export default function Methodology() {
         if (!sectionRef.current || !containerRef.current) return;
 
         const scrollTween = gsap.to(containerRef.current, {
-            xPercent: -100 * (steps.length - 1) / steps.length, // simple approximation not quite right for full width sections, let's do properly
-            // Actually simpler: x: -1 * (containerWidth - windowWidth)
             x: () => -(containerRef.current!.scrollWidth - window.innerWidth),
             ease: "none",
             scrollTrigger: {
                 trigger: sectionRef.current,
                 pin: true,
                 scrub: 1,
-                // The end value defines the length of the scroll distance.
-                end: "+=3000",
+                // End exactly when horizontal scroll completes
+                end: () => "+=" + (containerRef.current!.scrollWidth - window.innerWidth),
                 invalidateOnRefresh: true,
             }
         });

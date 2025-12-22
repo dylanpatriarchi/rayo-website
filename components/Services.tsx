@@ -38,6 +38,9 @@ export default function Services() {
             <div className="mb-16">
                 <h2 className="text-sm font-bold uppercase tracking-widest mb-2 text-primary">Servizi</h2>
                 <p className="text-3xl md:text-4xl font-light tracking-tight">Potenza computazionale su misura.</p>
+                <a href="/services" className="inline-block mt-6 text-sm font-bold border-b border-foreground pb-1 hover:opacity-50 transition-opacity">
+                    Esplora Arsenal Tecnico →
+                </a>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-foreground/10 border border-foreground/10">

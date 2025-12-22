@@ -19,10 +19,10 @@ export default function Footer() {
                         intelligence.
                     </h2>
                     <a
-                        href="mailto:hello@rayo.consulting"
+                        href="mailto:info@rayo.consulting"
                         className="text-xl md:text-2xl text-primary hover:text-blue-600 transition-colors underline underline-offset-4 decoration-1"
                     >
-                        hello@rayo.consulting
+                        info@rayo.consulting
                     </a>
                 </div>
 
@@ -41,8 +41,8 @@ export default function Footer() {
                             <a href="https://www.instagram.com/rayo.consulting/" target="_blank" rel="noopener noreferrer" className="hover:opacity-50">Instagram</a>
                         </div>
                         <div className="flex gap-4 text-xs font-light text-foreground/40">
-                            <a href="#" className="hover:opacity-70">Privacy Policy</a>
-                            <a href="#" className="hover:opacity-70">Cookie Policy</a>
+                            <a href="/privacy-policy" className="hover:opacity-70">Privacy Policy</a>
+                            <a href="/cookie-policy" className="hover:opacity-70">Cookie Policy</a>
                         </div>
                         <p className="text-xs font-light text-foreground/30 mt-auto">
                             © {new Date().getFullYear()} Rayo Consulting. All rights reserved.

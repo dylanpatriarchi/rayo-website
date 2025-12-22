@@ -31,7 +31,7 @@ export default function CookieBanner() {
                     <h4 className="font-bold mb-2">Rispetto della Privacy</h4>
                     <p className="text-sm font-light text-foreground/70">
                         Utilizziamo cookie tecnici per il funzionamento del sito e cookie analitici anonimizzati per migliorare l&apos;esperienza.
-                        Non tracciamo dati sensibili senza il tuo consenso esplicito. Leggi la <a href="#" className="underline">Cookie Policy</a>.
+                        Non tracciamo dati sensibili senza il tuo consenso esplicito. Leggi la <a href="/cookie-policy" className="underline">Cookie Policy</a>.
                     </p>
                 </div>
                 <div className="flex gap-4 shrink-0">

@@ -27,8 +27,9 @@ export default function Header() {
                 />
             </div>
             <nav className="hidden md:flex gap-8 text-sm uppercase tracking-wide font-light">
-                <a href="#services" className="hover:opacity-50 transition-opacity">Servizi</a>
-                <a href="#methodology" className="hover:opacity-50 transition-opacity">Metodologia</a>
+                <a href="/services" className="hover:opacity-50 transition-opacity">Servizi</a>
+                <a href="/about" className="hover:opacity-50 transition-opacity">Chi Siamo</a>
+                <a href="/#methodology" className="hover:opacity-50 transition-opacity">Metodologia</a>
                 <a href="#contact" className="hover:opacity-50 transition-opacity">Contatti</a>
             </nav>
             <button className="bg-primary hover:bg-blue-600 text-white text-sm font-medium px-5 py-2 rounded-full transition-colors">
