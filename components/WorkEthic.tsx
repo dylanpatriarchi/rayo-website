@@ -3,10 +3,10 @@
 export default function WorkEthic() {
     return (
         <section className="py-24 md:py-48 px-6 md:px-12 bg-background border-t border-foreground/10">
-            <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-16 md:gap-32">
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-12 md:gap-32">
                 <div className="md:w-1/3">
                     <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-4">Etica del Lavoro</h2>
-                    <h3 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">
+                    <h3 className="text-3xl md:text-5xl font-bold tracking-tight leading-tight">
                         Artigiani del Software.
                     </h3>
                 </div>

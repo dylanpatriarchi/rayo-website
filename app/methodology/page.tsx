@@ -5,7 +5,7 @@ export default function MethodologyPage() {
         <main className="w-full min-h-screen">
             <div className="pt-32 px-6 md:px-12 max-w-7xl mx-auto mb-12">
                 <h1 className="text-sm font-bold uppercase tracking-widest text-primary mb-6">Il Nostro Processo</h1>
-                <h2 className="text-5xl md:text-7xl font-bold tracking-tighter leading-none">
+                <h2 className="text-4xl md:text-7xl font-bold tracking-tighter leading-none">
                     Dal Caos <br />
                     all&apos;Ordine.
                 </h2>

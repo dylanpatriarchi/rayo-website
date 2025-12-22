@@ -12,7 +12,7 @@ export default function CasesPage() {
     return (
         <main className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto min-h-screen">
             <h1 className="text-sm font-bold uppercase tracking-widest text-primary mb-6">Casi Studio</h1>
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tighter leading-none mb-24">
+            <h2 className="text-4xl md:text-7xl font-bold tracking-tighter leading-none mb-24">
                 Risultati Misurabili.
             </h2>
 
@@ -26,7 +26,7 @@ export default function CasesPage() {
                         <div className="flex flex-col md:flex-row justify-between md:items-center gap-6 mb-8">
                             <div>
                                 <div className="text-sm uppercase tracking-wide opacity-50 mb-2">{post.metadata.industry}</div>
-                                <h3 className="text-3xl md:text-4xl font-bold group-hover:text-primary transition-colors">
+                                <h3 className="text-2xl md:text-4xl font-bold group-hover:text-primary transition-colors">
                                     {post.metadata.title}
                                 </h3>
                             </div>
