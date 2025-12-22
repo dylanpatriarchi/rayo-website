@@ -10,7 +10,7 @@ const services = [
     {
         title: "RAG Enterprise Systems",
         description: "Non un semplice search. Costruiamo pipeline RAG (Retrieval-Augmented Generation) che comprendono la semantica dei documenti. Risposte precise, niente allucinazioni.",
-        price: "Da €4.500",
+        price: "Da €1.500",
         detail: "Ingestion & Vector DB",
         tags: ["Vector DB", "Semanic Search", "LangChain"],
         className: "md:col-span-2 md:row-span-2", // Big 'Feature' card
@@ -19,7 +19,7 @@ const services = [
     {
         title: "LLM Fine-Tuning",
         description: "Specializza modelli open-weights (Llama 3, Mistral) sul tuo know-how aziendale specifico.",
-        price: "Da €8.000",
+        price: "Da €3.000",
         detail: "Training Completo",
         tags: ["LoRA", "PyTorch"],
         className: "md:col-span-1 md:row-span-1",

@@ -29,7 +29,7 @@ export default function ServicesPage() {
                             <li>Supporto tecnico su manualistica complessa</li>
                             <li>Onboarding HR automatizzato</li>
                         </ul>
-                        <div className="text-lg font-bold">Da €4.500 una tantum</div>
+                        <div className="text-lg font-bold">Da €1.500 una tantum</div>
                     </div>
                 </section>
 
@@ -55,7 +55,7 @@ export default function ServicesPage() {
                             <li>Agenti di vendita con script specifici</li>
                             <li>Classificazione ticket di supporto</li>
                         </ul>
-                        <div className="text-lg font-bold">Da €8.000 (Progetto Pilot)</div>
+                        <div className="text-lg font-bold">Da €3.000 (Progetto Pilot)</div>
                     </div>
                 </section>
 
