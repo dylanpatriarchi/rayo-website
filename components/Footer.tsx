@@ -26,7 +26,7 @@ export default function Footer() {
                     </a>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 text-center md:text-left">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 text-left">
                     <div className="flex flex-col gap-1 text-sm font-light text-foreground/60">
                         <p className="font-bold text-foreground">Rayo Consulting di Patriarchi Dylan</p>
                         <p>P.IVA 03988190546</p>
@@ -35,7 +35,7 @@ export default function Footer() {
                         <a href="mailto:info@rayo.consulting" className="hover:text-primary transition-colors mt-2">info@rayo.consulting</a>
                     </div>
 
-                    <div className="flex flex-col items-center md:items-start gap-4">
+                    <div className="flex flex-col items-start gap-4">
                         <div className="flex gap-4 text-sm font-medium">
                             <a href="https://www.linkedin.com/company/rayoconsulting" target="_blank" rel="noopener noreferrer" className="hover:opacity-50">LinkedIn</a>
                             <a href="https://www.instagram.com/rayo.consulting/" target="_blank" rel="noopener noreferrer" className="hover:opacity-50">Instagram</a>

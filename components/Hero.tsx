@@ -38,7 +38,7 @@ export default function Hero() {
                     </h1>
                 </div>
 
-                <div className="overflow-hidden mt-8 md:mt-16 max-w-2xl ml-auto">
+                <div className="overflow-hidden mt-8 md:mt-16 max-w-2xl ml-0 md:ml-auto">
                     <p
                         ref={subtitleRef}
                         className="text-xl md:text-2xl font-light text-foreground/80 opacity-0 translate-y-full leading-relaxed"

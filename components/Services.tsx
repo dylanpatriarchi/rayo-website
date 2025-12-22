@@ -89,7 +89,7 @@ export default function Services() {
                         <div
                             key={index}
                             className={clsx(
-                                "bento-card group relative overflow-hidden rounded-[2.5rem] p-8 flex flex-col justify-between transition-all duration-500 hover:scale-[1.01]",
+                                "bento-card group relative overflow-hidden rounded-[2.5rem] p-6 md:p-8 flex flex-col justify-between transition-all duration-500 hover:scale-[1.01]",
                                 // Liquid Glass Effect
                                 "bg-white/40 backdrop-blur-[40px] border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.05)]",
                                 "hover:bg-white/50 hover:shadow-[0_20px_60px_rgba(0,0,0,0.1)] hover:border-white/80",
