@@ -14,6 +14,7 @@ const services = [
         detail: "Ingestion & Vector DB",
         tags: ["Vector DB", "Semanic Search", "LangChain"],
         className: "md:col-span-2 md:row-span-2", // Big 'Feature' card
+        image: "/images/service_rag_abstract_1766431892519.png"
     },
     {
         title: "LLM Fine-Tuning",
@@ -22,6 +23,7 @@ const services = [
         detail: "Training Completo",
         tags: ["LoRA", "PyTorch"],
         className: "md:col-span-1 md:row-span-1",
+        image: "/images/service_finetuning_neural_1766431909340.png"
     },
     {
         title: "Private Infra",
@@ -30,6 +32,7 @@ const services = [
         detail: "Secure Deploy",
         tags: ["Docker", "vLLM"],
         className: "md:col-span-1 md:row-span-1",
+        image: "/images/service_infra_server_1766431924398.png"
     }
 ];
 
@@ -81,7 +84,7 @@ export default function Services() {
                 </div>
 
                 {/* Bento Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(300px,auto)]">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(350px,auto)]">
                     {services.map((service, index) => (
                         <div
                             key={index}
@@ -93,10 +96,21 @@ export default function Services() {
                                 service.className
                             )}
                         >
-                            {/* Glossy Reflection Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-50 pointer-events-none rounded-[2.5rem]" />
+                            {/* Card Image Background */}
+                            <div className="absolute inset-0 z-0 select-none">
+                                <Image
+                                    src={service.image}
+                                    alt={service.title}
+                                    fill
+                                    className="object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-700 mix-blend-overlay"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                            </div>
 
-                            <div className="relative z-10">
+                            {/* Glossy Reflection Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-50 pointer-events-none rounded-[2.5rem] z-10" />
+
+                            <div className="relative z-20">
                                 <div className="flex flex-wrap gap-2 mb-6">
                                     {service.tags.map(tag => (
                                         <span key={tag} className="px-3 py-1 rounded-full bg-background/50 backdrop-blur-md border border-white/20 text-foreground/80 text-[10px] font-bold uppercase tracking-wider">
@@ -107,17 +121,17 @@ export default function Services() {
                                 <h4 className="text-2xl md:text-3xl font-bold mb-4 text-foreground tracking-tight group-hover:text-primary transition-colors">
                                     {service.title}
                                 </h4>
-                                <p className="text-base md:text-lg text-foreground/70 font-medium leading-relaxed">
+                                <p className="text-base md:text-lg text-foreground/70 font-medium leading-relaxed group-hover:text-foreground/90 transition-colors">
                                     {service.description}
                                 </p>
                             </div>
 
-                            <div className="relative z-10 pt-8 mt-auto flex items-end justify-between border-t border-foreground/5">
+                            <div className="relative z-20 pt-8 mt-auto flex items-end justify-between border-t border-foreground/5 group-hover:border-foreground/10 transition-colors">
                                 <div>
-                                    <div className="text-[10px] uppercase tracking-widest text-foreground/40 mb-1">{service.detail}</div>
-                                    <div className="text-xl md:text-2xl font-bold tracking-tight text-primary">{service.price}</div>
+                                    <div className="text-[10px] uppercase tracking-widest text-foreground/40 mb-1 group-hover:text-foreground/60">{service.detail}</div>
+                                    <div className="text-xl md:text-2xl font-bold tracking-tight text-primary mix-blend-multiply">{service.price}</div>
                                 </div>
-                                <div className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                                <div className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 shadow-lg">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                         <line x1="5" y1="12" x2="19" y2="12"></line>
                                         <polyline points="12 5 19 12 12 19"></polyline>

@@ -7,14 +7,43 @@ export default function ContactForm() {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
-        // Simulate API call
-        setTimeout(() => {
+
+        const formData = new FormData(e.currentTarget);
+        const data = {
+            name: formData.get("name"),
+            email: formData.get("email"),
+            company: formData.get("company"),
+            vat: formData.get("vat"),
+            sector: formData.get("sector"),
+            message: formData.get("message"),
+        };
+
+        try {
+            const response = await fetch("https://chat.rayo.consulting/webhook/contact-form", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+
+            const jsonResponse = await response.json();
+
+            if (response.ok && jsonResponse.response === "OK") {
+                setSuccess(true);
+            } else {
+                console.error("Failed to submit form: Unexpected response", jsonResponse);
+                alert("Si è verificato un errore durante l'invio del messaggio. Riprova più tardi.");
+            }
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            alert("Si è verificato un errore di connessione. Riprova più tardi.");
+        } finally {
             setLoading(false);
-            setSuccess(true);
-        }, 1500);
+        }
     };
 
     return (
@@ -37,22 +66,42 @@ export default function ContactForm() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="flex flex-col gap-2">
                                 <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Nome</label>
-                                <input type="text" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="Il tuo nome" />
+                                <input name="name" type="text" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="Il tuo nome" />
                             </div>
                             <div className="flex flex-col gap-2">
                                 <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Email</label>
-                                <input type="email" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="nome@azienda.com" />
+                                <input name="email" type="email" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="nome@azienda.com" />
                             </div>
                         </div>
 
-                        <div className="flex flex-col gap-2">
-                            <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Azienda</label>
-                            <input type="text" className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="Nome della tua azienda" />
+                        {/* New Fields Row */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div className="flex flex-col gap-2">
+                                <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Azienda</label>
+                                <input name="company" type="text" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="Nome Azienda" />
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">P.IVA / CF</label>
+                                <input name="vat" type="text" className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="Opzionale" />
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Settore</label>
+                                <select name="sector" defaultValue="" className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors appearance-none">
+                                    <option value="" disabled>Seleziona...</option>
+                                    <option value="finance">Finance & Banking</option>
+                                    <option value="legal">Legal & Compliance</option>
+                                    <option value="manufacturing">Manufacturing</option>
+                                    <option value="retail">Retail & E-commerce</option>
+                                    <option value="healthcare">Healthcare</option>
+                                    <option value="tech">Tech & SaaS</option>
+                                    <option value="other">Altro</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div className="flex flex-col gap-2">
                             <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Messaggio</label>
-                            <textarea required rows={4} className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors resize-none" placeholder="Descrivi brevemente il tuo progetto..." />
+                            <textarea name="message" required rows={4} className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors resize-none" placeholder="Descrivi brevemente il tuo progetto..." />
                         </div>
 
                         <div className="flex items-start gap-4 mt-4">
