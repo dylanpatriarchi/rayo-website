@@ -59,7 +59,7 @@ export default function CaseStudiesPreview({ posts }: CaseStudiesPreviewProps) {
     return (
         <section ref={containerRef} className="py-24 md:py-32 px-6 md:px-12 bg-background">
             <div className="max-w-[1400px] mx-auto">
-                <div className="flex flex-col md:flex-row justify-between items-end mb-16 md:mb-24 gap-8">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 md:mb-24 gap-8">
                     <h2 ref={titleRef} className="text-4xl md:text-6xl font-bold tracking-tighter leading-[1.1]">
                         Selected <br />
                         Work.

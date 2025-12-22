@@ -107,7 +107,7 @@ export default function ContactForm() {
                         <div className="flex items-start gap-4 mt-4">
                             <input type="checkbox" id="privacy" required className="mt-1 accent-primary" />
                             <label htmlFor="privacy" className="text-sm font-light text-foreground/60 leading-snug">
-                                Acconsento al trattamento dei dati personali secondo la <a href="#" className="underline">Privacy Policy</a>.
+                                Acconsento al trattamento dei dati personali secondo la <a href="/privacy-policy" className="underline">Privacy Policy</a>.
                                 I dati non saranno mai ceduti a terzi.
                             </label>
                         </div>

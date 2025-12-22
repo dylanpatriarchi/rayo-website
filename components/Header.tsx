@@ -60,9 +60,9 @@ export default function Header() {
                 </nav>
 
                 <div className="flex items-center gap-4">
-                    <button className="hidden md:block bg-primary hover:bg-blue-600 text-white text-sm font-medium px-5 py-2 rounded-full transition-colors">
+                    <Link href="/contact" className="hidden md:block bg-primary hover:bg-blue-600 text-white text-sm font-medium px-5 py-2 rounded-full transition-colors">
                         Prenota una call
-                    </button>
+                    </Link>
 
                     {/* Hamburger Button */}
                     <button

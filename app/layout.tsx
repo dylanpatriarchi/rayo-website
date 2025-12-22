@@ -47,12 +47,6 @@ export const metadata: Metadata = {
     description: "Soluzioni AI verticali e Sviluppo Web di precisione. Dalla RAG Enterprise ai siti Next.js ad alte prestazioni.",
     siteName: "Rayo Consulting",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Rayo Consulting | AI & Web Agency",
-    description: "Soluzioni AI verticali e Sviluppo Web di precisione.",
-    creator: "@rayoconsulting",
-  },
   icons: {
     icon: "/favicon.svg",
   },
@@ -81,14 +75,14 @@ const jsonLd = {
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Vocabolo Marcheggiane 56/C",
-    "addressLocality": "Perugia",
+    "addressLocality": "Città di Castello",
     "postalCode": "06018",
     "addressCountry": "IT"
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": 43.1107,
-    "longitude": 12.3908
+    "latitude": 43.4569,
+    "longitude": 12.2397
   },
   "sameAs": [
     "https://www.linkedin.com/company/rayo-consulting"

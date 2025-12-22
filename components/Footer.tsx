@@ -31,7 +31,7 @@ export default function Footer() {
                         <p className="font-bold text-foreground">Rayo Consulting di Patriarchi Dylan</p>
                         <p>P.IVA 03988190546</p>
                         <p>Vocabolo Marcheggiane 56/C</p>
-                        <p>Breccione Zona Industriale, 06018 PG</p>
+                        <p>Breccione Zona Industriale, Città di Castello (PG)</p>
                         <a href="mailto:info@rayo.consulting" className="hover:text-primary transition-colors mt-2">info@rayo.consulting</a>
                     </div>
 
