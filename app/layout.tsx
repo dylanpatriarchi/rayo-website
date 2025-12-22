@@ -65,27 +65,100 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  "name": "Rayo Consulting",
-  "image": "https://rayo.consulting/favicon.svg",
-  "@id": "https://rayo.consulting",
-  "url": "https://rayo.consulting",
-  "telephone": "",
-  "priceRange": "€€€",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Vocabolo Marcheggiane 56/C",
-    "addressLocality": "Città di Castello",
-    "postalCode": "06018",
-    "addressCountry": "IT"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 43.4569,
-    "longitude": 12.2397
-  },
-  "sameAs": [
-    "https://www.linkedin.com/company/rayo-consulting"
+  "@graph": [
+    {
+      "@type": "ProfessionalService",
+      "name": "Rayo Consulting",
+      "image": "https://rayo.consulting/favicon.svg",
+      "@id": "https://rayo.consulting/#organization",
+      "url": "https://rayo.consulting",
+      "telephone": "",
+      "priceRange": "€€€",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Vocabolo Marcheggiane 56/C",
+        "addressLocality": "Città di Castello",
+        "postalCode": "06018",
+        "addressCountry": "IT"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 43.4569,
+        "longitude": 12.2397
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/rayo-consulting"
+      ],
+      "knowsAbout": ["Artificial Intelligence", "RAG Systems", "LLM Fine-Tuning", "Next.js Development", "Web Engineering"],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "AI & Web Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "RAG Enterprise Systems",
+              "description": "Sistemi di ricerca semantica su documenti aziendali (Retrieval-Augmented Generation)."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "LLM Fine-Tuning",
+              "description": "Addestramento modelli AI (Llama 3, Mistral) su dataset proprietari."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Private AI Infrastructure",
+              "description": "Setup di server AI on-premise o cloud privato GDPR-compliant."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Siti Web & Piattaforme Digitali",
+              "description": "Sviluppo web Next.js ad alte prestazioni e SEO nativa."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://rayo.consulting/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Come si differenzia il vostro approccio RAG?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Non usiamo semplici database vettoriali. Costruiamo grafi di conoscenza che mantengono il contesto semantico e gerarchico dei documenti, garantendo risposte che non solo trovano l'informazione, ma la comprendono."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "I miei dati vengono usati per il training?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Assolutamente no. Per le soluzioni Enterprise, offriamo deployment su cloud privato o on-premise. I modelli vengono fine-tunati sui tuoi dati, ma quei pesi rimangono di tua esclusiva proprietà."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quali sono i tempi di implementazione?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Per un sistema RAG standard, 2-3 settimane. Per progetti di Fine-Tuning complessi, dalle 4 alle 8 settimane a seconda della pulizia del dataset iniziale."
+          }
+        }
+      ]
+    }
   ]
 };
 
