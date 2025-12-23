@@ -1,93 +1,145 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
-import gsap from "gsap";
+import { gsap } from "gsap";
 
-export default function InteractiveLogo() {
-    const turbulenceRef = useRef<SVGFETurbulenceElement>(null);
+interface InteractiveLogoProps {
+    className?: string;
+}
+
+export default function InteractiveLogo({ className = "" }: InteractiveLogoProps) {
     const containerRef = useRef<HTMLDivElement>(null);
+    const [isHovered, setIsHovered] = useState(false);
+
+    // Mouse position state for the mask
+    const mouseX = useRef(0);
+    const mouseY = useRef(0);
+
+    // Initial mask size - 0 means hidden
+    const maskSize = useRef(0);
 
     useEffect(() => {
-        // Initial animation to settle the turbulence
-        if (turbulenceRef.current) {
-            gsap.to(turbulenceRef.current, {
-                attr: { baseFrequency: 0 },
-                duration: 1,
-                ease: "power2.out"
+        const container = containerRef.current;
+        if (!container) return;
+
+        const handleMouseMove = (e: MouseEvent) => {
+            const rect = container.getBoundingClientRect();
+            mouseX.current = e.clientX - rect.left;
+            mouseY.current = e.clientY - rect.top;
+        };
+
+        const handleMouseEnter = () => {
+            setIsHovered(true);
+            gsap.to(maskSize, {
+                current: 250, // Size of the distortion area
+                duration: 0.5,
+                ease: "power2.out",
+                onUpdate: updateMask
             });
-        }
-    }, []);
+        };
 
-    const handleMouseEnter = () => {
-        if (!turbulenceRef.current) return;
+        const handleMouseLeave = () => {
+            setIsHovered(false);
+            gsap.to(maskSize, {
+                current: 0,
+                duration: 0.5,
+                ease: "power2.out",
+                onUpdate: updateMask
+            });
+        };
 
-        // Create a glitch/noise spike
-        gsap.killTweensOf(turbulenceRef.current);
-        const tl = gsap.timeline();
+        const updateMask = () => {
+            if (container) {
+                // Update CSS variables for the mask
+                container.style.setProperty('--mask-x', `${mouseX.current}px`);
+                container.style.setProperty('--mask-y', `${mouseY.current}px`);
+                container.style.setProperty('--mask-size', `${maskSize.current}px`);
+            }
+        };
 
-        tl.to(turbulenceRef.current, {
-            attr: { baseFrequency: 0.2 }, // High frequency noise
-            duration: 0.1,
-            ease: "power1.in"
-        }).to(turbulenceRef.current, {
-            attr: { baseFrequency: 0.02 }, // Subtle distortion
-            duration: 0.2,
-            ease: "power1.out"
-        });
-    };
+        // Animation loop for smooth tracking
+        let rafId: number;
+        const tick = () => {
+            if (isHovered) {
+                updateMask();
+            }
+            rafId = requestAnimationFrame(tick);
+        };
+        tick();
 
-    const handleMouseLeave = () => {
-        if (!turbulenceRef.current) return;
+        container.addEventListener("mousemove", handleMouseMove);
+        container.addEventListener("mouseenter", handleMouseEnter);
+        container.addEventListener("mouseleave", handleMouseLeave);
 
-        // Return to calm
-        gsap.to(turbulenceRef.current, {
-            attr: { baseFrequency: 0 },
-            duration: 0.5,
-            ease: "power2.out"
-        });
-    };
+        return () => {
+            container.removeEventListener("mousemove", handleMouseMove);
+            container.removeEventListener("mouseenter", handleMouseEnter);
+            container.removeEventListener("mouseleave", handleMouseLeave);
+            cancelAnimationFrame(rafId);
+        };
+    }, [isHovered]);
 
     return (
         <div
             ref={containerRef}
-            className="relative w-64 h-64 md:w-96 md:h-96 cursor-pointer"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+            className={`relative group aspect-[3/1] ${className}`}
+            style={{
+                // Initialize variables
+                ['--mask-x' as any]: '50%',
+                ['--mask-y' as any]: '50%',
+                ['--mask-size' as any]: '0px'
+            }}
         >
-            {/* Filter Definition */}
-            <svg className="hidden">
-                <defs>
-                    <filter id="logo-noise">
-                        <feTurbulence
-                            ref={turbulenceRef}
-                            type="fractalNoise"
-                            baseFrequency="0"
-                            numOctaves="2"
-                            result="noise"
-                        />
-                        <feDisplacementMap
-                            in="SourceGraphic"
-                            in2="noise"
-                            scale="20"
-                        />
-                    </filter>
-                </defs>
-            </svg>
-
-            {/* Logo with Filter Applied */}
-            <div
-                className="w-full h-full relative"
-                style={{ filter: "url(#logo-noise)" }}
-            >
+            {/* 1. Base CLEAN Logo (Bottom Layer) */}
+            <div className="absolute inset-0 z-10">
                 <Image
                     src="/logo.svg"
-                    alt="Rayo Logo"
+                    alt="Rayo Logo Base"
                     fill
                     className="object-contain"
                     priority
                 />
             </div>
+
+            {/* 2. Distorted Logo (Top Layer) - Masked */}
+            <div
+                className="absolute inset-0 z-20 pointer-events-none"
+                style={{
+                    filter: "url(#logo-distortion)",
+                    maskImage: `radial-gradient(circle at var(--mask-x) var(--mask-y), black 0%, transparent var(--mask-size))`,
+                    WebkitMaskImage: `radial-gradient(circle at var(--mask-x) var(--mask-y), black 0%, transparent var(--mask-size))`
+                }}
+            >
+                <Image
+                    src="/logo.svg"
+                    alt="Rayo Logo Distorted"
+                    fill
+                    className="object-contain opacity-90" // Slightly lower opacity for blend
+                    priority
+                />
+            </div>
+
+            {/* SVG Filter Definition (Hidden) */}
+            <svg className="absolute w-0 h-0 overflow-hidden" aria-hidden="true">
+                <defs>
+                    <filter id="logo-distortion">
+                        <feTurbulence
+                            type="turbulence"
+                            baseFrequency="0.9"
+                            numOctaves="3"
+                            result="warp"
+                        />
+                        <feDisplacementMap
+                            in="SourceGraphic"
+                            in2="warp"
+                            scale="150"
+                            xChannelSelector="R"
+                            yChannelSelector="G"
+                        />
+                    </filter>
+                </defs>
+            </svg>
         </div>
     );
 }

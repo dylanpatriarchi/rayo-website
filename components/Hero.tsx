@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { animateTextReveal } from "@/utils/gsap-animations";
+import InteractiveLogo from "@/components/InteractiveLogo";
 
 export default function Hero() {
     const titleRef = useRef<HTMLHeadingElement>(null);
@@ -17,15 +18,8 @@ export default function Hero() {
         <section className="relative h-screen w-full overflow-hidden bg-background">
             {/* Abstract Background Elements (Central) - Static Logo Replacement */}
             <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none md:pointer-events-auto">
-                <div className="w-[80%] max-w-3xl flex items-center justify-center opacity-90">
-                    <Image
-                        src="/logo.svg"
-                        alt="Rayo Logo"
-                        width={600}
-                        height={200}
-                        priority
-                        className="w-full h-auto object-contain"
-                    />
+                <div className="w-full max-w-5xl flex items-center justify-center opacity-90">
+                    <InteractiveLogo className="w-full h-auto object-contain bg-transparent" />
                 </div>
             </div>
 
