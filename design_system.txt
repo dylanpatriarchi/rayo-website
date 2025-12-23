@@ -1,0 +1,37 @@
+# Rayo Consulting Design System
+
+## Philosophy
+"Minimalism meets Organic High-Tech".
+The design language combines rigorous geometric grids with fluid, organic forms to represent the duality of Code + Biology (AI).
+
+## Color Palette
+- **Background**: #030303 (Almost Black) - Deep, infinite canvas.
+- **Foreground**: #FFFFFF (Pure White) - Sharp contrast for typography.
+- **Primary**: #3B82F6 (Blue-500 equivalent) - Used sparingly for accents and interactive states.
+- **Glass**: Multiple layers of white/10 with backdrop-blur for depth.
+
+## Typography
+- **Primary Font**: Helvetica Now Display.
+- **Usage**:
+    - Headings: Tight tracking, bold weights.
+    - Body: Light weights (300/400), relaxed leading for readability.
+
+## UI Patterns
+
+### 1. Liquid Glass
+Components often feature a `backdrop-blur` with a subtle white border and shadow, mimicking frosted glass or liquid surfaces.
+Class: `bg-white/40 backdrop-blur-[40px] border border-white/60`.
+
+### 2. ScrollStack
+Vertical lists are presented not as grids but as stacking cards that overlap on scroll, creating a sense of depth and physical accumulation of value.
+
+### 3. Interactive 3D
+The HERO section features a WebGL liquid logo that responds to mouse movement, signaling that the digital environment is "alive".
+
+### 4. Bento Grids
+Used for feature lists or case studies to allow variable aspect ratios and visual hierarchy.
+
+## Animations
+- **GSAP**: Used for precise scroll-triggered entrances (text reveals, opacity fades).
+- **Lenis**: Smooth scrolling is mandatory for the premium feel.
+- **Micro-interactions**: Hover states on cards include scale, shadow, and border-color transitions.
