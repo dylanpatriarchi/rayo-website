@@ -13,7 +13,6 @@ const nextConfig: NextConfig = {
       // --- Services ---
       { source: '/en/services', destination: '/services', permanent: true },
       { source: '/it/services', destination: '/services', permanent: true },
-      { source: '/services', destination: '/services', permanent: true },
 
       // --- Contact ---
       { source: '/en/contact', destination: '/contact', permanent: true },

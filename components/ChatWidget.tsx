@@ -63,7 +63,7 @@ export default function ChatWidget() {
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className={clsx(
-                    "fixed bottom-8 right-8 z-50 flex items-center justify-center w-14 h-14 rounded-full shadow-lg transition-all duration-300 hover:scale-105",
+                    "fixed bottom-8 right-8 z-[200] flex items-center justify-center w-14 h-14 rounded-full shadow-lg transition-all duration-300 hover:scale-105",
                     isOpen ? "bg-foreground text-background rotate-90" : "bg-primary text-white"
                 )}
             >
@@ -81,7 +81,7 @@ export default function ChatWidget() {
 
             <div
                 className={clsx(
-                    "fixed bottom-28 right-8 z-40 w-[90%] md:w-[400px] bg-white/90 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl overflow-hidden transition-all duration-300 transform origin-bottom-right flex flex-col",
+                    "fixed bottom-28 right-8 z-[200] w-[90%] md:w-[400px] bg-white/90 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl overflow-hidden transition-all duration-300 transform origin-bottom-right flex flex-col",
                     isOpen ? "scale-100 opacity-100 translate-y-0 pointer-events-auto" : "scale-95 opacity-0 translate-y-4 pointer-events-none"
                 )}
                 style={{ height: '600px', maxHeight: 'calc(100vh - 150px)' }}

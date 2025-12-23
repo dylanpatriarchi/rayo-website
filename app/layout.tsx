@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ChatWidget from "@/components/ChatWidget";
 import CookieBanner from "@/components/CookieBanner";
+import GradualBlur from "@/components/GradualBlur";
 
 const helvetica = localFont({
   src: [
@@ -185,6 +186,17 @@ export default function RootLayout({
         </SmoothScroller>
         <ChatWidget />
         <CookieBanner />
+        <GradualBlur
+          target="page"
+          position="bottom"
+          height="6rem"
+          strength={2}
+          divCount={5}
+          curve="bezier"
+          exponential={true}
+          opacity={1}
+          zIndex={50}
+        />
       </body>
     </html>
   );
