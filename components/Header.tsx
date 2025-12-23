@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useRef, useEffect, useState } from "react";
 import { animateHeader } from "@/utils/gsap-animations";
 import React from 'react'; // Added import for React
@@ -9,10 +10,36 @@ import React from 'react'; // Added import for React
 export default function Header() {
     const headerRef = useRef<HTMLElement>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isLogoVisible, setIsLogoVisible] = useState(true);
+    const pathname = usePathname();
 
     useEffect(() => {
         animateHeader(headerRef.current);
     }, []);
+
+    // Handle Logo Visibility (Hidden in Hero on Homepage, visible elsewhere)
+    useEffect(() => {
+        const isHomePage = pathname === "/";
+
+        if (!isHomePage) {
+            setIsLogoVisible(true);
+            return;
+        }
+
+        // Initial check
+        setIsLogoVisible(window.scrollY > window.innerHeight * 0.8);
+
+        const handleScroll = () => {
+            if (window.scrollY > window.innerHeight * 0.8) {
+                setIsLogoVisible(true);
+            } else {
+                setIsLogoVisible(false);
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [pathname]);
 
     // Lock body scroll when menu is open
     useEffect(() => {
@@ -38,25 +65,31 @@ export default function Header() {
                 className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] text-foreground px-6 md:px-8 py-4 flex justify-between items-center bg-transparent transition-all rounded-full w-[90%] md:w-auto md:min-w-[600px] lg:min-w-[800px] border border-transparent"
             >
                 <div className="flex items-center relative z-[60]">
-                    <Link href="/">
+                    <Link
+                        href="/"
+                        className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden flex items-center ${isLogoVisible || isMenuOpen
+                            ? 'opacity-100 translate-y-0 w-[160px] pointer-events-auto'
+                            : 'opacity-0 -translate-y-4 w-0 pointer-events-none'
+                            }`}
+                    >
                         <Image
                             src="/logo.svg"
                             alt="Rayo Consulting Logo"
                             width={160}
                             height={56}
-                            className={`h-10 md:h-14 w-auto transition-all ${isMenuOpen ? 'invert md:invert-0' : ''}`} // Handle contrast on overlay if needed
+                            className={`h-10 md:h-14 w-auto object-contain transition-all whitespace-nowrap ${isMenuOpen ? 'invert md:invert-0' : ''}`}
                             priority
                         />
                     </Link>
                 </div>
 
                 {/* Desktop Nav */}
-                <nav className="hidden md:flex gap-8 text-sm uppercase tracking-wide font-light">
-                    <a href="/services" className="hover:opacity-50 transition-opacity">Servizi</a>
-                    <a href="/cases" className="hover:opacity-50 transition-opacity">Casi Studio</a>
-                    <a href="/methodology" className="hover:opacity-50 transition-opacity">Metodologia</a>
-                    <a href="/blog" className="hover:opacity-50 transition-opacity">Blog</a>
-                    <a href="/about" className="hover:opacity-50 transition-opacity">Chi Siamo</a>
+                <nav className="hidden md:flex gap-5 text-xs uppercase tracking-wider font-light items-center">
+                    <a href="/services" className="hover:opacity-50 transition-opacity whitespace-nowrap">Servizi</a>
+                    <a href="/cases" className="hover:opacity-50 transition-opacity whitespace-nowrap">Casi Studio</a>
+                    <a href="/methodology" className="hover:opacity-50 transition-opacity whitespace-nowrap">Metodologia</a>
+                    <a href="/blog" className="hover:opacity-50 transition-opacity whitespace-nowrap">Blog</a>
+                    <a href="/about" className="hover:opacity-50 transition-opacity whitespace-nowrap">Chi Siamo</a>
                 </nav>
 
                 <div className="flex items-center gap-4">
