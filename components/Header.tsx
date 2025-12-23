@@ -68,14 +68,14 @@ export default function Header() {
                     <Link
                         href="/"
                         className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden flex items-center ${isLogoVisible || isMenuOpen
-                            ? 'opacity-100 translate-y-0 w-[160px] pointer-events-auto'
+                            ? 'opacity-100 translate-y-0 w-[130px] pointer-events-auto'
                             : 'opacity-0 -translate-y-4 w-0 pointer-events-none'
                             }`}
                     >
                         <Image
                             src="/logo.svg"
                             alt="Rayo Consulting Logo"
-                            width={160}
+                            width={130}
                             height={56}
                             className={`h-10 md:h-14 w-auto object-contain transition-all whitespace-nowrap ${isMenuOpen ? 'invert md:invert-0' : ''}`}
                             priority
