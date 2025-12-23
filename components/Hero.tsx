@@ -18,8 +18,8 @@ export default function Hero() {
         <section className="relative h-screen w-full overflow-hidden bg-background">
             {/* Abstract Background Elements (Central) - Static Logo Replacement */}
             <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none md:pointer-events-auto">
-                <div className="w-full max-w-5xl flex items-center justify-center opacity-90">
-                    <InteractiveLogo className="w-full h-auto object-contain bg-transparent" />
+                <div className="w-full max-w-7xl flex items-center justify-center opacity-90">
+                    <InteractiveLogo className="w-full aspect-[3/1] h-[40vh] md:h-[60vh] object-contain bg-transparent" />
                 </div>
             </div>
 
