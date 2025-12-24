@@ -185,7 +185,6 @@ export default function RootLayout({
           <Footer />
         </SmoothScroller>
         <ChatWidget />
-        <CookieBanner />
         <GradualBlur
           target="page"
           position="bottom"
@@ -197,6 +196,7 @@ export default function RootLayout({
           opacity={1}
           zIndex={50}
         />
+        <CookieBanner />
       </body>
     </html>
   );
