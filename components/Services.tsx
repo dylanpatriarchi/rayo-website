@@ -1,152 +1,126 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import Image from "next/image";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
 
 const services = [
     {
-        title: "RAG Enterprise Systems",
-        description: "Non un semplice search. Costruiamo pipeline RAG (Retrieval-Augmented Generation) che comprendono la semantica dei documenti. Risposte precise, niente allucinazioni.",
-        price: "Da €1.500",
-        detail: "Ingestion & Vector DB",
-        tags: ["Vector DB", "Semanic Search", "LangChain"],
-        className: "md:col-span-2 md:row-span-2", // Big 'Feature' card
-        image: "/images/service_rag_abstract_1766431892519.png"
+        id: "01",
+        title: "RAG SYSTEMS",
+        description: "Pipeline di ricerca semantica su documenti aziendali. Zero allucinazioni, massima precisione.",
+        price: "da €1.5k",
+        tags: ["Vector DB", "LangChain", "Semantic Search"]
     },
     {
-        title: "LLM Fine-Tuning",
-        description: "Specializza modelli open-weights (Llama 3, Mistral) sul tuo know-how aziendale specifico.",
-        price: "Da €3.000",
-        detail: "Training Completo",
-        tags: ["LoRA", "PyTorch"],
-        className: "md:col-span-1 md:row-span-1",
-        image: "/images/service_finetuning_neural_1766431909340.png"
+        id: "02",
+        title: "LLM FINE-TUNING",
+        description: "Specializzazione di modelli open-weights (Llama 3, Mistral) sul tuo know-how specifico.",
+        price: "da €3.0k",
+        tags: ["LoRA", "PyTorch", "Hugging Face"]
     },
     {
-        title: "Private Infra",
-        description: "Infrastruttura on-premise o cloud privato. I tuoi dati non escono mai.",
+        id: "03",
+        title: "PRIVATE INFRA",
+        description: "Infrastruttura on-premise o cloud privato. I tuoi dati rimangono tuoi.",
         price: "Custom",
-        detail: "Secure Deploy",
-        tags: ["Docker", "vLLM"],
-        className: "md:col-span-1 md:row-span-1",
-        image: "/images/service_infra_server_1766431924398.png"
+        tags: ["vLLM", "Docker", "GPU Clusters"]
     },
     {
-        title: "Siti Web & Piattaforme Digitali",
-        description: "Non semplici siti vetrina, ma asset digitali ad alte prestazioni. Sviluppo custom con tecnologie moderne per un posizionamento SEO dominante.",
-        price: "Da €450",
-        detail: "Design & Performance",
-        tags: ["Next.js", "React", "SEO Native", "GSAP"],
-        className: "md:col-span-3 md:row-span-1",
-        image: "/images/web-dev-abstract.png"
+        id: "04",
+        title: "WEB PLATFORMS",
+        description: "Asset digitali performanti. Next.js e SEO avanzato per dominare il mercato.",
+        price: "da €450",
+        tags: ["Next.js", "React", "Advanced SEO"]
     }
 ];
 
 export default function Services() {
-    const sectionRef = useRef<HTMLElement>(null);
-
-    useEffect(() => {
-        gsap.registerPlugin(ScrollTrigger);
-
-        // Simple entrance animation for the bento grid
-        gsap.fromTo(".bento-card",
-            { y: 50, opacity: 0 },
-            {
-                y: 0,
-                opacity: 1,
-                duration: 0.8,
-                stagger: 0.1,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top 80%",
-                }
-            }
-        );
-    }, []);
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
     return (
-        <section ref={sectionRef} id="services" className="relative py-32 w-full bg-background overflow-hidden flex flex-col items-center">
-            {/* Background Texture - Liquid Feel */}
-            <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
-                <Image
-                    src="/images/services-bg.png"
-                    alt="Abstract Liquid"
-                    fill
-                    className="object-cover blur-[80px] scale-125 animate-pulse"
-                    style={{ animationDuration: '10s' }}
-                />
-            </div>
-
-            <div className="relative z-10 w-full max-w-7xl px-6 md:px-12">
-                <div className="mb-16 max-w-2xl">
-                    <h2 className="text-sm font-bold uppercase tracking-widest mb-3 text-primary">I Nostri Servizi</h2>
-                    <h3 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-6">
-                        Architettura dell'Intelligence.
-                    </h3>
-                    <p className="text-lg text-foreground/70 leading-relaxed font-light">
-                        Non vendiamo chatbot generici. Costruiamo infrastrutture AI su misura progettate per integrarsi nei tuoi processi business-critical.
-                    </p>
+        <section id="services" className="relative py-32 w-full bg-background min-h-screen flex flex-col justify-center">
+            <div className="w-full max-w-[90%] mx-auto px-4 md:px-0">
+                {/* Section Header - Minimalist */}
+                <div className="mb-24 flex flex-col md:flex-row md:items-end justify-between border-b border-foreground/10 pb-6">
+                    <div>
+                        <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-2">
+                            Capabilities
+                        </h2>
+                        <p className="text-sm text-foreground/60 max-w-sm leading-relaxed">
+                            Costruiamo infrastrutture AI su misura progettate per integrarsi nei tuoi processi business-critical.
+                        </p>
+                    </div>
+                    {/* Optional numeric indicator or decoration */}
+                    <div className="hidden md:block text-xs font-mono text-foreground/40">
+                        // ARCHITETTURA DELL'INTELLIGENZA
+                    </div>
                 </div>
 
-                {/* Bento Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(350px,auto)]">
+                {/* Editorial List */}
+                <div className="flex flex-col">
                     {services.map((service, index) => (
                         <div
                             key={index}
-                            className={clsx(
-                                "bento-card group relative overflow-hidden rounded-[2.5rem] p-6 md:p-8 flex flex-col justify-between transition-all duration-500 hover:scale-[1.01]",
-                                // Liquid Glass Effect
-                                "bg-white/40 backdrop-blur-[40px] border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.05)]",
-                                "hover:bg-white/50 hover:shadow-[0_20px_60px_rgba(0,0,0,0.1)] hover:border-white/80",
-                                service.className
-                            )}
+                            className="relative border-b border-foreground/10 last:border-b-0"
+                            onMouseEnter={() => setHoveredIndex(index)}
+                            onMouseLeave={() => setHoveredIndex(null)}
                         >
-                            {/* Card Image Background */}
-                            <div className="absolute inset-0 z-0 select-none">
-                                <Image
-                                    src={service.image}
-                                    alt={service.title}
-                                    fill
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                    className="object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-700 mix-blend-overlay"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                            </div>
+                            <div
+                                className={clsx(
+                                    "group w-full py-12 md:py-16 transition-all duration-500 ease-out cursor-pointer",
+                                    hoveredIndex !== null && hoveredIndex !== index ? "opacity-30 blur-[2px]" : "opacity-100"
+                                )}
+                            >
+                                <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-6 md:gap-12 pl-2">
+                                    {/* Index */}
+                                    <span className="text-xs font-mono text-primary/80 mb-2 md:mb-0">
+                                        {service.id}
+                                    </span>
 
-                            {/* Glossy Reflection Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-50 pointer-events-none rounded-[2.5rem] z-10" />
+                                    {/* Massive Title */}
+                                    <h3
+                                        className={clsx(
+                                            "text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-none transition-colors duration-300",
+                                            hoveredIndex === index ? "text-primary" : "text-foreground"
+                                        )}
+                                    >
+                                        {service.title}
+                                    </h3>
 
-                            <div className="relative z-20">
-                                <div className="flex flex-wrap gap-2 mb-6">
-                                    {service.tags.map(tag => (
-                                        <span key={tag} className="px-3 py-1 rounded-full bg-background/50 backdrop-blur-md border border-white/20 text-foreground/80 text-[10px] font-bold uppercase tracking-wider">
-                                            {tag}
+                                    {/* Price Tag (Desktop) */}
+                                    <div className="hidden md:block min-w-[100px] text-right">
+                                        <span className="text-xs font-mono border border-foreground/20 rounded-full px-3 py-1">
+                                            {service.price}
                                         </span>
-                                    ))}
+                                    </div>
                                 </div>
-                                <h4 className="text-2xl md:text-3xl font-bold mb-4 text-foreground tracking-tight group-hover:text-primary transition-colors">
-                                    {service.title}
-                                </h4>
-                                <p className="text-base md:text-lg text-foreground/70 font-medium leading-relaxed group-hover:text-foreground/90 transition-colors">
-                                    {service.description}
-                                </p>
-                            </div>
 
-                            <div className="relative z-20 pt-8 mt-auto flex items-end justify-between border-t border-foreground/5 group-hover:border-foreground/10 transition-colors">
-                                <div>
-                                    <div className="text-[10px] uppercase tracking-widest text-foreground/40 mb-1 group-hover:text-foreground/60">{service.detail}</div>
-                                    <div className="text-xl md:text-2xl font-bold tracking-tight text-primary mix-blend-multiply">{service.price}</div>
-                                </div>
-                                <div className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 shadow-lg">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                                        <polyline points="12 5 19 12 12 19"></polyline>
-                                    </svg>
-                                </div>
+                                {/* Animated Detail Reveal */}
+                                <AnimatePresence>
+                                    {hoveredIndex === index && (
+                                        <motion.div
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: "auto", opacity: 1 }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            transition={{ duration: 0.3, ease: "easeOut" }}
+                                            className="overflow-hidden"
+                                        >
+                                            <div className="pt-6 md:pt-8 md:pl-[60px] max-w-2xl">
+                                                <p className="text-lg md:text-xl text-foreground font-light leading-relaxed mb-6">
+                                                    {service.description}
+                                                </p>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {service.tags.map(tag => (
+                                                        <span key={tag} className="text-[10px] uppercase tracking-wider font-bold text-foreground/50 bg-foreground/5 px-2 py-1 rounded-sm">
+                                                            {tag}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </div>
                         </div>
                     ))}
