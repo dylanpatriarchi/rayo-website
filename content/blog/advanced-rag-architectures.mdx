@@ -1,0 +1,43 @@
+---
+title: "Advanced RAG Architectures for Enterprise"
+publishedAt: "2024-05-20"
+summary: "Oltre la demo: come costruire sistemi Retrieval-Augmented Generation affidabili, scalabili e privi di allucinazioni per l'uso aziendale."
+image: "/images/blog/rag-architecture.png"
+---
+
+# L'Illusione del "Chat with your PDF"
+
+Negli ultimi 12 mesi, migliaia di aziende hanno lanciato proof-of-concept (PoC) basati su RAG (Retrieval-Augmented Generation). La promessa è allettante: dare in pasto la documentazione aziendale a un LLM e ottenere un oracolo onnisciente.
+
+La realtà dei sistemi in produzione è ben diversa. Una volta superata la fase di demo con 10 documenti, emergono i veri problemi:
+1.  **Retrieval Accuracy**: Il sistema recupera chunk irrilevanti che confondono l'LLM.
+2.  **Context Window Limits**: Non possiamo inserire interi manuali nel prompt.
+3.  **Lost in the Middle**: L'LLM tende a ignorare le informazioni nel mezzo di contesti lunghi.
+
+In Rayo Consulting, abbiamo standardizzato un'architettura **Advanced RAG** che mitiga questi rischi. Ecco i componenti chiave.
+
+## 1. Chunking Strategico
+Il chunking "naive" (dividere il testo ogni 500 caratteri) distrugge il significato semantico.
+Utilizziamo **Semantic Chunking**: un algoritmo che analizza la densità semantica del testo e taglia solo quando cambia l'argomento, preservando l'integrità del contesto.
+Per documenti strutturati (contratti, bilanci), utilizziamo approcci **Hierarchy-Aware** che mantengono il legame padre-figlio (es. Articolo -> Comma -> Punto).
+
+## 2. Hybrid Search (Keyword + Vector)
+Affidarsi solo ai Vector Database (ricerca semantica) non basta. I vettori sono ottimi per concetti astratti, ma pessimi per keyword esatte (codici prodotto, acronimi specifici, date).
+La nostra soluzione implementa **Hybrid Search**:
+-   **Sparse Vectors (BM25)**: Per match esatti di keyword.
+-   **Dense Vectors (Embeddings)**: Per match semantici.
+I risultati vengono fusi usando l'algoritmo **Reciprocal Rank Fusion (RRF)**.
+
+## 3. Re-Ranking Step
+Il retrieval spesso restituisce 20-30 documenti candidati. Passarli tutti all'LLM aumenta costi e latenza (e rumore).
+Introduciamo un modello **Cross-Encoder Re-Ranker** (molto più lento ma preciso degli embedding) che analizza la coppia Domanda-Documento e assegna uno score di rilevanza puntuale. Solo i top-5 passano all'LLM finale.
+
+## 4. Query Transformation
+L'utente raramente formula domande perfette per un motore di ricerca.
+-   **Query Expansion**: Generiamo sinonimi e domande correlate.
+-   **HyDE (Hypothetical Document Embeddings)**: L'LLM genera una risposta ipotetica (anche falsa) alla domanda dell'utente. Usiamo quella risposta per la ricerca vettoriale, trovando documenti che *assomigliano alla risposta* invece che alla domanda.
+
+## Conclusioni
+Costruire un sistema RAG che "funziona" su un notebook Jupyter richiede un pomeriggio. Costruirne uno che scala su 100.000 documenti con un'accuratezza >99% richiede ingegneria robusta.
+
+Non fermatevi alla demo. Esigete metriche di valutazione (RAGAS framework) prima di andare in produzione.

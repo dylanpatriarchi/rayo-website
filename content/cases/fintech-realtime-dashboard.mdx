@@ -1,31 +1,34 @@
 ---
-title: "Dashboard Fintech Real-Time"
-industry: "Fintech"
-stat: "< 50ms"
-statLabel: "Latenza Dati"
-summary: "Costruzione di una pipeline di dati in tempo reale per una piattaforma di trading istituzionale, gestendo milioni di eventi al secondo."
-image: "/images/fintech_pipeline.png"
+title: "Real-Time Fraud Detection System"
+publishedAt: "2024-04-10"
+summary: "Pipeline di analisi transazionale in tempo reale processando 50k eventi/secondo. Riduzione dei falsi positivi del 90% rispetto ai sistemi rule-based."
+industry: "Fintech / Banking"
+impact: "-90% Fraud"
 ---
 
-## La Sfida
+## Il Problema
+Una neobank europea affrontava un tasso crescente di frodi sulle carte di credito. Il sistema esistente, un motore di regole deterministico (es. "Se transazione > €500 E paese != Italia -> Blocca"), generava un numero inaccettabile di **falsi positivi**, bloccando carte legittime e danneggiando la customer experience e la retention.
 
-Un importante player nel trading istituzionale soffriva di latenza critica nella visualizzazione dei dati di mercato. I sistemi legacy introducevano ritardi fino a 2 secondi, inaccettabili per il trading ad alta frequenza.
+## La Soluzione: Anomaly Detection con Deep Learning
+Abbiamo sostituito il motore a regole con un modello di **Anomaly Detection** non supervisionato, capace di apprendere il pattern di spesa "normale" di ogni singolo utente e segnalare deviazioni significative.
 
-## La Soluzione
+### Architettura
+1.  **Ingestion**: Streaming di transazioni via **Apache Kafka**.
+2.  **Processing**: Apache Flink per la feature extraction in tempo reale (es. "numero transazioni ultimi 10 minuti", "distanza geografica dall'ultima transazione").
+3.  **Inference**: Un modello **Autoencoder** (Neural Network) analizza il vettore delle feature. Se l'errore di ricostruzione supera una soglia dinamica, la transazione viene flaggata come anomala.
 
-Abbiamo riprogettato l'intera pipeline di ingestione e visualizzazione dati utilizzando tecnologie cutting-edge.
+## Engineering Challenges
+La sfida principale era la latenza. Il blocco della transazione deve avvenire sincrono al momento del pagamento (pre-auth).
+-   Abbiamo ottimizzato il modello convertendolo in **ONNX** e servendolo via **Triton Inference Server**.
+-   Latenza p99 dell'intera pipeline: **12ms**.
 
-### Architettura a Eventi
-Utilizzo di **Apache Kafka** per lo streaming di eventi ad alto throughput, garantendo la consegna dei messaggi without-loss.
-
-### WebSocket Ottimizzati
-Implementazione di server WebSocket custom in **Go** per gestire migliaia di connessioni concorrenti con un overhead minimo.
-
-### Frontend Reattivo
-Dashboard sviluppata in **React** con rendering canvas ottimizzato per visualizzare tick-by-tick updates senza bloccare il main thread.
+## Stack Tecnologico
+-   **Streaming**: Kafka, Kafka Connect.
+-   **Compute**: Apache Flink.
+-   **AI**: TensorFlow (Training), ONNX Runtime (Inference).
+-   **Dashboard**: Grafana per il monitoraggio delle metriche di modello (Drift Detection).
 
 ## Risultati
-
-- **Riduzione Latenza**: Da 2000ms a < 50ms end-to-end.
-- **Scalabilità**: Gestione dimostrata di 500k eventi/secondo.
-- **Affidabilità**: 99.999% uptime durante i picchi di mercato.
+-   **-90% Falsi Positivi**: Gli utenti legittimi non vengono più bloccati erroneamente all'estero.
+-   **+40% Detection Rate**: Il modello ha individuato pattern di frode complessi (es. "salami slicing") invisibili alle regole statiche.
+-   **ROI**: Il risparmio sulle frodi prevenute ha ripagato l'infrastruttura in 3 mesi.

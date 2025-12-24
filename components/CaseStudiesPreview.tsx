@@ -1,110 +1,95 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
-import { useRef, useEffect } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
+import { motion } from "framer-motion";
 import { Post } from "@/utils/mdx";
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface CaseStudiesPreviewProps {
     posts: Post[];
 }
 
 export default function CaseStudiesPreview({ posts }: CaseStudiesPreviewProps) {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const titleRef = useRef<HTMLHeadingElement>(null);
-    const cardsRef = useRef<HTMLElement[]>([]);
-
-    useEffect(() => {
-        if (!containerRef.current) return;
-
-        gsap.fromTo(
-            titleRef.current,
-            { y: 50, opacity: 0 },
-            {
-                y: 0,
-                opacity: 1,
-                duration: 0.8,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: containerRef.current,
-                    start: "top 80%",
-                },
-            }
-        );
-
-        cardsRef.current.forEach((card, i) => {
-            if (!card) return;
-            gsap.fromTo(
-                card,
-                { y: 100, opacity: 0 },
-                {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.8,
-                    delay: i * 0.1,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: card,
-                        start: "top 85%",
-                    },
-                }
-            );
-        });
-    }, []);
-
     return (
-        <section ref={containerRef} className="py-24 md:py-32 px-6 md:px-12 bg-background">
-            <div className="max-w-[1400px] mx-auto">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 md:mb-24 gap-8">
-                    <h2 ref={titleRef} className="text-4xl md:text-6xl font-bold tracking-tighter leading-[1.1]">
-                        Selected <br />
-                        Work.
-                    </h2>
+        <section className="py-32 px-6 md:px-12 bg-background border-b border-neutral-100">
+            <div className="max-w-7xl mx-auto">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-24 border-b border-foreground/10 pb-6">
+                    <div>
+                        <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-2">
+                            Selected Work
+                        </h2>
+                        <h3 className="text-4xl md:text-6xl font-bold tracking-tighter text-foreground">
+                            Il Nostro Impatto.
+                        </h3>
+                    </div>
                     <Link
                         href="/cases"
-                        className="group flex items-center gap-2 text-lg font-medium border-b border-foreground/20 pb-1 hover:border-foreground transition-all"
+                        className="hidden md:block text-sm font-mono text-foreground/60 hover:text-primary transition-colors hover:underline underline-offset-4"
                     >
-                        Vedi tutti i casi studio
-                        <span className="group-hover:translate-x-1 transition-transform">→</span>
+                        Tutti i casi →
                     </Link>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                <div className="flex flex-col">
+                    {/* Header Row */}
+                    <div className="hidden md:grid grid-cols-12 gap-4 pb-4 border-b border-foreground/10 text-xs font-mono uppercase tracking-widest text-foreground/40">
+                        <div className="col-span-1">ID</div>
+                        <div className="col-span-4">Client / Industry</div>
+                        <div className="col-span-7">Challenge & Solution</div>
+                    </div>
+
                     {posts.map((post, i) => (
-                        <Link
-                            key={post.slug}
-                            href={`/cases/${post.slug}`}
-                            className="group relative block w-full aspect-[4/3] md:aspect-[16/10] overflow-hidden rounded-2xl bg-foreground/5 p-8 flex flex-col justify-end"
-                            ref={(el) => { if (el) cardsRef.current[i] = el; }}
-                        >
-                            {post.metadata.image && (
-                                <Image
-                                    src={post.metadata.image}
-                                    alt={post.metadata.title}
-                                    fill
-                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                />
-                            )}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 transition-opacity duration-300" />
+                        <Link key={post.slug} href={`/cases/${post.slug}`} className="block group">
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1, duration: 0.5 }}
+                                className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-4 py-8 md:py-12 border-b border-foreground/10 group-hover:bg-foreground/[0.02] transition-colors"
+                            >
+                                {/* ID */}
+                                <div className="col-span-1 flex items-start">
+                                    <span className="text-xs font-mono text-primary/60 group-hover:text-primary transition-colors">
+                                        {(i + 1).toString().padStart(2, '0')}
+                                    </span>
+                                </div>
 
-                            <div className="relative z-10 text-white transform transition-transform duration-300 group-hover:-translate-y-2">
-                                <p className="text-xs font-bold uppercase tracking-wider mb-2 opacity-80">{post.metadata.industry}</p>
-                                <h3 className="text-2xl md:text-4xl font-bold leading-tight mb-2">{post.metadata.title}</h3>
-                                <p className="text-sm md:text-base opacity-80 line-clamp-2 max-w-md">{post.metadata.summary}</p>
-                            </div>
+                                {/* Industry / Title */}
+                                <div className="col-span-1 md:col-span-4 flex flex-col justify-start">
+                                    <span className="text-xs font-bold uppercase tracking-wider text-foreground/40 mb-2">
+                                        {post.metadata.industry || "Tech"}
+                                    </span>
+                                    <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors leading-tight">
+                                        {post.metadata.title}
+                                    </h3>
+                                </div>
 
-                            <div className="absolute bottom-8 right-8 z-10 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M7 17L17 7M17 7H7M17 7V17" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                            </div>
+                                {/* Description */}
+                                <div className="col-span-1 md:col-span-7 flex flex-col justify-between">
+                                    <p className="text-sm md:text-base text-foreground/60 font-light leading-relaxed max-w-2xl group-hover:text-foreground/80 transition-colors">
+                                        {post.metadata.summary}
+                                    </p>
+                                    <span className="md:hidden mt-4 text-xs font-mono text-primary flex items-center gap-2">
+                                        Read Case Study →
+                                    </span>
+                                </div>
+
+                                {/* Arrow (Desktop Only - Optional, keeping minimal) */}
+                                <div className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <span className="text-primary text-xl">→</span>
+                                </div>
+                            </motion.div>
                         </Link>
                     ))}
+                </div>
+
+                <div className="mt-12 md:hidden">
+                    <Link
+                        href="/cases"
+                        className="text-sm font-mono text-foreground/60 hover:text-primary transition-colors hover:underline underline-offset-4"
+                    >
+                        Tutti i casi →
+                    </Link>
                 </div>
             </div>
         </section>

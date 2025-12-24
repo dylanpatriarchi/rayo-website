@@ -1,3 +1,5 @@
+import FounderCard from "@/components/FounderCard";
+
 export default function About() {
     return (
         <main className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
@@ -40,6 +42,8 @@ export default function About() {
                     </div>
                 </div>
             </div>
+
+            <FounderCard />
         </main>
     );
 }

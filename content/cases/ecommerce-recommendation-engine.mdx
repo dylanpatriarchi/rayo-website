@@ -1,31 +1,37 @@
 ---
-title: "AI Recommendation Engine"
-industry: "E-Commerce"
-stat: "+35%"
-statLabel: "Conversion Rate"
-summary: "Sviluppo di un motore di raccomandazione personalizzato per un brand di moda luxury, basato su behavioral analysis e vector search."
-image: "/images/ecommerce_engine.png"
+title: "Autonomous Recommendation Engine"
+publishedAt: "2024-05-15"
+summary: "Sostituzione di un motore di raccomandazione legacy basato su regole con un sistema ibrido Neural/Collaborative Filtering. +28% Conversion Rate."
+industry: "E-Commerce / Retail"
+impact: "+28% CR"
 ---
 
-## Il Contesto
+## Il Problema
+Un grande player del retail fashion (GMV > €50M/anno) si affidava a un motore di raccomandazione legacy basato su regole statiche ("Chi ha comprato X compra anche Y"). Questo approccio soffriva di:
+1.  **Cold Start Problem**: Impossibilità di raccomandare prodotti a nuovi utenti o nuovi item senza storico.
+2.  **Mancanza di contesto**: Il sistema ignorava la semantica visiva e testuale dei prodotti (es. "Camicia estiva" vs "Camicia flanella").
+3.  **Manutenzione**: Richiedeva aggiornamenti manuali delle regole di cross-sell.
 
-Il cliente, un brand di moda luxury, aveva un tasso di conversione basso nonostante un alto traffico. L'esperienza utente era generica e non rispecchiava l'esclusività del brand.
+## La Soluzione: Architettura Ibrida
+Abbiamo progettato e deployato un'architettura di raccomandazione a due stadi:
 
-## La Soluzione
+### 1. Retrieval Layer (Candidate Generation)
+Utilizzando un **Vector Database (Qdrant)**, abbiamo indicizzato l'intero catalogo prodotti. Ogni prodotto è stato convertito in un embedding vettoriale multimodale (CLIP model) che combina:
+-   **Visual features** estratte dalle immagini del prodotto.
+-   **Semantic features** estratte dalle descrizioni e recensioni.
+Questo permette di trovare prodotti "simili" non solo perché comprati insieme, ma perché visivamente o concettualmente affini.
 
-Abbiamo creato un motore di raccomandazione "hyper-personalized" che agisce come un personal shopper digitale.
+### 2. Ranking Layer (Personalization)
+Sopra il layer di retrieval, abbiamo implementato un modello **XGBoost** addestrato in tempo reale sui segnali comportamentali dell'utente (click, add-to-cart, dwell time). Il modello riordina i candidati generati dal vector DB massimizzando la probabilità di conversione (pCVR).
 
-### Analisi Comportamentale
-Il sistema analizza in tempo reale i pattern di navigazione, il tempo di permanenza sulle immagini e le interazioni passate per costruire un profilo di gusto dinamico.
-
-### Vector Search
-Utilizzo di **Pinecone** e embeddings generati da modelli CLIP per trovare prodotti visivamente simili o complementari, andando oltre i semplici tag testuali.
-
-### Integrazione Trasparente
-Il motore è stato integrato via API headless nel frontend Shopify Plus esistente, garantendo zero impatto sulle performance di caricamento.
+## Stack Tecnologico
+-   **Inference**: Python, FastAPI (latenza < 50ms).
+-   **Vector DB**: Qdrant (self-hosted su Kubernetes).
+-   **Training**: PyTorch per fine-tuning degli embedding, XGBoost per il ranking.
+-   **Infrastructure**: AWS SageMaker per il training pipeline automatizzato.
 
 ## Risultati
-
-- **Conversion Rate**: Aumento del 35% in 6 mesi.
-- **Average Order Value**: Incremento del 20% grazie al cross-selling intelligente.
-- **Engagement**: Tempo speso sul sito raddoppiato.
+Il sistema è stato rilasciato in A/B test contro la soluzione legacy per 4 settimane.
+-   **+28% Conversion Rate** sulle schede prodotto.
+-   **+15% Average Order Value (AOV)** grazie a cross-sell più pertinenti.
+-   **Zero manutenzione manuale**: Il sistema si aggiorna automaticamente ogni notte con i nuovi dati di vendita.

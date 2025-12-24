@@ -1,0 +1,44 @@
+---
+title: "Fine-Tuning vs RAG: La Guida Definitiva"
+publishedAt: "2024-04-12"
+summary: "Quando addestrare un modello e quando usare il context retrieval? Analisi costi-benefici per CTO e decisori tecnici."
+image: "/images/blog/finetuning-vs-rag.png"
+---
+
+# Il Dilemma Architetturale
+
+Una delle domande più frequenti che riceviamo dai CTO è: "Dobbiamo fare fine-tuning su Llama-3 con i nostri dati o costruire una pipeline RAG?"
+La confusione nasce dal fatto che entrambi i metodi permettono al modello di "rispondere meglio". Ma agiscono su leve completamente diverse.
+
+## La Metafora dello Studente
+Immagina l'LLM come uno studente universitario brillante che deve affrontare un esame sulla tua azienda.
+
+1.  **Fine-Tuning** è come mandare lo studente a un master di specializzazione di 6 mesi sulla tua azienda. Impara il "gergo", lo stile, le procedure implicite. Modifica il suo cervello a lungo termine.
+2.  **RAG (Retrieval-Augmented Generation)** è come permettere allo studente di portare il libro di testo all'esame. Non sa le cose a memoria, ma sa dove cercarle velocemente.
+
+## Quando usare RAG
+Il RAG è la scelta corretta nel 90% dei casi aziendali, specialmente quando:
+-   **I dati cambiano spesso**: Listini prezzi, giacenze magazzino, news. Nel fine-tuning, aggiornare un dato richiede un ri-addestramento costoso. Nel RAG, basta aggiornare il database.
+-   **Serve Fact-Checking**: Con il RAG, il sistema può citare la fonte ("Vedi documento X, pag. 4"). Il Fine-Tuning è una "scatola nera" che allucina più facilmente.
+-   **Privacy Granulare**: È facile filtrare i documenti in base ai permessi utente nel retrieval. È impossibile "nascondere" un dato appreso nei pesi di un modello fine-tunato.
+
+## Quando usare Fine-Tuning
+Il Fine-Tuning brilla dove il RAG fallisce: **Forma e Comportamento**.
+-   **Tone of Voice**: Se il bot deve parlare esattamente come il vostro brand (es. empatico, o estremamente tecnico e secco).
+-   **Output Format**: Se il modello deve generare JSON complessi o codice SQL seguendo schemi proprietari rigidissimi.
+-   **Domain Adaptation**: Se lavorate in domini di nicchia (es. biochimica, diritto romano) dove il vocabolario base del modello è carente.
+
+## L'Approccio Ibrido
+La vera potenza emerge combinando i due.
+In Rayo Consulting, spesso utilizziamo un modello **Small Language Model (es. Mistral 7B)** sottoposto a fine-tuning per imparare a:
+1.  Usare correttamente i tool interni (API calling).
+2.  Mantenere il tono aziendale.
+E poi lo alimentiamo con dati aggiornati tramite una pipeline **RAG**.
+
+In questo modo otteniamo il meglio dei due mondi: un modello "specialista" che ha accesso a informazioni sempre fresche.
+
+## Costi a Confronto
+-   **RAG**: Costo iniziale basso (infrastruttura vettoriale), costo ricorrente variabile (token per context window).
+-   **Fine-Tuning**: Costo iniziale alto (GPU hours, data cleaning), costo ricorrente basso (modelli più piccoli possono girare su hardware meno potente).
+
+Non scegliere per hype. Scegli per ROI.

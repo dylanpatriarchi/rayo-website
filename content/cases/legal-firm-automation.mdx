@@ -1,35 +1,33 @@
 ---
-title: "Automazione Due Diligence Legale"
-industry: "Legal Tech"
-stat: "-85%"
-statLabel: "Tempo Analisi Contratti"
-summary: "Come abbiamo ridotto da 4 ore a 30 minuti l'analisi preliminare dei contratti M&A per uno studio legale internazionale."
-image: "/images/legal_automation.png"
+title: "Legal Contract Analysis Platform"
+publishedAt: "2024-06-22"
+summary: "Sistema RAG privato per l'analisi automatica di contratti M&A. Riduzione del 70% del tempo di due diligence legale."
+industry: "Legal / Corporate"
+impact: "-70% Time"
 ---
 
 ## Il Problema
+Uno studio legale internazionale specializzato in M&A (Mergers & Acquisitions) impiegava team di 10+ avvocati per settimane solo per analizzare le "Data Room" (migliaia di PDF, contratti, visure) delle aziende target. Il processo era lento, costoso e prono a errore umano.
 
-Lo studio legale **[Redacted]** analizzava manualmente centinaia di pagine di contratti per ogni operazione di M&A. 
-Il processo era **lento**, soggetto a **errore umano** e costringeva i senior associate a lavoro di basso valore.
+## La Soluzione: Private RAG (Retrieval-Augmented Generation)
+Abbiamo sviluppato una piattaforma interna "air-gapped" (senza accesso a internet per privacy) che permette di "interrogare" l'intera data room in linguaggio naturale.
 
-## La Soluzione
+### Privacy-First Architecture
+Dato il segreto industriale delle informazioni, non potevamo usare API pubbliche (GPT-4, Claude).
+Abbiamo implementato un'infrastruttura basata su **LLM Open Source (Mistral 7B fine-tuned)** hostati su server proprietari dello studio.
 
-Abbiamo implementato una pipeline RAG avanzata su infrastruttura privata (Azure AI Studio).
+### Funzionalità Core
+1.  **Ingestion Intelligente**: OCR avanzato per digitalizzare scansioni e PDF complessi, preservando la struttura (tabelle, firme).
+2.  **Semantic Search**: Ricerca concettuale (es. "Trova tutte le clausole di esclusiva con durata superiore a 2 anni").
+3.  **Cross-Document Reasoning**: Capacità di correlare informazioni tra documenti diversi (es. "La visura camerale conferma i poteri di firma citati nel contratto A?").
 
-### 1. Ingestion Intelligente
-Non un semplice PDF parser. Abbiamo costruito un estrattore semantico capace di identificare clausole, definizioni e rimandi normativi, preservando la struttura gerarchica del documento.
-
-### 2. Multi-Hop Reasoning
-L'AI non cerca solo parole chiave. Ragiona su collegamenti logici. 
-*Esempio: "La clausola di recesso (Art. 5) entra in conflitto con la penale (Art. 12)?"*
-
-### 3. Output Strutturato
-Il sistema non "chatta". Genera un report tabellare in standard XML importabile direttamente nel gestionale dello studio.
+## Stack Tecnologico
+-   **LLM**: Mistral 7B (quantizzato 4-bit per efficienza su singola GPU A100).
+-   **Backend**: LangChain, Python..
+-   **Frontend**: React, Next.js.
+-   **Security**: Docker containers, Network segregation.
 
 ## Risultati
-
-- **Tempo medio ridotto**: da 240 min a 35 min per contratto.
-- **Accuratezza**: 94% nel rilevamento clausole di rischio (validato da human-in-the-loop).
-- **ROI**: Ritorno dell'investimento in 3 mesi.
-
-> "Rayo ha trasformato un collo di bottiglia in un vantaggio competitivo." - *Managing Partner*
+-   **Tempo di Due Diligence**: Ridotto da 3 settimane a 4 giorni (-70%).
+-   **Precisione**: Il sistema evidenzia automaticamente clausole rischiose che spesso sfuggivano alla lettura veloce massiva.
+-   **Competitive Advantage**: Lo studio ora può offrire preventivi più aggressivi mantenendo margini più alti.

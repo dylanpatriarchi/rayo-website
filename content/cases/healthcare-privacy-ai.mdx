@@ -1,31 +1,33 @@
 ---
-title: "Privacy-Preserving AI Healthcare"
-industry: "Healthcare"
-stat: "100%"
-statLabel: "Compliance GDPR"
-summary: "Implementazione di un sistema di analisi diagnostica AI-driven che garantisce la totale anonimizzazione dei dati pazienti on-premise."
-image: "/images/healthcare_ai.png"
+title: "Federated Learning for Healthcare"
+publishedAt: "2024-03-01"
+summary: "Addestramento di modelli diagnostici su dati sensibili distribuiti tra 5 ospedali, senza mai spostare i dati dei pazienti. Compliance GDPR totale."
+industry: "Healthcare / Research"
+impact: "GDPR Compliant"
 ---
 
-## La Necessità
+## Il Problema
+Un consorzio di ricerca medica voleva addestrare un modello AI per la diagnosi precoce di patologie polmonari basandosi su TAC e Risonanze.
+Tuttavia, le normative sulla privacy (GDPR) e le policy interne degli ospedali rendevano impossibile centralizzare i dati in un unico cloud storage per il training. I dati erano "silos" isolati.
 
-Un gruppo ospedaliero voleva sfruttare l'AI per il supporto alla diagnosi radiologica, ma i vincoli normativi (GDPR e trattamento dati sensibili) rendevano impossibile l'uso di API cloud standard.
+## La Soluzione: Federated Learning
+Abbiamo implementato un'architettura di **Federated Learning**. Invece di portare i dati al modello, abbiamo portato il modello ai dati.
 
-## La Soluzione
+### Come funziona
+1.  **Local Training**: Un'istanza "vergine" del modello viene inviata ai server locali di ogni ospedale.
+2.  **Private Update**: Ogni ospedale addestra il modello sui propri dati (che non escono mai dal perimetro sicuro).
+3.  **Aggregation**: I server locali inviano al server centrale solo i "gradienti" (aggiornamenti matematici dei pesi), non i dati.
+4.  **Global Model**: Il server centrale media i gradienti ricevuti e crea un nuovo "Global Model" più intelligente, che viene ridistribuito agli ospedali.
 
-Abbiamo sviluppato una soluzione "Edge AI" che processa i dati sensibili interamente all'interno dell'infrastruttura ospedaliera.
+### Sicurezza Aggiuntiva
+Abbiamo applicato tecniche di **Differential Privacy** (aggiunta di rumore statistico) ai gradienti, rendendo matematicamente impossibile fare reverse-engineering dei dati di un singolo paziente partendo dal modello.
 
-### Federated Learning
-Il modello AI viene addestrato su dati distribuiti senza che questi lascino mai i server locali dei singoli ospedali. Solo i pesi del modello vengono centralizzati.
-
-### Local Inference
-Distribuzione di nodi di inferenza locali su hardware GPU on-premise, garantendo che le immagini DICOM non vengano mai trasmesse su internet.
-
-### Audit Trail Immutabile
-Registrazione di ogni accesso e predizione su una blockchain privata per garantire la totale tracciabilità e immutabilità dei log per fini di compliance.
+## Stack Tecnologico
+-   **Framework**: PySyft / TensorFlow Federated.
+-   **Orchestration**: Kubernetes (K8s) distribuito.
+-   **Encryption**: Secure Multi-Party Computation (SMPC).
 
 ## Risultati
-
-- **Sicurezza**: Zero esfiltrazione di dati sensibili.
-- **Compliance**: Piena conformità GDPR e HIPAA.
-- **Efficienza**: Riduzione del 40% dei falsi positivi nelle diagnosi preliminari.
+-   **Dataset Virtuale**: Il modello finale performa come se fosse stato addestrato su un dataset di 50.000 pazienti, pur non avendo mai visto un singolo dato centralizzato.
+-   **Accuracy**: 94% sull'identificazione di noduli (vs 82% dei modelli addestrati sui dati di un singolo ospedale).
+-   **Privacy Garantita**: Approvato dai DPO (Data Protection Officer) di tutte le strutture sanitarie coinvolte.
