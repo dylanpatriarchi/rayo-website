@@ -1,37 +1,44 @@
 ---
-title: "Autonomous Recommendation Engine"
+title: "Hybrid Neural Recommendation System"
 publishedAt: "2024-05-15"
-summary: "Sostituzione di un motore di raccomandazione legacy basato su regole con un sistema ibrido Neural/Collaborative Filtering. +28% Conversion Rate."
+summary: "Evoluzione da sistemi rule-based a un'architettura ibrida Neural/Collaborative per la personalizzazione su larga scala."
 industry: "E-Commerce / Retail"
-impact: "+28% CR"
+impact: "Improved CTR"
 ---
 
-## Il Problema
-Un grande player del retail fashion (GMV > €50M/anno) si affidava a un motore di raccomandazione legacy basato su regole statiche ("Chi ha comprato X compra anche Y"). Questo approccio soffriva di:
-1.  **Cold Start Problem**: Impossibilità di raccomandare prodotti a nuovi utenti o nuovi item senza storico.
-2.  **Mancanza di contesto**: Il sistema ignorava la semantica visiva e testuale dei prodotti (es. "Camicia estiva" vs "Camicia flanella").
-3.  **Manutenzione**: Richiedeva aggiornamenti manuali delle regole di cross-sell.
+## Il Contesto Tecnico
 
-## La Soluzione: Architettura Ibrida
-Abbiamo progettato e deployato un'architettura di raccomandazione a due stadi:
+Un'infrastruttura e-commerce ad alto traffico necessitava di superare i limiti dei sistemi di raccomandazione deterministici. L'approccio legacy, basato su regole statiche di cross-sell ("Chi ha comprato X compra Y"), presentava colli di bottiglia strutturali:
+1.  **Sparsità dei Dati**: Inefficacia su nuovi prodotti (Cold Start) privi di storico comportamentale.
+2.  **Rigidità Semantica**: Incapacità di correlare prodotti concettualmente simili ma categorizzati diversamente.
+3.  **Onere Operativo**: Manutenzione manuale continua delle regole di associazione.
+
+## L'Approccio: Two-Tower Architecture
+
+Abbiamo riprogettato il sistema adottando un paradigma di **Retrieval & Ranking** a due stadi, ispirato alle architetture di raccomandazione su scala industriale.
 
 ### 1. Retrieval Layer (Candidate Generation)
-Utilizzando un **Vector Database (Qdrant)**, abbiamo indicizzato l'intero catalogo prodotti. Ogni prodotto è stato convertito in un embedding vettoriale multimodale (CLIP model) che combina:
--   **Visual features** estratte dalle immagini del prodotto.
--   **Semantic features** estratte dalle descrizioni e recensioni.
-Questo permette di trovare prodotti "simili" non solo perché comprati insieme, ma perché visivamente o concettualmente affini.
+La fase di retrieval riduce lo spazio di ricerca da milioni di item a centinaia di candidati rilevanti. Abbiamo implementato una strategia ibrida:
+-   **Vector Search**: Utilizzo di embedding multimodali (CLIP) per catturare la similarità visiva e semantica tra prodotti.
+-   **Collaborative Filtering**: Matrix Factorization per catturare pattern di co-acquisto latenti.
+L'indicizzazione avviene su **Qdrant**, configurato per gestire vettori ad alta dimensionalità con latenza di ricerca sub-millisecondo.
 
 ### 2. Ranking Layer (Personalization)
-Sopra il layer di retrieval, abbiamo implementato un modello **XGBoost** addestrato in tempo reale sui segnali comportamentali dell'utente (click, add-to-cart, dwell time). Il modello riordina i candidati generati dal vector DB massimizzando la probabilità di conversione (pCVR).
+I candidati vengono riordinati da un modello **Learning-to-Rank** (XGBoost) addestrato su feature in tempo reale:
+-   **User Intent**: Click recenti, ricerche, tempo di permanenza.
+-   **Context**: Dispositivo, orario, provenienza del traffico.
+Il modello stima la probabilità condizionata di conversione per ogni coppia (User, Item).
 
-## Stack Tecnologico
--   **Inference**: Python, FastAPI (latenza < 50ms).
--   **Vector DB**: Qdrant (self-hosted su Kubernetes).
--   **Training**: PyTorch per fine-tuning degli embedding, XGBoost per il ranking.
--   **Infrastructure**: AWS SageMaker per il training pipeline automatizzato.
+## Stack Tecnologico e Infrastruttura
 
-## Risultati
-Il sistema è stato rilasciato in A/B test contro la soluzione legacy per 4 settimane.
--   **+28% Conversion Rate** sulle schede prodotto.
--   **+15% Average Order Value (AOV)** grazie a cross-sell più pertinenti.
--   **Zero manutenzione manuale**: Il sistema si aggiorna automaticamente ogni notte con i nuovi dati di vendita.
+L'intera pipeline è stata ingegnerizzata per la scalabilità orizzontale:
+-   **Serving**: FastAPI con workers asincroni per gestire picchi di richieste concorrenti.
+-   **Inference Optimization**: Modelli quantizzati e serviti via ONNX Runtime per minimizzare il footprint CPU/GPU.
+-   **Data Pipeline**: Airflow per l'orchestrazione dei job di training periodici e dell'aggiornamento degli indici vettoriali.
+
+## Impatto Osservato
+
+L'introduzione del sistema ha portato a una trasformazione misurabile delle metriche di engagement:
+-   **Rilevanza Semantica**: Incremento significativo del Click-Through Rate (CTR) sui widget di raccomandazione.
+-   **Copertura del Catalogo**: Drastica riduzione dei prodotti "orfani" mai raccomandati, grazie all'approccio content-based per il cold start.
+-   **Efficienza Operativa**: Automazione completa del ciclo di aggiornamento delle raccomandazioni, liberando risorse dal team di merchandising.

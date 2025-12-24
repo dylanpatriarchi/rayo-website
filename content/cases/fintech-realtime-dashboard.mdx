@@ -1,34 +1,39 @@
 ---
-title: "Real-Time Fraud Detection System"
+title: "Real-Time Transaction Analysis Pipeline"
 publishedAt: "2024-04-10"
-summary: "Pipeline di analisi transazionale in tempo reale processando 50k eventi/secondo. Riduzione dei falsi positivi del 90% rispetto ai sistemi rule-based."
+summary: "Ingegnerizzazione di una pipeline di stream processing per l'anomaly detection ad alta frequenza su volumi transazionali critici."
 industry: "Fintech / Banking"
-impact: "-90% Fraud"
+impact: "Low Latency"
 ---
 
-## Il Problema
-Una neobank europea affrontava un tasso crescente di frodi sulle carte di credito. Il sistema esistente, un motore di regole deterministico (es. "Se transazione > €500 E paese != Italia -> Blocca"), generava un numero inaccettabile di **falsi positivi**, bloccando carte legittime e danneggiando la customer experience e la retention.
+## La Sfida Ingegneristica
 
-## La Soluzione: Anomaly Detection con Deep Learning
-Abbiamo sostituito il motore a regole con un modello di **Anomaly Detection** non supervisionato, capace di apprendere il pattern di spesa "normale" di ogni singolo utente e segnalare deviazioni significative.
+La gestione di flussi transazionali ad alta velocità richiede sistemi capaci di prendere decisioni complesse in finestre temporali estremamente ridotte. I sistemi tradizionali basati su regole cablate ("hard-coded rules") mostravano limiti evidenti nel bilanciare accuratezza e velocità, generando frizione operativa e falsi allarmi. La necessità era migrare verso un approccio probabilistico capace di adattarsi a pattern emergenti.
 
-### Architettura
-1.  **Ingestion**: Streaming di transazioni via **Apache Kafka**.
-2.  **Processing**: Apache Flink per la feature extraction in tempo reale (es. "numero transazioni ultimi 10 minuti", "distanza geografica dall'ultima transazione").
-3.  **Inference**: Un modello **Autoencoder** (Neural Network) analizza il vettore delle feature. Se l'errore di ricostruzione supera una soglia dinamica, la transazione viene flaggata come anomala.
+## Architettura: Event-Driven Analysis
 
-## Engineering Challenges
-La sfida principale era la latenza. Il blocco della transazione deve avvenire sincrono al momento del pagamento (pre-auth).
--   Abbiamo ottimizzato il modello convertendolo in **ONNX** e servendolo via **Triton Inference Server**.
--   Latenza p99 dell'intera pipeline: **12ms**.
+Abbiamo implementato una pipeline di **Stream Processing** che analizza ogni evento in tempo reale, mantenendo uno stato contestuale per ogni entità monitorata.
 
-## Stack Tecnologico
--   **Streaming**: Kafka, Kafka Connect.
--   **Compute**: Apache Flink.
--   **AI**: TensorFlow (Training), ONNX Runtime (Inference).
--   **Dashboard**: Grafana per il monitoraggio delle metriche di modello (Drift Detection).
+### Ingestion & Processing
+Il core del sistema è basato su un'architettura Kappa:
+1.  **Message Backbone**: Utilizzo di **Apache Kafka** come l'unica fonte di verità per i log delle transazioni, garantendo durability e replayability.
+2.  **Stateful Processing**: **Apache Flink** gestisce finestre temporali (sliding windows) per aggregare metriche in tempo reale (es. "frequenza eventi negli ultimi 5 minuti" vs "media storica").
 
-## Risultati
--   **-90% Falsi Positivi**: Gli utenti legittimi non vengono più bloccati erroneamente all'estero.
--   **+40% Detection Rate**: Il modello ha individuato pattern di frode complessi (es. "salami slicing") invisibili alle regole statiche.
--   **ROI**: Il risparmio sulle frodi prevenute ha ripagato l'infrastruttura in 3 mesi.
+### Deep Anomaly Detection
+Invece di classificazioni binarie, utilizziamo un approccio non supervisionato basato su **Autoencoder**:
+-   Il modello apprende la rappresentazione latente compressa del comportamento "normale".
+-   In fase di inferenza, calcola il "Reconstruction Error" tra l'input e l'output ricostruito.
+-   Un errore elevato indica una deviazione significativa dal pattern appreso (anomalia), senza la necessità di aver visto quella specifica tipologia di anomalia in precedenza.
+
+## Ottimizzazione della Latenza
+
+Il vincolo critico era la latenza di inferenza sincrona.
+-   **Model Serving**: Deployment su **Triton Inference Server** con ottimizzazione TensorRT per massimizzare il throughput su GPU.
+-   **Feature Store**: Utilizzo di Redis come low-latency store per il recupero istantaneo delle feature aggregare (online serving).
+
+## Risultati Tecnici
+
+Il deploy in produzione ha validato la robustezza dell'architettura:
+-   **Latenza Deterministica**: Tempi di risposta p99 costantemente sotto i 50ms, inclusi network trip e feature retrieval.
+-   **Adattabilità**: Il modello dimostra capacità di generalizzazione su nuovi pattern non presenti nel training set iniziale.
+-   **Scalabilità**: L'architettura disaccoppiata permette di scalare indipendentemente i nodi di calcolo (Flink) e i nodi di inferenza (Kubernetes/GPU).

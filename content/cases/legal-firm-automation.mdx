@@ -1,33 +1,38 @@
 ---
-title: "Legal Contract Analysis Platform"
+title: "Secure Document Intelligence Platform"
 publishedAt: "2024-06-22"
-summary: "Sistema RAG privato per l'analisi automatica di contratti M&A. Riduzione del 70% del tempo di due diligence legale."
+summary: "Sviluppo di un sistema RAG air-gapped per l'analisi e l'interrogazione semantica di corpus documentali riservati."
 industry: "Legal / Corporate"
-impact: "-70% Time"
+impact: "Secure Analysis"
 ---
 
-## Il Problema
-Uno studio legale internazionale specializzato in M&A (Mergers & Acquisitions) impiegava team di 10+ avvocati per settimane solo per analizzare le "Data Room" (migliaia di PDF, contratti, visure) delle aziende target. Il processo era lento, costoso e prono a errore umano.
+## Complessità nell'Analisi Documentale
 
-## La Soluzione: Private RAG (Retrieval-Augmented Generation)
-Abbiamo sviluppato una piattaforma interna "air-gapped" (senza accesso a internet per privacy) che permette di "interrogare" l'intera data room in linguaggio naturale.
+L'analisi intensiva di grandi volumi di documentazione non strutturata (Data Room, contratti complessi) presenta sfide uniche di scalabilità e precisione. I metodi manuali soffrono di fatica cognitiva, mentre le soluzioni cloud generaliste sono spesso inutilizzabili a causa di stringenti vincoli di riservatezza e proprietà intellettuale. La richiesta era per una soluzione on-premises capace di "ragionare" sui documenti mantenendo un isolamento totale.
 
-### Privacy-First Architecture
-Dato il segreto industriale delle informazioni, non potevamo usare API pubbliche (GPT-4, Claude).
-Abbiamo implementato un'infrastruttura basata su **LLM Open Source (Mistral 7B fine-tuned)** hostati su server proprietari dello studio.
+## Soluzione: Air-Gapped RAG
 
-### Funzionalità Core
-1.  **Ingestion Intelligente**: OCR avanzato per digitalizzare scansioni e PDF complessi, preservando la struttura (tabelle, firme).
-2.  **Semantic Search**: Ricerca concettuale (es. "Trova tutte le clausole di esclusiva con durata superiore a 2 anni").
-3.  **Cross-Document Reasoning**: Capacità di correlare informazioni tra documenti diversi (es. "La visura camerale conferma i poteri di firma citati nel contratto A?").
+Abbiamo realizzato una piattaforma di **Private Retrieval-Augmented Generation**, ingegnerizzata per operare in ambienti isolati senza connettività esterna.
+
+### Ingestion & Parsing Avanzato
+La qualità del retrieval dipende dalla qualità dell'ingestion (Garbage In, Garbage Out).
+-   **Layout-Aware Parsing**: Utilizzo di modelli di visione per segmentare correttamente PDF complessi multi-colonna, preservando la struttura di tabelle e intestazioni.
+-   **Recursive Chunking**: Strategie di segmentazione del testo gerarchiche per mantenere il contesto semantico (es. collegare una clausola al suo articolo di riferimento).
+
+### Local Inference Engine
+Per garantire la privacy, abbiamo evitato API esterne a favore di modelli proprietari hostati localmente:
+-   **LLM Fine-Tuning**: Adattamento di modelli open-weights (es. Mistral/Llama) su corpus giuridici specifici per migliorare la comprensione della terminologia tecnica.
+-   **Resource Optimization**: Quantizzazione (4-bit/8-bit) per eseguire l'inferenza su hardware on-premise limitato mantenendo un throughput accettabile.
 
 ## Stack Tecnologico
--   **LLM**: Mistral 7B (quantizzato 4-bit per efficienza su singola GPU A100).
--   **Backend**: LangChain, Python..
--   **Frontend**: React, Next.js.
--   **Security**: Docker containers, Network segregation.
 
-## Risultati
--   **Tempo di Due Diligence**: Ridotto da 3 settimane a 4 giorni (-70%).
--   **Precisione**: Il sistema evidenzia automaticamente clausole rischiose che spesso sfuggivano alla lettura veloce massiva.
--   **Competitive Advantage**: Lo studio ora può offrire preventivi più aggressivi mantenendo margini più alti.
+-   **Vector Store**: Milvus/ChromaDB per la gestione locale degli embedding documentali.
+-   **Inferenza**: vLLM per il serving ad alta efficienza del modello linguistico.
+-   **Orchestration**: LangChain per la gestione dei flussi di retrieval e della memoria conversazionale.
+
+## Risultati Operativi
+
+La piattaforma ha abilitato nuove capacità di analisi profonda:
+-   **Cross-Reference**: Capacità di identificare contraddizioni o correlazioni tra documenti distinti all'interno del corpus.
+-   **Precisione nel Retrieval**: Il sistema recupera ed evidenzia le fonti esatte (citazioni) per ogni generazione, facilitando la verifica umana.
+-   **Sicurezza Verificata**: Architettura validata per operare in ambienti a sicurezza critica ("zero data egress").
