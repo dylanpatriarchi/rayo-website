@@ -1,59 +1,70 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import NeuralNetwork from "@/components/NeuralNetwork";
 import { animateTextReveal } from "@/utils/gsap-animations";
-import InteractiveLogo from "@/components/InteractiveLogo";
+import BlurText from "@/components/BlurText";
 
 export default function Hero() {
-    const titleRef = useRef<HTMLHeadingElement>(null);
     const subtitleRef = useRef<HTMLParagraphElement>(null);
+    const [showButton, setShowButton] = useState(false);
 
-    // useEffect(() => {
-    //     animateTextReveal(titleRef.current, 0);
-    //     animateTextReveal(subtitleRef.current, 0.2);
-    // }, []);
+    const handleAnimationComplete = () => {
+        if (subtitleRef.current) {
+            animateTextReveal(subtitleRef.current, 0);
+        }
+        // Delay button appearance slightly after subtitle starts
+        setTimeout(() => setShowButton(true), 1000);
+    };
 
     return (
-        <section className="relative h-screen w-full overflow-hidden bg-background">
-            {/* Abstract Background Elements (Central) - Static Logo Replacement */}
-            <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none md:pointer-events-auto">
-                <div className="w-full max-w-7xl flex items-center justify-center opacity-90">
-                    <InteractiveLogo className="w-full aspect-[3/1] h-[40vh] md:h-[60vh] object-contain bg-transparent" />
+        <section className="relative min-h-screen w-full flex flex-col-reverse md:flex-row bg-background pt-[80px] md:pt-0 overflow-hidden">
+            {/* Left Panel: Content */}
+            <div className="w-full md:w-1/2 flex flex-col justify-center px-6 md:px-16 lg:px-24 py-12 md:py-0 z-10 bg-background relative">
+                <div className="max-w-xl">
+                    <div className="min-h-[160px] md:min-h-[240px] flex items-center">
+                        <div className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.1] text-foreground">
+                            <BlurText
+                                text="L'INTELLIGENZA ARTIFICIALE,"
+                                delay={50}
+                                animateBy="words"
+                                direction="top"
+                                className="inline-block mr-2 md:mr-4"
+                            />
+                            <BlurText
+                                text="DISTILLATA."
+                                delay={50}
+                                animateBy="words"
+                                direction="top"
+                                className="inline-block text-primary"
+                                onAnimationComplete={handleAnimationComplete}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="overflow-hidden mt-8">
+                        <p
+                            ref={subtitleRef}
+                            className="text-lg md:text-xl font-light text-neutral-500 leading-relaxed max-w-md opacity-0" // Start invisible for GSAP
+                        >
+                            Trasformiamo il caos dei dati in architetture operative. Soluzioni AI verticali per aziende che esigono precisione assoluta.
+                        </p>
+                    </div>
+
+                    <div className={`mt-12 flex items-center gap-4 transition-opacity duration-1000 ${showButton ? 'opacity-100' : 'opacity-0'}`}>
+                        {/* Removed CSS keyframe animation reliance */}
+                        <a href="/methodology" className="group relative px-8 py-3 bg-foreground text-background text-sm font-medium hover:bg-primary transition-colors duration-300 rounded-full">
+                            SCOPRI IL METODO
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            {/* Grid Overlay for texture */}
-            <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none"
-                style={{ backgroundImage: 'radial-gradient(#1C1C1E 1px, transparent 1px)', backgroundSize: '32px 32px' }}>
-            </div>
+            {/* Right Panel: Dense Graph Visualization */}
+            <div className="w-full md:w-1/2 min-h-[50vh] md:min-h-screen relative bg-background">
+                <NeuralNetwork />
 
-            {/* Title - Bottom Left (Responsive - Now consistent since Subtitle is hidden on mobile) */}
-            <div className="absolute bottom-12 left-6 md:bottom-12 md:left-12 z-10 max-w-4xl text-left">
-                <div className="overflow-visible pb-2 block">
-                    <h1
-                        ref={titleRef}
-                        className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tighter leading-tight md:leading-[0.9] text-foreground"
-                    >
-                        L&apos;intelligenza <br className="hidden md:block" />
-                        artificiale, <br />
-                        <span className="text-primary">distillata.</span>
-                    </h1>
-                </div>
-            </div>
-
-            {/* Subtitle - Bottom Right (Hidden on Mobile) */}
-            <div className="hidden md:block absolute bottom-12 right-12 z-10 max-w-sm md:max-w-md text-right">
-                <div className="overflow-hidden">
-                    <p
-                        ref={subtitleRef}
-                        className="text-lg md:text-xl font-light text-foreground/80 leading-relaxed"
-                    >
-                        Soluzioni AI verticali per aziende che esigono precisione ossessiva.
-                        <br />
-                        Trasformiamo il caos dei dati in architetture operative.
-                    </p>
-                </div>
+                {/* Overlay to fade edges if needed, but keeping it clean for now */}
             </div>
         </section>
     );
