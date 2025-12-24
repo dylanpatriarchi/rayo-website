@@ -9,7 +9,9 @@ export default function ContactPage() {
                     Hai un problema complesso? Ottimo. È il nostro pane quotidiano.
                 </p>
             </div>
-            <ContactForm />
+            <div className="max-w-7xl mx-auto items-start">
+                <ContactForm />
+            </div>
             <div className="py-24 text-center">
                 <p className="text-sm font-bold uppercase tracking-widest text-foreground/40 mb-4">Sede Operativa</p>
                 <p className="text-xl">Vocabolo Marcheggiane 56/C<br />06018, Breccione Zona Industriale (PG)</p>

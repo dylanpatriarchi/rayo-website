@@ -118,7 +118,7 @@ export default function Header() {
                     <MenuLink href="/blog" onClick={toggleMenu}>Blog</MenuLink>
                     <MenuLink href="/about" onClick={toggleMenu}>Chi Siamo</MenuLink>
                     <div className="h-px w-24 bg-background/20 mx-auto my-4"></div>
-                    <Link href="#contact" onClick={toggleMenu} className="text-xl font-light uppercase tracking-widest">
+                    <Link href="/contact" onClick={toggleMenu} className="text-xl font-light uppercase tracking-widest hover:text-primary transition-colors">
                         Contatti
                     </Link>
                 </nav>

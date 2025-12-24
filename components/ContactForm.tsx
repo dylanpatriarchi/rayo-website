@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import clsx from "clsx";
+import CalendlyWidget from "./CalendlyWidget";
 
 export default function ContactForm() {
     const [loading, setLoading] = useState(false);
@@ -62,67 +63,84 @@ export default function ContactForm() {
                         <button onClick={() => setSuccess(false)} className="mt-6 text-sm underline text-green-700">Invia un altro messaggio</button>
                     </div>
                 ) : (
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div className="flex flex-col gap-2">
-                                <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Nome</label>
-                                <input name="name" type="text" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="Il tuo nome" />
-                            </div>
-                            <div className="flex flex-col gap-2">
-                                <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Email</label>
-                                <input name="email" type="email" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="nome@azienda.com" />
-                            </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 items-start">
+                        {/* Left Column: Form */}
+                        <div className="flex flex-col h-full">
+                            <h3 className="text-xl md:text-2xl font-bold mb-6">Inviaci un messaggio</h3>
+                            <form onSubmit={handleSubmit} className="flex flex-col gap-6 flex-grow">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Nome</label>
+                                        <input name="name" type="text" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="Il tuo nome" />
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Email</label>
+                                        <input name="email" type="email" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="nome@azienda.com" />
+                                    </div>
+                                </div>
+
+                                {/* New Fields Row */}
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Azienda</label>
+                                        <input name="company" type="text" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="Nome Azienda" />
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">P.IVA / CF</label>
+                                        <input name="vat" type="text" className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="Opzionale" />
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Settore</label>
+                                        <select name="sector" defaultValue="" className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors appearance-none">
+                                            <option value="" disabled>Seleziona...</option>
+                                            <option value="finance">Finance & Banking</option>
+                                            <option value="legal">Legal & Compliance</option>
+                                            <option value="manufacturing">Manufacturing</option>
+                                            <option value="retail">Retail & E-commerce</option>
+                                            <option value="healthcare">Healthcare</option>
+                                            <option value="tech">Tech & SaaS</option>
+                                            <option value="other">Altro</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Messaggio</label>
+                                    <textarea name="message" required rows={4} className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors resize-none" placeholder="Descrivi brevemente il tuo progetto..." />
+                                </div>
+
+                                <div className="flex items-start gap-4 mt-4">
+                                    <input type="checkbox" id="privacy" required className="mt-1 accent-primary" />
+                                    <label htmlFor="privacy" className="text-sm font-light text-foreground/60 leading-snug">
+                                        Acconsento al trattamento dei dati personali secondo la <a href="/privacy-policy" className="underline">Privacy Policy</a>.
+                                        I dati non saranno mai ceduti a terzi.
+                                    </label>
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className={clsx(
+                                        "mt-8 bg-foreground text-background py-4 px-12 rounded-full font-bold tracking-wide self-start hover:bg-foreground/90 transition-all",
+                                        loading && "opacity-70 cursor-wait"
+                                    )}
+                                >
+                                    {loading ? "Invio in corso..." : "Invia Richiesta"}
+                                </button>
+                            </form>
                         </div>
 
-                        {/* New Fields Row */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            <div className="flex flex-col gap-2">
-                                <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Azienda</label>
-                                <input name="company" type="text" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="Nome Azienda" />
+                        {/* Right Column: Calendly */}
+                        <div className="flex flex-col h-full bg-background border border-foreground/10 rounded-2xl overflow-hidden p-6 min-h-[750px] shadow-sm">
+                            <div className="mb-2">
+                                <h3 className="text-xl md:text-2xl font-bold mb-2">Prenota una Call</h3>
+                                <p className="text-foreground/60 text-sm font-light">Scegli uno slot per una discovery call di 30 minuti con Dylan.</p>
                             </div>
-                            <div className="flex flex-col gap-2">
-                                <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">P.IVA / CF</label>
-                                <input name="vat" type="text" className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="Opzionale" />
-                            </div>
-                            <div className="flex flex-col gap-2">
-                                <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Settore</label>
-                                <select name="sector" defaultValue="" className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors appearance-none">
-                                    <option value="" disabled>Seleziona...</option>
-                                    <option value="finance">Finance & Banking</option>
-                                    <option value="legal">Legal & Compliance</option>
-                                    <option value="manufacturing">Manufacturing</option>
-                                    <option value="retail">Retail & E-commerce</option>
-                                    <option value="healthcare">Healthcare</option>
-                                    <option value="tech">Tech & SaaS</option>
-                                    <option value="other">Altro</option>
-                                </select>
+                            <div className="flex-grow -mx-4">
+                                <CalendlyWidget />
                             </div>
                         </div>
-
-                        <div className="flex flex-col gap-2">
-                            <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Messaggio</label>
-                            <textarea name="message" required rows={4} className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors resize-none" placeholder="Descrivi brevemente il tuo progetto..." />
-                        </div>
-
-                        <div className="flex items-start gap-4 mt-4">
-                            <input type="checkbox" id="privacy" required className="mt-1 accent-primary" />
-                            <label htmlFor="privacy" className="text-sm font-light text-foreground/60 leading-snug">
-                                Acconsento al trattamento dei dati personali secondo la <a href="/privacy-policy" className="underline">Privacy Policy</a>.
-                                I dati non saranno mai ceduti a terzi.
-                            </label>
-                        </div>
-
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className={clsx(
-                                "mt-8 bg-foreground text-background py-4 px-12 rounded-full font-bold tracking-wide self-start hover:bg-foreground/90 transition-all",
-                                loading && "opacity-70 cursor-wait"
-                            )}
-                        >
-                            {loading ? "Invio in corso..." : "Invia Richiesta"}
-                        </button>
-                    </form>
+                    </div>
                 )}
             </div>
         </section>
