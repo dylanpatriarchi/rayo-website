@@ -34,8 +34,9 @@ export default function CookieBanner() {
                     <div>
                         <h4 className="font-bold text-lg mb-2">Privacy & Cookies</h4>
                         <p className="text-sm font-light text-foreground/70 leading-relaxed">
-                            Utilizziamo cookie tecnici e analitici anonimizzati per garantirti la migliore esperienza di navigazione.
-                            Puoi gestire le tue preferenze o accettare tutti i cookie.
+                            Utilizziamo cookie tecnici, analitici e di profilazione per garantirti la migliore esperienza e mostrarti contenuti pertinenti.
+                            Accettando, acconsenti all'uso di tutti i cookie, inclusi quelli pubblicitari di Google.
+                            Puoi scegliere di accettare tutto o rifiutare i cookie non essenziali.
                             <a href="/cookie-policy" className="block mt-2 text-xs underline opacity-60 hover:opacity-100 transition-opacity">
                                 Leggi la Cookie Policy
                             </a>

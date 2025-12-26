@@ -1,6 +1,7 @@
 import { getPost, getAllPosts } from "@/utils/mdx";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import GoogleAdUnit from "@/components/GoogleAdUnit";
 
 export async function generateStaticParams() {
     const posts = getAllPosts("blog");
@@ -51,6 +52,11 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
             <div className="prose prose-lg md:prose-xl prose-slate dark:prose-invert max-w-none prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-li:text-foreground prose-a:text-primary hover:prose-a:text-blue-600 prose-img:rounded-xl">
                 <MDXRemote source={post.content} />
+            </div>
+
+            <div className="mt-16 border-t border-foreground/10 pt-12">
+                <p className="text-sm font-light text-foreground/50 text-center mb-6">Advertisement</p>
+                <GoogleAdUnit slot="2375828345" format="auto" responsive={true} />
             </div>
         </article>
     );

@@ -24,7 +24,17 @@ export default function PrivacyPolicy() {
                 <ul>
                     <li>Rispondere alle richieste di contatto.</li>
                     <li>Erogare i nostri servizi di consulenza AI.</li>
+                    <li><strong>Marketing e Pubblicità:</strong> Mostrare annunci personalizzati tramite Google AdSense (solo previo consenso).</li>
+                    <li><strong>Prenotazione Appuntamenti:</strong> Gestire il calendario tramite Calendly (solo previo consenso).</li>
                     <li>Adempiere agli obblighi legali e fiscali.</li>
+                </ul>
+
+                <h3>4. Servizi di Terze Parti</h3>
+                <p>Il sito utilizza i seguenti servizi che potrebbero raccogliere dati:</p>
+                <ul>
+                    <li><strong>Google Analytics 4:</strong> Statistiche (anonimizzato).</li>
+                    <li><strong>Google AdSense:</strong> Pubblicità personalizzata (profilazione).</li>
+                    <li><strong>Calendly:</strong> Prenotazione appuntamenti.</li>
                 </ul>
 
                 <h3>4. Base Giuridica</h3>

@@ -13,6 +13,8 @@ export default function CookiePolicy() {
                 <ul>
                     <li><strong>Tecnici (Necessari):</strong> Indispensabili per il funzionamento del sito (es. gestione preferenze cookie). Non richiedono consenso.</li>
                     <li><strong>Analitici (Google Analytics 4):</strong> Utilizzati per raccogliere statistiche anonime sull&apos;uso del sito. Richiedono il tuo consenso.</li>
+                    <li><strong>Profilazione (Google AdSense):</strong> Utilizzati per mostrarti annunci pubblicitari pertinenti ai tuoi interessi. Richiedono il tuo consenso.</li>
+                    <li><strong>Funzionali (Calendly):</strong> Necessari per il widget di prenotazione appuntamenti. Richiedono il tuo consenso.</li>
                 </ul>
 
                 <h3>Gestione del Consenso</h3>
