@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAllPosts } from "@/utils/mdx";
+import PostList from "@/components/PostList";
 
 export const metadata = {
     title: "Blog | Rayo Consulting",
@@ -16,26 +17,8 @@ export default function BlogPage() {
                 Trasmissioni.
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                {posts.map((post) => (
-                    <Link
-                        key={post.slug}
-                        href={`/blog/${post.slug}`}
-                        className="group block border-t border-foreground/10 pt-8"
-                    >
-                        <div className="text-sm text-foreground/50 mb-4">{post.metadata.publishedAt}</div>
-                        <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">
-                            {post.metadata.title}
-                        </h3>
-                        <p className="text-foreground/70 font-light leading-relaxed mb-4">
-                            {post.metadata.summary}
-                        </p>
-                        <div className="text-sm font-bold underline decoration-1 underline-offset-4 decoration-primary/50 group-hover:decoration-primary transition-all">
-                            Leggi tutto
-                        </div>
-                    </Link>
-                ))}
-            </div>
+            <PostList initialPosts={posts} variant="blog" />
         </main>
     );
 }
+

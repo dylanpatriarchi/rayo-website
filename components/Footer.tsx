@@ -125,6 +125,7 @@ export default function Footer() {
                         <div className="flex gap-4 text-xs font-light text-foreground/40">
                             <a href="/privacy-policy" className="hover:opacity-70">Privacy Policy</a>
                             <a href="/cookie-policy" className="hover:opacity-70">Cookie Policy</a>
+                            <a href="/terms" className="hover:opacity-70">Termini e Condizioni</a>
                         </div>
                         <p className="text-xs font-light text-foreground/30 mt-auto">
                             © {new Date().getFullYear()} Rayo Consulting. All rights reserved.
