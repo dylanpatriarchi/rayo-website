@@ -115,6 +115,7 @@ export default function Footer() {
                         <a href="/blog" className="hover:text-primary transition-colors">Blog</a>
                         <a href="/about" className="hover:text-primary transition-colors">Chi Siamo</a>
                         <a href="/contact" className="hover:text-primary transition-colors">Contatti</a>
+                        <a href="/careers" className="hover:text-primary transition-colors text-primary/80">Lavora con noi</a>
                     </div>
 
                     <div className="flex flex-col items-start gap-4">

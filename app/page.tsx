@@ -3,6 +3,7 @@ import Services from "@/components/Services";
 import Methodology from "@/components/Methodology";
 import WorkEthic from "@/components/WorkEthic";
 import FAQ from "@/components/FAQ";
+import Testimonials from "@/components/Testimonials";
 import ContactForm from "@/components/ContactForm";
 import CaseStudiesPreview from "@/components/CaseStudiesPreview";
 import { getAllPosts } from "@/utils/mdx";
@@ -20,6 +21,7 @@ export default function Home() {
       <WorkEthic />
       <Methodology />
       <FAQ />
+      <Testimonials />
       <ContactForm />
     </main>
   );
