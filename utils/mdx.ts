@@ -16,11 +16,11 @@ export type Post = {
     content: string;
 };
 
-export function getFiles(type: "blog" | "cases") {
+export function getFiles(type: "blog" | "cases" | "jobs") {
     return fs.readdirSync(path.join(root, "content", type));
 }
 
-export function getPost(type: "blog" | "cases", slug: string): Post | null {
+export function getPost(type: "blog" | "cases" | "jobs", slug: string): Post | null {
     try {
         const source = fs.readFileSync(
             path.join(root, "content", type, `${slug}.mdx`),
@@ -39,7 +39,7 @@ export function getPost(type: "blog" | "cases", slug: string): Post | null {
     }
 }
 
-export function getAllPosts(type: "blog" | "cases"): Post[] {
+export function getAllPosts(type: "blog" | "cases" | "jobs"): Post[] {
     const files = getFiles(type);
 
     return files.reduce((allPosts, postSlug) => {
