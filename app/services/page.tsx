@@ -110,6 +110,33 @@ export default function ServicesPage() {
                         <div className="text-lg font-bold">Da €450</div>
                     </div>
                 </section>
+
+                {/* B2B Dev Team Section */}
+                <section className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-start border-t border-foreground/10 pt-24">
+                    <div>
+                        <h3 className="text-4xl font-bold mb-6">Team Extension per Software House & Agenzie</h3>
+                        <p className="text-xl font-light text-foreground/70 leading-relaxed mb-8">
+                            Supporto tecnico on-demand per agenzie digitali e software house che vogliono scalare
+                            senza assumere full-time. Integrazione AI, sviluppo custom, architetture complesse.
+                            Lavoriamo come una estensione del tuo team, con gli stessi standard di qualità che usiamo per i nostri clienti diretti.
+                        </p>
+                        <ul className="space-y-4 text-sm font-medium border-l-2 border-primary pl-6">
+                            <li>Sviluppo AI (RAG, Fine-tuning, Agenti)</li>
+                            <li>Full-stack custom (Next.js, Node, Python)</li>
+                            <li>Integrazioni complesse e API design</li>
+                        </ul>
+                    </div>
+                    <div className="bg-foreground/5 p-8 md:p-12 rounded-lg">
+                        <div className="text-sm uppercase tracking-wide opacity-50 mb-2">Modalità di Lavoro</div>
+                        <ul className="list-disc list-inside space-y-2 mb-8">
+                            <li>Ticket-based (blocchi di ore prepagati)</li>
+                            <li>Sprint dedicati (progetti di 1-2 settimane)</li>
+                            <li>Retainer mensile (supporto continuativo)</li>
+                        </ul>
+                        <div className="text-lg font-bold">€30/ora </div>
+                        <div className="text-sm text-foreground/50 mt-2">Minimo 10 ore/mese</div>
+                    </div>
+                </section>
             </div>
         </main>
     );

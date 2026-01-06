@@ -32,6 +32,13 @@ const services = [
         description: "Asset digitali performanti. Next.js e SEO avanzato per dominare il mercato.",
         price: "da €450",
         tags: ["Next.js", "React", "Advanced SEO"]
+    },
+    {
+        id: "05",
+        title: "B2B DEV TEAM",
+        description: "Consulenza e sviluppo su richiesta per Software House e Agenzie. AI o full-stack custom.",
+        price: "€30/ora",
+        tags: ["Team Extension", "Custom Dev", "AI Integration"]
     }
 ];
 

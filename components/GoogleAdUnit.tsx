@@ -44,10 +44,9 @@ export default function GoogleAdUnit({ slot, format = "auto", responsive = true,
         }
     }, [showAd]);
 
-    if (!showAd) return null;
-
+    // Always render the ad slot (for Google verification), but only activate when consent is given
     return (
-        <div className="w-full text-center my-8 min-h-[100px] bg-background/50 animate-in fade-in zoom-in duration-500">
+        <div className="w-full text-center my-8 min-h-[100px] bg-background/50">
             <ins
                 className="adsbygoogle"
                 style={{ display: "block", width: "100%", ...style }}
