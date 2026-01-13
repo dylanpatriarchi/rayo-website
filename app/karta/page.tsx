@@ -21,7 +21,7 @@ function KartaDemo() {
     const opacity = useTransform(scrollYProgress, [0, 0.2], [0.5, 1]);
 
     return (
-        <div ref={containerRef} className="mt-24 w-full max-w-5xl mx-auto perspective-[2000px] h-[800px] flex items-center justify-center relative">
+        <div ref={containerRef} className="mt-12 md:mt-24 w-full max-w-5xl mx-auto perspective-[2000px] h-[600px] md:h-[800px] flex items-center justify-center relative">
 
             <motion.div
                 style={{ rotateX, scale, opacity }}
@@ -36,19 +36,19 @@ function KartaDemo() {
                             <div className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-black/10"></div>
                             <div className="w-3 h-3 rounded-full bg-[#28C840] border border-black/10"></div>
                         </div>
-                        <div className="flex-1 bg-white rounded-md h-7 px-3 flex items-center gap-2 text-xs text-gray-500 shadow-sm border border-gray-200">
-                            <Lock size={10} className="text-gray-400" />
-                            <span className="text-gray-400">linkedin.com/in/dylanpatriarchi</span>
+                        <div className="flex-1 bg-white rounded-md h-7 px-3 flex items-center gap-2 text-xs text-gray-500 shadow-sm border border-gray-200 overflow-hidden">
+                            <Lock size={10} className="text-gray-400 shrink-0" />
+                            <span className="text-gray-400 truncate">linkedin.com/in/dylanpatriarchi</span>
                         </div>
                     </div>
 
                     {/* Fake LinkedIn Header */}
-                    <div className="h-14 bg-white border-b border-gray-200 flex items-center px-8 gap-4">
-                        <div className="w-8 h-8 bg-[#0A66C2] rounded"></div>
-                        <div className="w-64 h-8 bg-gray-100 rounded-md"></div>
+                    <div className="h-14 bg-white border-b border-gray-200 flex items-center px-4 md:px-8 gap-4">
+                        <div className="w-8 h-8 bg-[#0A66C2] rounded shrink-0"></div>
+                        <div className="w-40 md:w-64 h-8 bg-gray-100 rounded-md"></div>
                         <div className="ml-auto flex gap-6">
-                            <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
-                            <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
+                            <div className="w-6 h-6 bg-gray-300 rounded-full hidden md:block"></div>
+                            <div className="w-6 h-6 bg-gray-300 rounded-full hidden md:block"></div>
                             <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
                         </div>
                     </div>
@@ -58,8 +58,8 @@ function KartaDemo() {
                         <div className="h-40 bg-gradient-to-r from-blue-100 to-blue-200"></div>
                         <div className="px-8 relative">
                             <div className="w-32 h-32 rounded-full border-4 border-white bg-gray-200 -mt-20 mb-4"></div>
-                            <div className="h-8 w-64 bg-gray-800 rounded mb-3"></div>
-                            <div className="h-4 w-96 bg-gray-400 rounded mb-6"></div>
+                            <div className="h-8 w-48 md:w-64 bg-gray-800 rounded mb-3"></div>
+                            <div className="h-4 w-60 md:w-96 bg-gray-400 rounded mb-6"></div>
                             <div className="flex gap-2">
                                 <div className="h-8 w-24 bg-[#0A66C2] rounded-full"></div>
                                 <div className="h-8 w-24 bg-white border border-gray-400 rounded-full"></div>
@@ -74,7 +74,7 @@ function KartaDemo() {
                 <motion.div
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    className="absolute top-20 right-[15%] w-[380px] bg-white rounded-[24px] shadow-2xl border border-gray-100 overflow-hidden flex flex-col z-20"
+                    className="absolute top-4 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-[15%] md:top-20 w-[95%] max-w-[380px] bg-white rounded-[24px] shadow-2xl border border-gray-100 overflow-hidden flex flex-col z-20"
                 >
                     {/* Popup Header */}
                     <div className="px-6 py-5 flex items-center justify-between bg-white">
