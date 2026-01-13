@@ -6,6 +6,13 @@ export default function PrivacyPolicy() {
             <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-li:text-foreground prose-a:text-primary hover:prose-a:text-blue-600">
                 <p><strong>Ultimo aggiornamento: {new Date().toLocaleDateString('it-IT')}</strong></p>
 
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 my-6 not-prose">
+                    <p className="text-sm text-gray-800 m-0">
+                        Stai cercando la policy per l&apos;estensione Chrome <strong>Karta</strong>?
+                        <a href="/karta/privacy" className="text-[#0047FF] font-bold hover:underline ml-1">Consulta la Karta Privacy Policy qui.</a>
+                    </p>
+                </div>
+
                 <h3>1. Titolare del Trattamento</h3>
                 <p>Rayo Consulting di Patriarchi Dylan<br />
                     Vocabolo Marcheggiane 56/C, Breccione Zona Industriale, 06018 PG<br />

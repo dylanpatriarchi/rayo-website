@@ -109,6 +109,7 @@ export default function Footer() {
 
                     <div className="flex flex-col gap-2 text-sm font-light text-foreground/60">
                         <p className="font-bold text-foreground mb-2">Menu</p>
+                        <a href="/karta" className="hover:text-primary transition-colors text-primary font-medium">Karta (New)</a>
                         <a href="/services" className="hover:text-primary transition-colors">Servizi</a>
                         <a href="/cases" className="hover:text-primary transition-colors">Casi Studio</a>
                         <a href="/methodology" className="hover:text-primary transition-colors">Metodologia</a>

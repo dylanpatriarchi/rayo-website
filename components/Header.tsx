@@ -62,7 +62,7 @@ export default function Header() {
         <>
             <header
                 ref={headerRef}
-                className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] text-foreground px-6 md:px-8 py-4 flex justify-between items-center bg-transparent transition-all rounded-full w-[90%] md:w-auto md:min-w-[600px] lg:min-w-[800px] border border-transparent"
+                className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] text-foreground px-6 md:px-8 py-4 flex justify-between items-center bg-transparent transition-all rounded-full w-[95%] md:w-auto md:min-w-[700px] lg:min-w-[900px] border border-transparent"
             >
                 <div className="flex items-center relative z-[60]">
                     <Link
@@ -85,6 +85,7 @@ export default function Header() {
 
                 {/* Desktop Nav */}
                 <nav className="hidden md:flex gap-5 text-xs uppercase tracking-wider font-light items-center">
+                    <a href="/karta" className="hover:opacity-50 transition-opacity whitespace-nowrap text-primary font-bold">Karta</a>
                     <a href="/services" className="hover:opacity-50 transition-opacity whitespace-nowrap">Servizi</a>
                     <a href="/cases" className="hover:opacity-50 transition-opacity whitespace-nowrap">Casi Studio</a>
                     <a href="/methodology" className="hover:opacity-50 transition-opacity whitespace-nowrap">Metodologia</a>
@@ -112,6 +113,7 @@ export default function Header() {
             {/* Mobile Menu Overlay */}
             <div className={`fixed inset-0 bg-foreground z-[90] flex flex-col items-center justify-center transition-all duration-500 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
                 <nav className="flex flex-col gap-8 text-center text-background">
+                    <MenuLink href="/karta" onClick={toggleMenu}><span className="text-primary">Karta</span></MenuLink>
                     <MenuLink href="/services" onClick={toggleMenu}>Servizi</MenuLink>
                     <MenuLink href="/cases" onClick={toggleMenu}>Casi Studio</MenuLink>
                     <MenuLink href="/methodology" onClick={toggleMenu}>Metodologia</MenuLink>
