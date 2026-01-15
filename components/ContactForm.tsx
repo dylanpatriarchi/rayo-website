@@ -141,10 +141,11 @@ export default function ContactForm() {
                                     // Valid "random" number based on month index (0-11)
                                     // This ensures consistency for all users within the same month
                                     const monthIndex = date.getMonth();
-                                    const slots = ((monthIndex % 3) + 1); // logic: 0->1, 1->2, 2->3, 3->1...
+                                    const slots = ((monthIndex % 3) + 1);
+                                    const suffix = slots === 1 ? 'disponibile' : 'disponibili';
 
                                     return (
-                                        <>🔥 Solo {slots} slot disponibili per {currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1)} {currentYear}</>
+                                        <>🔥 Solo {slots} slot {suffix} per {currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1)} {currentYear}</>
                                     );
                                 })()}
                             </div>
