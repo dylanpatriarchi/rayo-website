@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useState, useRef } from "react";
 
 function KartaDemo() {
-    const [activeTab, setActiveTab] = useState<"generate" | "settings">("generate");
+    const [activeTab, setActiveTab] = useState<"generate" | "history" | "settings">("generate");
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Scroll Animation Logic
@@ -77,32 +77,38 @@ function KartaDemo() {
                     className="absolute top-4 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-[15%] md:top-20 w-[95%] max-w-[380px] bg-white rounded-[24px] shadow-2xl border border-gray-100 overflow-hidden flex flex-col z-20"
                 >
                     {/* Popup Header */}
-                    <div className="px-6 py-5 flex items-center justify-between bg-white">
-                        <div className="flex items-center gap-3">
-                            <Image src="/favicon.svg" width={32} height={32} alt="Karta Logo" className="w-8 h-8" />
-                            <span className="font-bold text-xl tracking-tight text-black">Karta</span>
+                    <div className="px-5 py-4 flex items-center justify-between bg-white gap-2">
+                        <div className="flex items-center gap-2 shrink-0">
+                            <Image src="/favicon.svg" width={28} height={28} alt="Karta Logo" className="w-7 h-7" />
+                            <span className="font-bold text-lg tracking-tight text-black">Karta</span>
                         </div>
-                        <div className="bg-[#F3F4F6] p-1 rounded-full flex text-xs font-medium relative">
+                        <div className="bg-[#F3F4F6] p-1 rounded-full flex text-[11px] font-medium relative shrink-0">
                             {/* Animated Tab Background */}
                             <motion.div
                                 className="absolute top-1 bottom-1 bg-white rounded-full shadow-sm z-0"
                                 initial={false}
                                 animate={{
-                                    x: activeTab === 'generate' ? 4 : 86,
-                                    width: activeTab === 'generate' ? 82 : 78
+                                    x: activeTab === 'generate' ? 3 : (activeTab === 'history' ? 73 : 133),
+                                    width: activeTab === 'generate' ? 70 : (activeTab === 'history' ? 60 : 66)
                                 }}
                                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                             />
 
                             <button
                                 onClick={() => setActiveTab("generate")}
-                                className={`px-4 py-1.5 rounded-full z-10 transition-colors relative ${activeTab === 'generate' ? 'text-black' : 'text-gray-400 hover:text-gray-600'}`}
+                                className={`px-3 py-1 rounded-full z-10 transition-colors relative w-[70px] ${activeTab === 'generate' ? 'text-black' : 'text-gray-400 hover:text-gray-600'}`}
                             >
                                 Generate
                             </button>
                             <button
+                                onClick={() => setActiveTab("history")}
+                                className={`px-3 py-1 rounded-full z-10 transition-colors relative w-[60px] ${activeTab === 'history' ? 'text-black' : 'text-gray-400 hover:text-gray-600'}`}
+                            >
+                                History
+                            </button>
+                            <button
                                 onClick={() => setActiveTab("settings")}
-                                className={`px-4 py-1.5 rounded-full z-10 transition-colors relative ${activeTab === 'settings' ? 'text-black' : 'text-gray-400 hover:text-gray-600'}`}
+                                className={`px-3 py-1 rounded-full z-10 transition-colors relative w-[66px] ${activeTab === 'settings' ? 'text-black' : 'text-gray-400 hover:text-gray-600'}`}
                             >
                                 Settings
                             </button>
@@ -181,6 +187,34 @@ function KartaDemo() {
                                             <div className="h-2 w-4/6 bg-gray-100 rounded"></div>
                                         </div>
                                     </div>
+                                </motion.div>
+                            ) : activeTab === "history" ? (
+                                <motion.div
+                                    key="history"
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="pt-2 space-y-3"
+                                >
+                                    {[
+                                        { name: "Dylan Patriarchi", date: "Jan 15, 04:36 PM" },
+                                        { name: "Dylan Patriarchi", date: "Jan 14, 04:07 PM" },
+                                        { name: "Dylan Patriarchi", date: "Jan 14, 04:04 PM" }
+                                    ].map((item, i) => (
+                                        <div key={i} className="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-3xl shadow-[0_2px_20px_rgba(0,0,0,0.02)] hover:shadow-md transition-shadow cursor-pointer group">
+                                            <div>
+                                                <div className="font-bold text-gray-900">{item.name}</div>
+                                                <div className="flex items-center gap-2 text-xs text-gray-400 mt-1">
+                                                    <Layers size={12} />
+                                                    {item.date}
+                                                </div>
+                                            </div>
+                                            <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-[#0047FF]/10 transition-colors">
+                                                <ArrowRight size={14} className="text-gray-300 group-hover:text-[#0047FF]" />
+                                            </div>
+                                        </div>
+                                    ))}
                                 </motion.div>
                             ) : (
                                 <motion.div
@@ -287,10 +321,15 @@ export default function KartaPage() {
                     transition={{ duration: 0.5, delay: 0.3 }}
                     className="flex flex-col sm:flex-row items-center gap-4"
                 >
-                    <button className="h-14 px-8 rounded-full bg-[#0047FF] text-white font-semibold text-lg hover:bg-blue-600 transition-all shadow-lg hover:shadow-blue-500/30 flex items-center gap-2">
+                    <a
+                        href="https://github.com/dylanpatriarchi/karta"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="h-14 px-8 rounded-full bg-[#0047FF] text-white font-semibold text-lg hover:bg-blue-600 transition-all shadow-lg hover:shadow-blue-500/30 flex items-center gap-2"
+                    >
                         <Download size={20} />
                         Aggiungi a Chrome
-                    </button>
+                    </a>
                     <a
                         href="https://github.com/dylanpatriarchi/karta"
                         target="_blank"
@@ -472,10 +511,15 @@ export default function KartaPage() {
                     <p className="text-xl text-gray-500 mb-12 max-w-2xl mx-auto">
                         Inizia a chiudere più deal con la tua AI personale per LinkedIn.
                     </p>
-                    <button className="h-16 px-10 rounded-full bg-[#0047FF] text-white font-bold text-xl hover:bg-blue-600 transition-all shadow-[0_8px_30px_rgb(0,71,255,0.4)] hover:shadow-[0_8px_40px_rgb(0,71,255,0.6)] flex items-center gap-3 mx-auto transform hover:-translate-y-1">
+                    <a
+                        href="https://github.com/dylanpatriarchi/karta"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="h-16 px-10 rounded-full bg-[#0047FF] text-white font-bold text-xl hover:bg-blue-600 transition-all shadow-[0_8px_30px_rgb(0,71,255,0.4)] hover:shadow-[0_8px_40px_rgb(0,71,255,0.6)] flex items-center gap-3 mx-auto transform hover:-translate-y-1"
+                    >
                         <Download size={24} />
                         Aggiungi a Chrome - È Gratis
-                    </button>
+                    </a>
                     <p className="mt-8 text-xs text-gray-400 uppercase tracking-[0.2em]">
                         Funziona su Chrome, Arc e Edge
                     </p>
