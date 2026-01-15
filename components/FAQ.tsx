@@ -18,7 +18,7 @@ const faqs = [
     },
     {
         question: "Quanto costa l'investimento iniziale e qual è il ROI?",
-        answer: "I nostri progetti AI partono da €2.5k. Il ROI medio misurato sui nostri clienti è del 300% nel primo anno, grazie al risparmio netto di ore-uomo e all'azzeramento degli errori manuali."
+        answer: "I nostri progetti AI partono da €1.5k. Il ROI medio misurato sui nostri clienti è del 300% nel primo anno, grazie al risparmio netto di ore-uomo e all'azzeramento degli errori manuali."
     },
     {
         question: "Offrite manutenzione post-rilascio?",
