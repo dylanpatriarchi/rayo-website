@@ -6,6 +6,8 @@ import FAQ from "@/components/FAQ";
 import Testimonials from "@/components/Testimonials";
 import ContactForm from "@/components/ContactForm";
 import CaseStudiesPreview from "@/components/CaseStudiesPreview";
+import LogoStrip from "@/components/LogoStrip";
+import Comparison from "@/components/Comparison";
 import { getAllPosts } from "@/utils/mdx";
 
 export default function Home() {
@@ -16,10 +18,12 @@ export default function Home() {
   return (
     <main className="w-full min-h-screen">
       <Hero />
+      <LogoStrip />
       <Services />
       <CaseStudiesPreview posts={featuredCases} />
       <WorkEthic />
       <Methodology />
+      <Comparison />
       <FAQ />
       <Testimonials />
       <ContactForm />

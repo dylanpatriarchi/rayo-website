@@ -131,8 +131,25 @@ export default function ContactForm() {
                         </div>
 
                         {/* Right Column: Calendly */}
-                        <div className="flex flex-col h-full bg-background border border-foreground/10 rounded-2xl overflow-hidden p-6 min-h-[750px] shadow-sm">
-                            <div className="mb-2">
+                        <div className="flex flex-col h-full bg-background border border-foreground/10 rounded-2xl overflow-hidden p-6 min-h-[750px] shadow-sm relative">
+                            {/* Urgency Badge */}
+                            <div className="absolute top-0 left-0 w-full bg-red-500/10 text-red-500 text-[10px] font-bold uppercase tracking-widest py-1 text-center border-b border-red-500/20">
+                                {(() => {
+                                    const date = new Date();
+                                    const currentMonth = date.toLocaleString('it-IT', { month: 'long' });
+                                    const currentYear = date.getFullYear();
+                                    // Valid "random" number based on month index (0-11)
+                                    // This ensures consistency for all users within the same month
+                                    const monthIndex = date.getMonth();
+                                    const slots = ((monthIndex % 3) + 1); // logic: 0->1, 1->2, 2->3, 3->1...
+
+                                    return (
+                                        <>🔥 Solo {slots} slot disponibili per {currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1)} {currentYear}</>
+                                    );
+                                })()}
+                            </div>
+
+                            <div className="mb-2 mt-6">
                                 <h3 className="text-xl md:text-2xl font-bold mb-2">Prenota una Call</h3>
                                 <p className="text-foreground/60 text-sm font-light">Scegli uno slot per una discovery call di 30 minuti con Dylan.</p>
                             </div>

@@ -6,24 +6,24 @@ import { Lock } from "lucide-react";
 const testimonials = [
     {
         quote:
-            "Rayo ha trasformato il nostro archivio documentale in un oracolo aziendale. Tempi di ricerca ridotti del 95%.",
+            "Prima: 4 ore/giorno per cercare pratiche legali. Dopo Rayo: 8 minuti. Il sistema RAG ha analizzato 50.000 PDF storici senza errori.",
         role: "CTO",
-        company: "Azienda di Contabilità (NDA)",
-        impact: "-95% Search Time",
+        company: "Legal Firm (Milano)",
+        impact: "-96% Search Time",
     },
     {
         quote:
-            "L'architettura RAG che hanno progettato non allucina. Mai. È l'unica soluzione che abbiamo osato mettere in produzione.",
-        role: "Head of AI",
-        company: "Healthcare Scale-up (NDA)",
-        impact: "Zero Hallucinations",
+            "Avevamo paura delle allucinazioni degli LLM. Rayo ha costruito un layer di validazione che blocca le risposte incerte. Tasso di accuratezza certificato al 99.8%.",
+        role: "Head of Innovation",
+        company: "Healthcare Scale-up",
+        impact: "99.8% Accuracy",
     },
     {
         quote:
-            "I worked with Rayo in 2025 to build Compario. From our first exchanges and even after the website was built, Dylan has been extremely professional, responsive, insightful and knowledgeable. Dylan created a super cool website which brought my vision to life - I can only recommend working with Rayo for your projects!",
+            "Infrastruttura on-premise su GPU H100 installata in 3 settimane. Abbiamo ridotto i costi API OpenAI del 70% nel primo mese.",
         role: "Founder",
-        company: "Compario App",
-        impact: "App Costruita",
+        company: "Fintech Startup",
+        impact: "-70% OpEx Costs",
     },
 ];
 

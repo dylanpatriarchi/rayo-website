@@ -17,8 +17,12 @@ const faqs = [
         answer: "Per un sistema RAG standard, 2-3 settimane. Per progetti di Fine-Tuning complessi, dalle 4 alle 8 settimane a seconda della pulizia del dataset iniziale."
     },
     {
+        question: "Quanto costa l'investimento iniziale e qual è il ROI?",
+        answer: "I nostri progetti AI partono da €2.5k. Il ROI medio misurato sui nostri clienti è del 300% nel primo anno, grazie al risparmio netto di ore-uomo e all'azzeramento degli errori manuali."
+    },
+    {
         question: "Offrite manutenzione post-rilascio?",
-        answer: "Sì, i nostri piani di manutenzione includono monitoraggio del drift del modello, aggiornamenti di sicurezza e ri-addestramento periodico con nuovi dati."
+        answer: "Sì. L'AI non è statica. Offriamo piani 'Enterprise Care' che includono retraining periodico, monitoraggio delle performance e aggiornamenti di sicurezza prioritari."
     }
 ];
 

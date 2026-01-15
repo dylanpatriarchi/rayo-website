@@ -1,0 +1,5 @@
+<svg width="140" height="32" viewBox="0 0 140 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M10 6h20v4h-20zm0 8h16v4h-16zm0 8h12v4h-12z" fill="#0047FF" fill-opacity="0.4" />
+  <path d="M6 6h4v20h-4z" fill="#0047FF" />
+  <text x="40" y="21" fontFamily="Arial, sans-serif" fontWeight="bold" fontSize="18" letterSpacing="1" fill="#0047FF">FUTURA</text>
+</svg>

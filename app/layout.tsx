@@ -33,20 +33,20 @@ const helvetica = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "Rayo Consulting | AI & Web Agency",
+    default: "Rayo Consulting | Enterprise AI Solutions",
     template: "%s | Rayo Consulting",
   },
-  description: "Agenzia AI & Sviluppo Web Enterprise. Costruiamo architetture RAG, modelli Fine-Tuned e piattaforme web ad alte prestazioni.",
-  keywords: ["AI Agency", "Web Agency", "Sviluppo Next.js", "RAG", "LLM Fine-tuning", "Software House Perugia", "Consulenza AI"],
-  authors: [{ name: "Dylan Patriarchi" }],
+  description: "Trasformiamo processi manuali in sistemi AI autonomi. Agenzia specializzata in RAG Enterprise, LLM Fine-Tuning e Automazione Business Critica.",
+  keywords: ["Enterprise AI Agency", "Sviluppo RAG", "LLM Fine-tuning Italia", "Automazione Processi AI", "Consulenza AI B2B", "Software House AI"],
+  authors: [{ name: "Rayo Consulting Team" }],
   creator: "Rayo Consulting",
   metadataBase: new URL("https://rayo.consulting"),
   openGraph: {
     type: "website",
     locale: "it_IT",
     url: "https://rayo.consulting",
-    title: "Rayo Consulting | AI & Web Agency",
-    description: "Soluzioni AI verticali e Sviluppo Web di precisione. Dalla RAG Enterprise ai siti Next.js ad alte prestazioni.",
+    title: "Rayo Consulting | L'AI che porta ROI",
+    description: "Smetti di giocare con le chat. Costruiamo infrastrutture AI proprietarie che riducono i costi operativi dal 40% al 60%.",
     siteName: "Rayo Consulting",
   },
   icons: {

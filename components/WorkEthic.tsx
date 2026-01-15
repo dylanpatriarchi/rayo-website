@@ -13,26 +13,26 @@ export default function WorkEthic() {
 
                 <div className="md:w-2/3 flex flex-col gap-12">
                     <div className="border-l border-foreground/20 pl-8">
-                        <h4 className="text-xl font-bold mb-4">Precisione Ossessiva</h4>
+                        <h4 className="text-xl font-bold mb-4">Robustezza Enterprise</h4>
                         <p className="text-lg md:text-xl font-light text-foreground/70 leading-relaxed">
-                            Non accettiamo il &quot;funziona abbastanza&quot;. Costruiamo infrastrutture che devono reggere il peso
-                            di decisioni critiche. Ogni riga di codice, ogni prompt, ogni pipeline è testata fino alla rottura.
+                            Non costruiamo giocattoli. I nostri sistemi sono progettati per gestire carichi critici e dati sensibili.
+                            Se si rompe, paghiamo noi. SLA garantito.
                         </p>
                     </div>
 
                     <div className="border-l border-foreground/20 pl-8">
-                        <h4 className="text-xl font-bold mb-4">No Black Boxes</h4>
+                        <h4 className="text-xl font-bold mb-4">Codice Proprietario</h4>
                         <p className="text-lg md:text-xl font-light text-foreground/70 leading-relaxed">
-                            L&apos;AI non deve essere magica, deve essere comprensibile. Ti diamo il controllo completo
-                            sui tuoi sistemi. Niente lock-in tecnologico, niente dipendenze oscure.
+                            Niente lock-in. Ti consegniamo le chiavi del regno: codice sorgente, pesi del modello e documentazione.
+                            L'asset è tuo, per sempre.
                         </p>
                     </div>
 
                     <div className="border-l border-foreground/20 pl-8">
-                        <h4 className="text-xl font-bold mb-4">Velocità Chirurgica</h4>
+                        <h4 className="text-xl font-bold mb-4">Focus sul ROI</h4>
                         <p className="text-lg md:text-xl font-light text-foreground/70 leading-relaxed">
-                            Ci muoviamo velocemente non perché corriamo, ma perché non sbagliamo strada.
-                            La nostra metodologia elimina le distrazioni e punta dritta al valore di business.
+                            Non scriviamo una riga di codice se non c'è un chiaro ritorno economico.
+                            Ogni sprint deve avvicinarti al fatturato o al risparmio costi.
                         </p>
                     </div>
                 </div>

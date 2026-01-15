@@ -35,7 +35,7 @@ export default function CaseStudiesPreview({ posts }: CaseStudiesPreviewProps) {
                     <div className="hidden md:grid grid-cols-12 gap-4 pb-4 border-b border-foreground/10 text-xs font-mono uppercase tracking-widest text-foreground/40">
                         <div className="col-span-1">ID</div>
                         <div className="col-span-4">Client / Industry</div>
-                        <div className="col-span-7">Challenge & Solution</div>
+                        <div className="col-span-7">Business Impact</div>
                     </div>
 
                     {posts.map((post, i) => (

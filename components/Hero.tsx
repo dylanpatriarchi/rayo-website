@@ -32,7 +32,7 @@ export default function Hero() {
                                 className="inline-block mr-2 md:mr-4"
                             />
                             <BlurText
-                                text="DISTILLATA."
+                                text="OPERATIVA."
                                 delay={50}
                                 animateBy="words"
                                 direction="top"
@@ -47,14 +47,20 @@ export default function Hero() {
                             ref={subtitleRef}
                             className="text-lg md:text-xl font-light text-neutral-500 leading-relaxed max-w-md opacity-0" // Start invisible for GSAP
                         >
-                            Trasformiamo il caos dei dati in architetture operative. Soluzioni AI verticali per aziende che esigono precisione assoluta.
+                            Riduci i costi operativi del 40-60% con un'infrastruttura AI proprietaria.
+                            Dal caos dei dati al deploy in produzione in 4 settimane.
                         </p>
                     </div>
 
-                    <div className={`mt-12 flex items-center gap-4 transition-opacity duration-1000 ${showButton ? 'opacity-100' : 'opacity-0'}`}>
-                        {/* Removed CSS keyframe animation reliance */}
-                        <a href="/methodology" className="group relative px-8 py-3 bg-foreground text-background text-sm font-medium hover:bg-primary transition-colors duration-300 rounded-full">
-                            SCOPRI IL METODO
+                    <div className={`mt-12 flex flex-col sm:flex-row items-start sm:items-center gap-4 transition-opacity duration-1000 ${showButton ? 'opacity-100' : 'opacity-0'}`}>
+                        {/* Primary CTA */}
+                        <div onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })} className="cursor-pointer group relative px-8 py-4 bg-primary text-white text-sm font-bold tracking-wider hover:bg-primary/90 transition-all duration-300 rounded-full shadow-[0_0_20px_rgba(0,71,255,0.3)] hover:shadow-[0_0_30px_rgba(0,71,255,0.5)] transform hover:-translate-y-1">
+                            RICHIEDI AUDIT GRATUITO
+                        </div>
+
+                        {/* Secondary CTA */}
+                        <a href="/methodology" className="px-6 py-4 text-foreground/60 text-sm font-medium hover:text-foreground transition-colors border-b border-transparent hover:border-foreground/20">
+                            Scopri il Metodo →
                         </a>
                     </div>
                 </div>

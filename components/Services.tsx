@@ -7,38 +7,38 @@ import clsx from "clsx";
 const services = [
     {
         id: "01",
-        title: "RAG SYSTEMS",
-        description: "Pipeline di ricerca semantica su documenti aziendali. Zero allucinazioni, massima precisione.",
+        title: "ENTERPRISE RAG",
+        description: "Il tuo 'Cervello Aziendale' centralizzato. Ricerca semantica istantanea su milioni di documenti. Zero perdite di tempo.",
         price: "da €1.5k",
-        tags: ["Vector DB", "LangChain", "Semantic Search"]
+        tags: ["Knowledge Graph", "Vector DB", "Zero-Hallucination"]
     },
     {
         id: "02",
         title: "LLM FINE-TUNING",
-        description: "Specializzazione di modelli open-weights (Llama 3, Mistral) sul tuo know-how specifico.",
+        description: "Addestriamo l'AI a pensare come il tuo miglior dipendente. Modelli verticali proprietari (Llama 3, Mistral) sui tuoi dati.",
         price: "da €3.0k",
-        tags: ["LoRA", "PyTorch", "Hugging Face"]
+        tags: ["Data Privacy", "Custom Models", "High Accuracy"]
     },
     {
         id: "03",
-        title: "PRIVATE INFRA",
-        description: "Infrastruttura on-premise o cloud privato. I tuoi dati rimangono tuoi.",
+        title: "AI AGENTS",
+        description: "Forza lavoro digitale attiva 24/7. Agenti autonomi che eseguono task complessi in Customer Service, Sales e Operations.",
         price: "Custom",
-        tags: ["vLLM", "Docker", "GPU Clusters"]
+        tags: ["Autonomy", "Multi-Agent", "Workflow Automation"]
     },
     {
         id: "04",
-        title: "WEB PLATFORMS",
-        description: "Asset digitali performanti. Next.js e SEO avanzato per dominare il mercato.",
-        price: "da €450",
-        tags: ["Next.js", "React", "Advanced SEO"]
+        title: "HIGH-PERF WEB",
+        description: "Non semplici siti, ma piattaforme di conversione. Next.js, Vercel e SEO tecnico per dominare la SERP.",
+        price: "da €700",
+        tags: ["Next.js 14", "Technical SEO", "Conversion Design"]
     },
     {
         id: "05",
-        title: "B2B DEV TEAM",
-        description: "Consulenza e sviluppo su richiesta per Software House e Agenzie. AI o full-stack custom.",
-        price: "€30/ora",
-        tags: ["Team Extension", "Custom Dev", "AI Integration"]
+        title: "TECH ADVISORY",
+        description: "CTO as a Service. Guidiamo la tua trasformazione digitale evitando sprechi di budget e debiti tecnici.",
+        price: "€38/ora",
+        tags: ["Strategy", "Audit", "Architecture"]
     }
 ];
 
@@ -48,19 +48,29 @@ export default function Services() {
     return (
         <section id="services" className="relative py-32 w-full bg-background min-h-screen flex flex-col justify-center">
             <div className="w-full max-w-[90%] mx-auto px-4 md:px-0">
-                {/* Section Header - Minimalist */}
-                <div className="mb-24 flex flex-col md:flex-row md:items-end justify-between border-b border-foreground/10 pb-6">
-                    <div>
-                        <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-2">
-                            Capabilities
-                        </h2>
-                        <p className="text-sm text-foreground/60 max-w-sm leading-relaxed">
-                            Costruiamo infrastrutture AI su misura progettate per integrarsi nei tuoi processi business-critical.
-                        </p>
-                    </div>
-                    {/* Optional numeric indicator or decoration */}
-                    <div className="hidden md:block text-xs font-mono text-foreground/40">
-                        // ARCHITETTURA DELL'INTELLIGENZA
+                {/* Section Header - Refined */}
+                <div className="mb-24 border-b border-foreground/10 pb-12">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+                        <div className="max-w-3xl">
+                            <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-6 relative inline-block">
+                                Capacità Operative.
+                                <div className="hidden md:block absolute -top-4 -right-8 w-3 h-3 bg-primary rounded-full animate-pulse" />
+                            </h2>
+                            <p className="text-xl md:text-2xl text-foreground/60 font-light leading-relaxed">
+                                Costruiamo infrastrutture AI su misura progettate per integrarsi nei tuoi processi business-critical.
+                            </p>
+                        </div>
+
+                        <div className="flex flex-col items-end gap-3">
+                            {/* Premium Badge */}
+                            <div className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-full backdrop-blur-sm">
+                                <span className="text-lg">🛡️</span>
+                                <div className="flex flex-col">
+                                    <span className="text-[10px] uppercase font-bold text-primary/60 tracking-wider">Garanzia Rayo</span>
+                                    <span className="text-sm font-bold text-primary">PoC Gratuito: Soddisfatti o Rimborsati</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

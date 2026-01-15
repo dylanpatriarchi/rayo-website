@@ -7,18 +7,18 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 const steps = [
     {
         number: "01",
-        title: "Discovery",
-        description: "Analisi profonda dei flussi dati esistenti e identificazione dei colli di bottiglia risolvibili con l'AI."
+        title: "Data Audit",
+        description: "Non tiriamo a indovinare. Analizziamo i tuoi flussi di dati grezzi per isolare le inefficienze che ti costano migliaia di euro al mese."
     },
     {
         number: "02",
-        title: "Engineering",
-        description: "Sviluppo iterativo di pipeline RAG e fine-tuning di modelli open-weights (Llama 3, Mistral) ottimizzati per il task."
+        title: "AI Architecture",
+        description: "Costruiamo il sistema. Pipeline RAG ibride e Modelli Fine-Tunati che operano nel tuo perimetro di sicurezza. Niente API pubbliche insicure."
     },
     {
         number: "03",
-        title: "Deployment",
-        description: "Rilascio in ambiente protetto, integrazione API e training del personale sull'utilizzo degli agenti."
+        title: "Integration",
+        description: "Il sistema entra in produzione. Integrazione invisibile nei tuoi tool esistenti (ERP, CRM) e formazione del team per il massimo ROI."
     }
 ];
 
