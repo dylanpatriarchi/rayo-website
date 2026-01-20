@@ -56,6 +56,7 @@ const nextConfig: NextConfig = {
       { source: '/newsletter', destination: '/', permanent: true },
       { source: '/en/unsubscribe', destination: '/', permanent: true },
       { source: '/en/thank-you', destination: '/', permanent: true },
+      { source: '/konnekt', destination: 'https://docs.google.com/forms/d/e/1FAIpQLSeCWVbr0zlJ_ccvsn2Uk0sFuSDUAkLQwLHfo_Nk7xlYzCZCOw/viewform?usp=publish-editor', permanent: true },
     ];
   },
 };
