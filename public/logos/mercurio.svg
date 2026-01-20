@@ -1,5 +1,5 @@
-<svg width="180" height="40" viewBox="0 0 180 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M10 20L20 5V35L30 20" stroke="#0047FF" stroke-width="3" stroke-linecap="round" stroke-opacity="0.6"/>
-  <text x="45" y="26" fontFamily="Arial, sans-serif" fontWeight="bold" fontSize="16" letterSpacing="0.5" fill="#0047FF">MERCURIO</text>
-  <text x="45" y="36" fontFamily="Arial, sans-serif" fontSize="8" letterSpacing="1.5" fill="#0047FF" fill-opacity="0.6">LOGISTICS GROUP</text>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 32C12 20.9543 20.9543 12 32 12C43.0457 12 52 20.9543 52 32" stroke="#0047FF" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="32" cy="32" r="8" fill="#0047FF"/>
+  <path d="M52 32C52 43.0457 43.0457 52 32 52C20.9543 52 12 43.0457 12 32" stroke="#0047FF" stroke-width="6" stroke-opacity="0.4" stroke-linecap="round"/>
 </svg>

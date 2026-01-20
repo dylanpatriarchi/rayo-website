@@ -183,6 +183,28 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('consent', 'default', {
+                'ad_storage': 'denied',
+                'ad_user_data': 'denied',
+                'ad_personalization': 'denied',
+                'analytics_storage': 'denied',
+                'wait_for_update': 500
+              });
+            `
+          }}
+        />
+        {/* Google CMP Script Placeholder - Replace with actual script from AdSense if different */}
+        <script async src="https://fundingchoicesmessages.google.com/i/pub-4372911380864795?ers=1"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function() {function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();`
+          }}
+        />
         <Analytics />
         <SmoothScroller>
           <Header />
@@ -201,7 +223,7 @@ export default function RootLayout({
           opacity={1}
           zIndex={50}
         />
-        <CookieBanner />
+        {/* <CookieBanner /> - Replaced by Google CMP */}
         <AdSenseLoader />
       </body>
     </html>
