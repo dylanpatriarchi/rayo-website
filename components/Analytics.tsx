@@ -4,6 +4,31 @@ import { useEffect, useState } from "react";
 import Script from "next/script";
 
 export default function Analytics() {
+    const [consentGiven, setConsentGiven] = useState(false);
+
+    useEffect(() => {
+        const checkConsent = () => {
+            const consent = localStorage.getItem("rayo-cookie-consent");
+            if (consent === "accepted") {
+                setConsentGiven(true);
+            } else {
+                setConsentGiven(false);
+            }
+        };
+
+        // Check initially
+        checkConsent();
+
+        // Listen for updates from CookieBanner
+        window.addEventListener("cookie-consent-updated", checkConsent);
+
+        return () => {
+            window.removeEventListener("cookie-consent-updated", checkConsent);
+        };
+    }, []);
+
+    if (!consentGiven) return null;
+
     return (
         <>
             <Script
