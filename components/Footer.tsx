@@ -1,68 +1,4 @@
-"use client";
-
 import Image from "next/image";
-import { useState } from "react";
-
-function NewsletterForm() {
-    const [email, setEmail] = useState("");
-    const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!email) return;
-
-        setStatus("loading");
-        try {
-            const response = await fetch("https://chat.rayo.consulting/webhook/subscribe", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, source: "minimal-newsletter" }),
-            });
-
-            if (response.ok) {
-                setStatus("success");
-                setEmail("");
-            } else {
-                setStatus("error");
-            }
-        } catch (error) {
-            setStatus("error");
-        }
-    };
-
-    if (status === "success") {
-        return (
-            <div className="p-4 bg-green-50 text-green-800 text-sm rounded-lg border border-green-100">
-                Grazie per l&apos;iscrizione. Ti abbiamo inviato una email di conferma.
-            </div>
-        );
-    }
-
-    return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-            <div className="flex gap-2">
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="tua@email.com"
-                    required
-                    className="flex-1 bg-transparent border border-foreground/20 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-foreground/30"
-                />
-                <button
-                    type="submit"
-                    disabled={status === "loading"}
-                    className="bg-foreground text-background px-4 py-2 rounded-lg text-sm font-medium hover:bg-foreground/90 disabled:opacity-50 transition-colors"
-                >
-                    {status === "loading" ? "..." : "Iscriviti"}
-                </button>
-            </div>
-            {status === "error" && (
-                <p className="text-xs text-red-500">Qualcosa è andato storto. Riprova più tardi.</p>
-            )}
-        </form>
-    );
-}
 
 export default function Footer() {
     return (
@@ -82,13 +18,6 @@ export default function Footer() {
                         Let&apos;s build <br />
                         intelligence.
                     </h2>
-
-                    <div className="flex flex-col gap-6 mb-8 max-w-sm">
-                        <p className="text-sm font-light text-foreground/70">
-                            Iscriviti alla newsletter per ricevere approfondimenti su AI e architetture software.
-                        </p>
-                        <NewsletterForm />
-                    </div>
 
                     <a
                         href="mailto:info@rayo.consulting"

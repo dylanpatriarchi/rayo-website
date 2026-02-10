@@ -5,7 +5,6 @@ import SmoothScroller from "@/components/SmoothScroller";
 import Analytics from "@/components/Analytics";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ChatWidget from "@/components/ChatWidget";
 import CookieBanner from "@/components/CookieBanner";
 import AdSenseLoader from "@/components/AdSenseLoader";
 import GradualBlur from "@/components/GradualBlur";
@@ -189,7 +188,6 @@ export default function RootLayout({
           {children}
           <Footer />
         </SmoothScroller>
-        <ChatWidget />
         <GradualBlur
           target="page"
           position="bottom"
