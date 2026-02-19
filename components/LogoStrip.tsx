@@ -7,6 +7,7 @@ const logos = [
     { src: "/logos/futura.svg", alt: "Futura" },
     { src: "/logos/sinergia.svg", alt: "Sinergia" },
     { src: "/logos/mercurio.svg", alt: "Mercurio Logistics" },
+    { src: "/logos/spapperi.svg", alt: "Spapperi" },
 ];
 
 export default function LogoStrip() {
