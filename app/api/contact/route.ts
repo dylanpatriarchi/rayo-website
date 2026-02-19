@@ -4,7 +4,7 @@ export async function POST(request: Request) {
     try {
         const body = await request.json();
 
-        const webhookUrl = "https://chat.rayo.consulting/webhook/contact-form";
+        const webhookUrl = "https://n8n.rayo.consulting/webhook/contact-form";
 
         const response = await fetch(webhookUrl, {
             method: "POST",
