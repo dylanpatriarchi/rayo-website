@@ -322,7 +322,7 @@ export default function KartaPage() {
                     className="flex flex-col sm:flex-row items-center gap-4"
                 >
                     <a
-                        href="https://github.com/dylanpatriarchi/karta"
+                        href="https://chromewebstore.google.com/detail/iapefdioleobpmjgbleckenjmanfbhgf?utm_source=item-share-cb"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="h-14 px-8 rounded-full bg-[#0047FF] text-white font-semibold text-lg hover:bg-blue-600 transition-all shadow-lg hover:shadow-blue-500/30 flex items-center gap-2"
@@ -512,7 +512,7 @@ export default function KartaPage() {
                         Inizia a chiudere più deal con la tua AI personale per LinkedIn.
                     </p>
                     <a
-                        href="https://github.com/dylanpatriarchi/karta"
+                        href="https://chromewebstore.google.com/detail/iapefdioleobpmjgbleckenjmanfbhgf?utm_source=item-share-cb"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="h-16 px-10 rounded-full bg-[#0047FF] text-white font-bold text-xl hover:bg-blue-600 transition-all shadow-[0_8px_30px_rgb(0,71,255,0.4)] hover:shadow-[0_8px_40px_rgb(0,71,255,0.6)] flex items-center gap-3 mx-auto transform hover:-translate-y-1"
