@@ -31,6 +31,14 @@ export const metadata: Metadata = {
     title: "Rayo Consulting | L'AI che porta ROI",
     description: "Smetti di giocare con le chat. Costruiamo infrastrutture AI proprietarie che riducono i costi operativi dal 40% al 60%.",
     siteName: "Rayo Consulting",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Rayo Consulting OpenGraph Image",
+      }
+    ]
   },
   icons: {
     icon: "/favicon.svg",
