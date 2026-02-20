@@ -28,13 +28,6 @@ const services = [
     },
     {
         id: "04",
-        title: "HIGH-PERF WEB",
-        description: "Non semplici siti, ma piattaforme di conversione. Next.js, Vercel e SEO tecnico per dominare la SERP.",
-        price: "da €700",
-        tags: ["Next.js 14", "Technical SEO", "Conversion Design"]
-    },
-    {
-        id: "05",
         title: "TECH ADVISORY",
         description: "CTO as a Service. Guidiamo la tua trasformazione digitale evitando sprechi di budget e debiti tecnici.",
         price: "€38/ora",
