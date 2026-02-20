@@ -45,7 +45,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
-  --font-sans: var(--font-helvetica), Helvetica, Arial, sans-serif;
+  --font-sans: var(--font-manrope), sans-serif;
 
   /* Typography Overrides for better contrast */
   --typography-color-body: var(--foreground);

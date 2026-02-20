@@ -8,6 +8,7 @@ const logos = [
     { src: "/logos/sinergia.svg", alt: "Sinergia" },
     { src: "/logos/mercurio.svg", alt: "Mercurio Logistics" },
     { src: "/logos/spapperi.svg", alt: "Spapperi" },
+    { src: "/logos/compario.svg", alt: "Compario" },
 ];
 
 export default function LogoStrip() {
@@ -18,16 +19,22 @@ export default function LogoStrip() {
                     Scelto da innovatori italiani
                 </p>
 
-                <div className="flex overflow-hidden">
+                <div
+                    className="flex overflow-hidden relative w-full"
+                    style={{
+                        maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+                        WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+                    }}
+                >
                     <motion.div
                         initial={{ x: 0 }}
                         animate={{ x: "-25%" }}
                         transition={{
                             repeat: Infinity,
                             ease: "linear",
-                            duration: 10
+                            duration: 15 // slower for a premium feel
                         }}
-                        className="flex items-center gap-24 md:gap-40 pr-24 md:pr-40 opacity-60 hover:opacity-100 transition-opacity duration-500"
+                        className="flex items-center gap-24 md:gap-40 pr-24 md:pr-40 opacity-40 hover:opacity-100 transition-opacity duration-1000"
                         style={{ width: "fit-content" }}
                     >
                         {/* 4 Sets of logos to ensure full coverage and smooth looping */}

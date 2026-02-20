@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Manrope } from "next/font/google";
 import "./globals.css";
 import SmoothScroller from "@/components/SmoothScroller";
 import Analytics from "@/components/Analytics";
@@ -9,25 +9,9 @@ import CookieBanner from "@/components/CookieBanner";
 import AdSenseLoader from "@/components/AdSenseLoader";
 import GradualBlur from "@/components/GradualBlur";
 
-const helvetica = localFont({
-  src: [
-    {
-      path: "../public/fonts/HelveticaNow-Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/HelveticaNow-Bold.ttf",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/HelveticaNow-Light.ttf",
-      weight: "300",
-      style: "normal",
-    },
-  ],
-  variable: "--font-helvetica",
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
 });
 
 export const metadata: Metadata = {
@@ -177,7 +161,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="it">
-      <body className={`${helvetica.variable} font-sans antialiased text-foreground bg-background overflow-x-hidden`}>
+      <body className={`${manrope.variable} font-sans antialiased text-foreground bg-background overflow-x-hidden`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
