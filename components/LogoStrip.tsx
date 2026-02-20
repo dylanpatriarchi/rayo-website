@@ -6,19 +6,17 @@ import { motion } from "framer-motion";
 const logos = [
     { src: "/logos/futura.svg", alt: "Futura" },
     { src: "/logos/sinergia.svg", alt: "Sinergia" },
-    { src: "/logos/mercurio.svg", alt: "Mercurio Logistics" },
-    { src: "/logos/spapperi.svg", alt: "Spapperi" },
     { src: "/logos/compario.svg", alt: "Compario" },
+    { src: "/logos/mercurio.svg", alt: "Mercurio Logistics" },
+    { src: "/logos/horizon.svg", alt: "Horizon" },
+    { src: "/logos/aegis.svg", alt: "Aegis" },
+    { src: "/logos/spapperi.svg", alt: "Spapperi" },
 ];
 
 export default function LogoStrip() {
     return (
         <section className="w-full bg-background border-b border-foreground/5 py-12 overflow-hidden">
             <div className="w-full">
-                <p className="text-center text-xs font-mono uppercase tracking-widest text-foreground/40 mb-10">
-                    Scelto da innovatori italiani
-                </p>
-
                 <div
                     className="flex overflow-hidden relative w-full"
                     style={{
