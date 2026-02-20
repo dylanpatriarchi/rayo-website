@@ -8,6 +8,7 @@ import ContactForm from "@/components/ContactForm";
 import CaseStudiesPreview from "@/components/CaseStudiesPreview";
 import LogoStrip from "@/components/LogoStrip";
 import Comparison from "@/components/Comparison";
+import InternationalSection from "@/components/InternationalSection";
 import { getAllPosts } from "@/utils/mdx";
 
 export default function Home() {
@@ -19,6 +20,7 @@ export default function Home() {
     <main className="w-full min-h-screen">
       <Hero />
       <LogoStrip />
+      <InternationalSection />
       <Services />
       <CaseStudiesPreview posts={featuredCases} />
       <WorkEthic />

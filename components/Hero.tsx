@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import NeuralNetwork from "@/components/NeuralNetwork";
 import { animateTextReveal } from "@/utils/gsap-animations";
 import BlurText from "@/components/BlurText";
+import { FlipWords } from "@/components/ui/flip-words";
 
 export default function Hero() {
     const subtitleRef = useRef<HTMLParagraphElement>(null);
@@ -16,6 +17,18 @@ export default function Hero() {
         // Delay button appearance slightly after subtitle starts
         setTimeout(() => setShowButton(true), 1000);
     };
+
+    const words = ["OPERATIVA", "SCALABILE", "SICURA", "VELOCE"];
+
+    // To ensure the blur animation also runs if we re-render or mount
+    useEffect(() => {
+        if (subtitleRef.current) {
+            setTimeout(() => {
+                animateTextReveal(subtitleRef.current!, 0);
+            }, 500);
+        }
+        setTimeout(() => setShowButton(true), 1000);
+    }, []);
 
     return (
         <section className="relative min-h-screen w-full flex flex-col-reverse md:flex-row bg-background pt-[80px] md:pt-0 overflow-hidden">
@@ -31,14 +44,7 @@ export default function Hero() {
                                 direction="top"
                                 className="inline-block mr-2 md:mr-4"
                             />
-                            <BlurText
-                                text="OPERATIVA."
-                                delay={50}
-                                animateBy="words"
-                                direction="top"
-                                className="inline-block text-primary"
-                                onAnimationComplete={handleAnimationComplete}
-                            />
+                            <FlipWords words={words} className="text-primary px-0 font-bold" />
                         </div>
                     </div>
 
@@ -69,8 +75,6 @@ export default function Hero() {
             {/* Right Panel: Dense Graph Visualization */}
             <div className="w-full md:w-1/2 min-h-[50vh] md:min-h-screen relative bg-background">
                 <NeuralNetwork />
-
-                {/* Overlay to fade edges if needed, but keeping it clean for now */}
             </div>
         </section>
     );
