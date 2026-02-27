@@ -1,5 +1,10 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M12 44H52" stroke="#0047FF" stroke-width="6" stroke-linecap="round"/>
-  <path d="M16 44C16 35.1634 23.1634 28 32 28C40.8366 28 48 35.1634 48 44" stroke="#0047FF" stroke-width="6" stroke-linecap="round" stroke-opacity="0.6"/>
-  <circle cx="32" cy="20" r="6" fill="#0047FF"/>
+  <defs>
+    <clipPath id="sunClip">
+      <rect x="0" y="0" width="64" height="38" />
+    </clipPath>
+  </defs>
+  <circle cx="32" cy="38" r="20" fill="#0047FF" clip-path="url(#sunClip)" stroke="none"/>
+  <path d="M 16 46 L 48 46" stroke="#0047FF" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M 24 54 L 40 54" stroke="#0047FF" stroke-width="4" stroke-linecap="round" fill="none"/>
 </svg>
