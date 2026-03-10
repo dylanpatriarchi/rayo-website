@@ -89,28 +89,28 @@ export default function ContactForm() {
                                 <form onSubmit={handleSubmit} className="flex flex-col gap-6 flex-grow">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Nome</label>
-                                            <input name="name" type="text" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="Il tuo nome" />
+                                            <label htmlFor="contact-name" className="text-xs uppercase tracking-wider font-bold text-foreground/40">Nome</label>
+                                            <input id="contact-name" name="name" type="text" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 transition-colors rounded-sm" placeholder="Il tuo nome" />
                                         </div>
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Email</label>
-                                            <input name="email" type="email" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="nome@azienda.com" />
+                                            <label htmlFor="contact-email" className="text-xs uppercase tracking-wider font-bold text-foreground/40">Email</label>
+                                            <input id="contact-email" name="email" type="email" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 transition-colors rounded-sm" placeholder="nome@azienda.com" />
                                         </div>
                                     </div>
 
                                     {/* New Fields Row */}
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Azienda</label>
-                                            <input name="company" type="text" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="Nome Azienda" />
+                                            <label htmlFor="contact-company" className="text-xs uppercase tracking-wider font-bold text-foreground/40">Azienda</label>
+                                            <input id="contact-company" name="company" type="text" required className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 transition-colors rounded-sm" placeholder="Nome Azienda" />
                                         </div>
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">P.IVA / CF</label>
-                                            <input name="vat" type="text" className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors" placeholder="Opzionale" />
+                                            <label htmlFor="contact-vat" className="text-xs uppercase tracking-wider font-bold text-foreground/40">P.IVA / CF</label>
+                                            <input id="contact-vat" name="vat" type="text" className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 transition-colors rounded-sm" placeholder="Opzionale" />
                                         </div>
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Settore</label>
-                                            <select name="sector" defaultValue="" className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors appearance-none">
+                                            <label htmlFor="contact-sector" className="text-xs uppercase tracking-wider font-bold text-foreground/40">Settore</label>
+                                            <select id="contact-sector" name="sector" defaultValue="" className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 transition-colors appearance-none rounded-sm">
                                                 <option value="" disabled>Seleziona...</option>
                                                 <option value="finance">Finance & Banking</option>
                                                 <option value="legal">Legal & Compliance</option>
@@ -124,8 +124,8 @@ export default function ContactForm() {
                                     </div>
 
                                     <div className="flex flex-col gap-2">
-                                        <label className="text-xs uppercase tracking-wider font-bold text-foreground/40">Messaggio</label>
-                                        <textarea name="message" required rows={4} className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors resize-none" placeholder="Descrivi brevemente il tuo progetto..." />
+                                        <label htmlFor="contact-message" className="text-xs uppercase tracking-wider font-bold text-foreground/40">Messaggio</label>
+                                        <textarea id="contact-message" name="message" required rows={4} className="bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 transition-colors resize-none rounded-sm" placeholder="Descrivi brevemente il tuo progetto..." />
                                     </div>
 
                                     <div className="flex items-start gap-4 mt-4">
@@ -140,7 +140,7 @@ export default function ContactForm() {
                                         type="submit"
                                         disabled={loading}
                                         className={clsx(
-                                            "mt-8 bg-foreground text-background py-4 px-12 rounded-full font-bold tracking-wide self-start hover:bg-foreground/90 transition-all",
+                                            "mt-8 bg-foreground text-background py-4 px-12 rounded-full font-bold tracking-wide self-start hover:bg-foreground/90 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
                                             loading && "opacity-70 cursor-wait"
                                         )}
                                     >

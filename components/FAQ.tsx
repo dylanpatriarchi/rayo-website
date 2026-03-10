@@ -2,29 +2,7 @@
 
 import { useState } from "react";
 import clsx from "clsx";
-
-const faqs = [
-    {
-        question: "Come si differenzia il vostro approccio RAG?",
-        answer: "Non usiamo semplici database vettoriali. Costruiamo grafi di conoscenza che mantengono il contesto semantico e gerarchico dei documenti, garantendo risposte che non solo trovano l'informazione, ma la comprendono."
-    },
-    {
-        question: "I miei dati vengono usati per il training?",
-        answer: "Assolutamente no. Per le soluzioni Enterprise, offriamo deployment su cloud privato o on-premise. I modelli vengono fine-tunati sui tuoi dati, ma quei pesi rimangono di tua esclusiva proprietà."
-    },
-    {
-        question: "Quali sono i tempi di implementazione?",
-        answer: "Per un sistema RAG standard, 2-3 settimane. Per progetti di Fine-Tuning complessi, dalle 4 alle 8 settimane a seconda della pulizia del dataset iniziale."
-    },
-    {
-        question: "Quanto costa l'investimento iniziale e qual è il ROI?",
-        answer: "L'investimento dipende da obiettivi e scope. Il ROI medio misurato sui nostri clienti è del 300% nel primo anno, grazie al risparmio netto di ore-uomo e all'azzeramento degli errori manuali. Offriamo un audit gratuito per stimare costi e tempi."
-    },
-    {
-        question: "Offrite manutenzione post-rilascio?",
-        answer: "Sì. L'AI non è statica. Offriamo piani 'Enterprise Care' che includono retraining periodico, monitoraggio delle performance e aggiornamenti di sicurezza prioritari."
-    }
-];
+import { faqs } from "@/lib/faq";
 
 export default function FAQ() {
     const [openIndex, setOpenIndex] = useState<number | null>(null);

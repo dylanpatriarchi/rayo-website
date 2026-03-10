@@ -1,29 +1,28 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Lock } from "lucide-react";
 
 const testimonials = [
     {
         quote:
-            "Prima: 4 ore/giorno per cercare pratiche legali. Dopo Rayo: 8 minuti. Il sistema RAG ha analizzato 50.000 PDF storici senza errori.",
-        role: "CTO",
-        company: "Legal Firm (Milano)",
-        impact: "-96% Search Time",
-    },
-    {
-        quote:
-            "Avevamo paura delle allucinazioni degli LLM. Rayo ha costruito un layer di validazione che blocca le risposte incerte. Tasso di accuratezza certificato al 99.8%.",
-        role: "Head of Innovation",
-        company: "Healthcare Scale-up",
-        impact: "99.8% Accuracy",
-    },
-    {
-        quote:
-            "Infrastruttura on-premise su GPU H100 installata in 3 settimane. Abbiamo ridotto i costi API OpenAI del 70% nel primo mese.",
+            "I worked with Rayo in 2025 to build Compario. From our first exchanges and even after the website was built, Dylan has been extremely professional, responsive, insightful and knowledgeable. Dylan created a super cool website which brought my vision to life - I can only recommend working with Rayo for your projects!",
         role: "Founder",
-        company: "Fintech Startup",
-        impact: "-70% OpEx Costs",
+        company: "Compario",
+        name: "Katia Korobovskaya",
+    },
+    {
+        quote:
+            "Abbiamo affidato a Rayo un PoC su RAG per i nostri documenti legali. Delivery puntuale, codice pulito e documentazione chiara. Consigliati per chi vuole evitare fumisterie e avere risultati concreti.",
+        role: "Cliente",
+        company: "",
+        name: null,
+    },
+    {
+        quote:
+            "Team tecnico serio, niente venditori. Hanno capito subito il nostro use case e proposto un approccio sensato invece di spingerci su soluzioni preconfezionate.",
+        role: "Cliente",
+        company: "",
+        name: null,
     },
 ];
 
@@ -41,8 +40,7 @@ export default function Testimonials() {
                         </h3>
                     </div>
                     <p className="text-foreground/60 max-w-sm text-right hidden md:block">
-                        Rispettiamo la privacy dei nostri clienti Enterprise.<br />
-                        I risultati parlano per noi.
+                        Cosa dicono di noi.
                     </p>
                 </div>
 
@@ -54,26 +52,25 @@ export default function Testimonials() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.1, duration: 0.5 }}
-                            className="relative p-8 md:p-12 bg-foreground/5 rounded-2xl flex flex-col justify-between min-h-[400px] border border-transparent hover:border-foreground/10 transition-colors"
+                            className="relative p-8 md:p-12 bg-foreground/5 rounded-2xl flex flex-col justify-between min-h-[320px] border border-transparent hover:border-foreground/10 transition-colors"
                         >
-                            <div className="absolute top-8 right-8 text-foreground/20">
-                                <Lock size={20} />
-                            </div>
-
                             <div className="text-xl md:text-2xl font-light leading-relaxed mb-8">
                                 &quot;{t.quote}&quot;
                             </div>
 
                             <div>
-                                <div className="text-sm font-bold uppercase tracking-wide opacity-50 mb-1">
-                                    {t.role}
-                                </div>
-                                <div className="text-lg font-medium mb-6 blur-[2px] hover:blur-none transition-all duration-300 select-none">
-                                    {t.company}
-                                </div>
-                                <div className="inline-block px-3 py-1 bg-background rounded-full text-xs font-bold text-primary border border-foreground/10 shadow-sm">
-                                    {t.impact}
-                                </div>
+                                {t.name ? (
+                                    <>
+                                        <div className="text-lg font-bold text-foreground">{t.name}</div>
+                                        <div className="text-sm font-medium text-foreground/60">
+                                            {t.role}{t.company ? `, ${t.company}` : ""}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="text-sm font-medium text-foreground/50">
+                                        — {t.role}
+                                    </div>
+                                )}
                             </div>
                         </motion.div>
                     ))}

@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getAllPosts } from '@/utils/mdx';
 import { SERVICE_SLUGS } from '@/lib/services-landing';
+import { SETTORE_SLUGS } from '@/lib/settori-landing';
 
 const baseUrl = 'https://rayo.consulting';
 
@@ -28,6 +29,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
             lastModified: new Date().toISOString(),
             changeFrequency: 'yearly' as const,
             priority: 1,
+        },
+        {
+            url: `${baseUrl}/en`,
+            lastModified: new Date().toISOString(),
+            changeFrequency: 'monthly' as const,
+            priority: 0.9,
         },
         {
             url: `${baseUrl}/about`,
@@ -95,6 +102,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
             changeFrequency: 'monthly' as const,
             priority: 0.85,
         },
+        {
+            url: `${baseUrl}/risorse`,
+            lastModified: new Date().toISOString(),
+            changeFrequency: 'monthly' as const,
+            priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/rayo-vs`,
+            lastModified: new Date().toISOString(),
+            changeFrequency: 'monthly' as const,
+            priority: 0.7,
+        },
     ];
 
     const serviziLanding = SERVICE_SLUGS.map((slug) => ({
@@ -104,5 +123,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.8,
     }));
 
-    return [...routes, ...serviziLanding, ...blogs, ...cases];
+    const settoriLanding = SETTORE_SLUGS.map((slug) => ({
+        url: `${baseUrl}/settori/${slug}`,
+        lastModified: new Date().toISOString(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.75,
+    }));
+
+    return [...routes, ...serviziLanding, ...settoriLanding, ...blogs, ...cases];
 }

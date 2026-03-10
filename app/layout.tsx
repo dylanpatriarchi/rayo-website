@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
+import { faqs } from "@/lib/faq";
 import SmoothScroller from "@/components/SmoothScroller";
 import Analytics from "@/components/Analytics";
 import Header from "@/components/Header";
@@ -24,6 +25,13 @@ export const metadata: Metadata = {
   authors: [{ name: "Rayo Consulting Team" }],
   creator: "Rayo Consulting",
   metadataBase: new URL("https://rayo.consulting"),
+  alternates: {
+    languages: {
+      "x-default": "https://rayo.consulting",
+      it: "https://rayo.consulting",
+      en: "https://rayo.consulting/en",
+    },
+  },
   openGraph: {
     type: "website",
     locale: "it_IT",
@@ -128,32 +136,14 @@ const jsonLd = {
     {
       "@type": "FAQPage",
       "@id": "https://rayo.consulting/#faq",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Come si differenzia il vostro approccio RAG?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Non usiamo semplici database vettoriali. Costruiamo grafi di conoscenza che mantengono il contesto semantico e gerarchico dei documenti, garantendo risposte che non solo trovano l'informazione, ma la comprendono."
-          }
+      "mainEntity": faqs.map((faq) => ({
+        "@type": "Question" as const,
+        "name": faq.question,
+        "acceptedAnswer": {
+          "@type": "Answer" as const,
+          "text": faq.answer,
         },
-        {
-          "@type": "Question",
-          "name": "I miei dati vengono usati per il training?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Assolutamente no. Per le soluzioni Enterprise, offriamo deployment su cloud privato o on-premise. I modelli vengono fine-tunati sui tuoi dati, ma quei pesi rimangono di tua esclusiva proprietà."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Quali sono i tempi di implementazione?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Per un sistema RAG standard, 2-3 settimane. Per progetti di Fine-Tuning complessi, dalle 4 alle 8 settimane a seconda della pulizia del dataset iniziale."
-          }
-        }
-      ]
+      }))
     }
   ]
 };

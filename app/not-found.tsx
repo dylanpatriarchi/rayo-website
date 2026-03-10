@@ -13,16 +13,22 @@ export default async function NotFound() {
                 Sembra che tu stia cercando qualcosa che non esiste più, o che non è mai esistito.
             </p>
 
-            <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex flex-wrap justify-center gap-4">
                 <Link
                     href="/"
-                    className="px-8 py-4 bg-foreground text-background rounded-full font-bold hover:bg-foreground/90 transition-all"
+                    className="px-8 py-4 bg-foreground text-background rounded-full font-bold hover:bg-foreground/90 transition-all focus:outline focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 >
                     Torna alla Home
                 </Link>
                 <Link
+                    href="/services"
+                    className="px-8 py-4 border border-foreground/20 text-foreground rounded-full font-bold hover:bg-foreground/5 transition-all focus:outline focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                >
+                    Servizi
+                </Link>
+                <Link
                     href="/contact"
-                    className="px-8 py-4 border border-foreground/20 text-foreground rounded-full font-bold hover:bg-foreground/5 transition-all"
+                    className="px-8 py-4 border border-foreground/20 text-foreground rounded-full font-bold hover:bg-foreground/5 transition-all focus:outline focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 >
                     Contattaci
                 </Link>

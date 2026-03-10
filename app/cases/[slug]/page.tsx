@@ -1,7 +1,9 @@
+import Link from "next/link";
 import { getPost, getAllPosts } from "@/utils/mdx";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import ContentCTA from "@/components/ContentCTA";
+import { getServiceBySlug } from "@/lib/services-landing";
 
 const BASE_URL = "https://rayo.consulting";
 
@@ -67,6 +69,14 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
                 <div className="prose prose-lg md:prose-xl prose-slate dark:prose-invert max-w-none prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-li:text-foreground prose-a:text-primary hover:prose-a:text-blue-600 prose-img:rounded-xl">
                     <MDXRemote source={post.content} />
                 </div>
+                {post.metadata.service && getServiceBySlug(post.metadata.service as string) && (
+                    <p className="mt-12 text-sm text-foreground/60">
+                        Servizio correlato:{" "}
+                        <Link href={`/servizi/${post.metadata.service}`} className="text-primary font-medium hover:underline">
+                            {getServiceBySlug(post.metadata.service as string)!.title} →
+                        </Link>
+                    </p>
+                )}
                 <ContentCTA variant="case" />
             </div>
         </article>

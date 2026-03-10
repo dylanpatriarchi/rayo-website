@@ -4,23 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const steps = [
-    {
-        number: "01",
-        title: "Data Audit",
-        description: "Non tiriamo a indovinare. Analizziamo i tuoi flussi di dati grezzi per isolare le inefficienze che ti costano migliaia di euro al mese."
-    },
-    {
-        number: "02",
-        title: "AI Architecture",
-        description: "Costruiamo il sistema. Pipeline RAG ibride e Modelli Fine-Tunati che operano nel tuo perimetro di sicurezza. Niente API pubbliche insicure."
-    },
-    {
-        number: "03",
-        title: "Integration",
-        description: "Il sistema entra in produzione. Integrazione invisibile nei tuoi tool esistenti (ERP, CRM) e formazione del team per il massimo ROI."
-    }
-];
+import { methodologySteps } from "@/lib/methodology-steps";
 
 export default function Methodology() {
     const sectionRef = useRef<HTMLElement>(null);
@@ -69,7 +53,7 @@ export default function Methodology() {
                     ref={containerRef}
                     className="flex flex-col md:flex-row md:h-full bg-foreground w-full md:w-[300vw]"
                 >
-                    {steps.map((step, index) => (
+                    {methodologySteps.map((step, index) => (
                         <div
                             key={index}
                             className="w-full md:w-[100vw] h-[80vh] md:h-full flex flex-col justify-center px-6 md:px-24 border-b md:border-b-0 md:border-r border-white/10 shrink-0"

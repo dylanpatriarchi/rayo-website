@@ -40,7 +40,7 @@ export default function LogoStrip() {
                             <div key={`set-${setIndex}`} className="flex gap-24 md:gap-40 shrink-0">
                                 {logos.map((logo, i) => (
                                     <div key={`${setIndex}-${i}`} className="relative h-12 w-48 shrink-0 grayscale hover:grayscale-0 transition-all">
-                                        <Image src={logo.src} alt={logo.alt} fill className="object-contain" />
+                                        <Image src={logo.src} alt={logo.alt} fill sizes="192px" className="object-contain" />
                                     </div>
                                 ))}
                             </div>

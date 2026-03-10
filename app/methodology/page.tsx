@@ -1,5 +1,6 @@
 import Methodology from "@/components/Methodology";
 import Link from "next/link";
+import { getMethodologyHowToJsonLd } from "@/lib/methodology-steps";
 
 export const metadata = {
     title: "Metodologia",
@@ -13,8 +14,14 @@ export const metadata = {
 };
 
 export default function MethodologyPage() {
+    const howToJsonLd = getMethodologyHowToJsonLd();
+
     return (
         <main className="w-full min-h-screen">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+            />
             <div className="pt-32 px-6 md:px-12 max-w-7xl mx-auto mb-12">
                 <h1 className="text-sm font-bold uppercase tracking-widest text-primary mb-6">Il Nostro Processo</h1>
                 <h2 className="text-4xl md:text-7xl font-bold tracking-tighter leading-none">

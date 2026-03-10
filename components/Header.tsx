@@ -8,9 +8,9 @@ export default function Header() {
         {
             label: "Company",
             links: [
-                { label: "Chi Siamo", ariaLabel: "Chi Siamo", href: "/about" },
-                { label: "Karta", ariaLabel: "Karta", href: "/karta" },
-                { label: "Blog", ariaLabel: "Blog", href: "/blog" }
+                { label: "Chi siamo", ariaLabel: "Chi siamo", href: "/about" },
+                { label: "Blog", ariaLabel: "Blog", href: "/blog" },
+                { label: "Karta", ariaLabel: "Karta", href: "/karta" }
             ]
         },
         {
@@ -24,6 +24,7 @@ export default function Header() {
         {
             label: "Connect",
             links: [
+                { label: "Audit gratuito", ariaLabel: "Audit gratuito", href: "/audit-gratuito" },
                 { label: "Contatti", ariaLabel: "Contatti", href: "/contact" }
             ]
         }

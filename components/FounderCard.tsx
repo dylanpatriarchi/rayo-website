@@ -19,8 +19,9 @@ export default function FounderCard() {
                     <div className="relative w-full md:w-1/3 aspect-[3/4] overflow-hidden rounded-sm grayscale hover:grayscale-0 transition-all duration-700 ease-out">
                         <Image
                             src="/images/dylan.jpg"
-                            alt="Dylan Patriarchi"
+                            alt="Dylan Patriarchi, Founder e AI Architect di Rayo Consulting"
                             fill
+                            sizes="(max-width: 768px) 100vw, 33vw"
                             className="object-cover"
                         />
                     </div>

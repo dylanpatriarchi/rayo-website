@@ -5,9 +5,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       // --- Language & Home Variants ---
-      { source: '/en', destination: '/', permanent: true },
+      // /en served by app/en/page.tsx (English landing + GEO/AEO)
       { source: '/it', destination: '/', permanent: true },
-      { source: '/en/', destination: '/', permanent: true },
       { source: '/it/', destination: '/', permanent: true },
 
       // --- Services ---

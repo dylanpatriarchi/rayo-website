@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import GoogleAdUnit from "@/components/GoogleAdUnit";
 import ContentCTA from "@/components/ContentCTA";
+import BlogServiceCTA from "@/components/BlogServiceCTA";
 
 const BASE_URL = "https://rayo.consulting";
 
@@ -49,8 +50,22 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         notFound();
     }
 
+    const articleJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: post.metadata.title,
+        description: post.metadata.summary,
+        datePublished: post.metadata.publishedAt,
+        dateModified: post.metadata.updatedAt || post.metadata.publishedAt,
+        author: { "@type": "Organization", name: "Rayo Consulting" },
+        publisher: { "@type": "Organization", name: "Rayo Consulting", logo: { "@type": "ImageObject", url: `${BASE_URL}/logo.svg` } },
+        url: `${BASE_URL}/blog/${slug}`,
+        image: post.metadata.image ? `${BASE_URL}${post.metadata.image.startsWith("/") ? "" : "/"}${post.metadata.image}` : `${BASE_URL}/og-image.png`,
+    };
+
     return (
         <article className="pt-32 pb-24 px-6 md:px-12 max-w-4xl mx-auto min-h-screen">
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
             <header className="mb-12">
                 <div className="text-sm font-bold uppercase tracking-widest text-primary mb-4">
                     {new Date(post.metadata.publishedAt).toLocaleDateString('it-IT')}
@@ -64,7 +79,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             </header>
 
             <div className="prose prose-lg md:prose-xl prose-slate dark:prose-invert max-w-none prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-li:text-foreground prose-a:text-primary hover:prose-a:text-blue-600 prose-img:rounded-xl">
-                <MDXRemote source={post.content} />
+                <MDXRemote source={post.content} components={{ BlogServiceCTA }} />
             </div>
 
             <ContentCTA variant="blog" />

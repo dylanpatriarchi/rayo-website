@@ -12,8 +12,8 @@ export default function Comparison() {
                         Perché scegliere Rayo?
                     </h2>
                     <p className="text-lg text-foreground/60 font-light">
-                        Costruire internamente un team AI richiede mesi e budget enormi.
-                        Rayo ti offre un reparto R&D operativo dal primo giorno.
+                        Costruire un team AI interno richiede tempo e budget importanti.
+                        Con Rayo puoi partire da subito con competenze specializzate.
                     </p>
                 </div>
 
@@ -46,8 +46,8 @@ export default function Comparison() {
                         <ComparisonRow
                             icon={<Code2 size={18} />}
                             criterion="Livello Expertise"
-                            rayo="Sr. AI Engineers (Top 1%)"
-                            inHouse="Generalist / Learning Curve"
+                            rayo="Ingegneri senior specializzati in RAG, LLM e agenti"
+                            inHouse="Generalist, learning curve lunga"
                             delay={0.2}
                         />
                         {/* Row 4 */}
@@ -55,7 +55,7 @@ export default function Comparison() {
                             icon={<ShieldAlert size={18} />}
                             criterion="Garanzia & Rischio"
                             rayo="PoC Gratuito (Zero Rischio)"
-                            inHouse="Alto Tasso di Fallimento"
+                            inHouse="Rischio e costi di fallimento elevati"
                             highlightRayo={true}
                             delay={0.3}
                         />
