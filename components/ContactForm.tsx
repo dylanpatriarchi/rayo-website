@@ -13,6 +13,7 @@ export default function ContactForm() {
         setLoading(true);
 
         const formData = new FormData(e.currentTarget);
+        const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams();
         const data = {
             name: formData.get("name"),
             email: formData.get("email"),
@@ -20,6 +21,10 @@ export default function ContactForm() {
             vat: formData.get("vat"),
             sector: formData.get("sector"),
             message: formData.get("message"),
+            utm_source: params.get("utm_source") || undefined,
+            utm_medium: params.get("utm_medium") || undefined,
+            utm_campaign: params.get("utm_campaign") || undefined,
+            service: params.get("service") || undefined,
         };
 
         try {
@@ -34,7 +39,11 @@ export default function ContactForm() {
             const jsonResponse = await response.json();
 
             if (response.ok && jsonResponse.response === "OK") {
-                setSuccess(true);
+                if (typeof window !== "undefined" && typeof (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag === "function") {
+                    (window as unknown as { gtag: (...a: unknown[]) => void }).gtag("event", "form_submit", { send_to: "G-9T1HYCRWDK", event_category: "contact", event_label: "contact_form" });
+                }
+                window.location.href = "/thank-you";
+                return;
             } else {
                 console.error("Failed to submit form: Unexpected response", jsonResponse);
                 alert("Si è verificato un errore durante l'invio del messaggio. Riprova più tardi.");

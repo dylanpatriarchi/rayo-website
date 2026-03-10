@@ -445,10 +445,8 @@ export default function KartaPage() {
                                     Bring Your Own Key.
                                 </h3>
                                 <p className="text-lg text-gray-500 leading-relaxed mb-8">
-                                    Non ti addebitiamo 30€/mese per "AI Features". Paghi il prezzo wholesale
-                                    direttamente ai provider (OpenAI, Anthropic).
-                                    <br />
-                                    <span className="text-gray-900 font-medium">Spendi circa 1€ per 500 generazioni.</span>
+                                    Nessun abbonamento fisso per &quot;AI Features&quot;. Paghi il prezzo wholesale
+                                    direttamente ai provider (OpenAI, Anthropic): zero markup, solo quello che consumi.
                                 </p>
                             </div>
 

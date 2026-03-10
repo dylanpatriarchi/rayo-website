@@ -81,7 +81,7 @@ const CardNav: React.FC<CardNavProps> = ({
                         <Link
                             href="/contact"
                             onClick={() => { setIsExpanded(false); setIsHamburgerOpen(false); }}
-                            className="card-nav-cta-button hidden md:inline-flex border border-[#0047FF]/10 bg-[#0047FF] hover:bg-[#003ad1] text-white rounded-full px-4 items-center justify-center h-full text-[10px] font-bold tracking-widest uppercase transition-all duration-300 shadow-sm hover:shadow-md"
+                            className="card-nav-cta-button inline-flex border border-[#0047FF]/10 bg-[#0047FF] hover:bg-[#003ad1] text-white rounded-full px-3 md:px-4 items-center justify-center h-full text-[10px] font-bold tracking-widest uppercase transition-all duration-300 shadow-sm hover:shadow-md"
                         >
                             Prenota
                         </Link>

@@ -18,6 +18,13 @@ export default function BlogPage() {
             </h2>
 
             <PostList initialPosts={posts} variant="blog" />
+
+            <section className="mt-24 pt-24 border-t border-foreground/10 text-center">
+                <p className="text-foreground/60 font-light mb-6">Vuoi un audit gratuito o parlare con un ingegnere?</p>
+                <Link href="/contact" className="inline-flex px-8 py-4 bg-primary text-white font-bold rounded-full hover:bg-primary/90 transition-colors text-sm">
+                    Contattaci
+                </Link>
+            </section>
         </main>
     );
 }

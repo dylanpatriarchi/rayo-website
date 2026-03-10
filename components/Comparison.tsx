@@ -38,8 +38,8 @@ export default function Comparison() {
                         <ComparisonRow
                             icon={<DollarSign size={18} />}
                             criterion="Costo Operativo"
-                            rayo="€1.5k - €30k / setup"
-                            inHouse="€150k+ (Salaries/Yr)"
+                            rayo="Preventivo su misura, zero costi fissi"
+                            inHouse="Costi fissi elevati (team interno)"
                             delay={0.1}
                         />
                         {/* Row 3 */}

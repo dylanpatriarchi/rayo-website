@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { getAllPosts } from '@/utils/mdx';
+import { SERVICE_SLUGS } from '@/lib/services-landing';
 
 const baseUrl = 'https://rayo.consulting';
 
@@ -76,7 +77,32 @@ export default function sitemap(): MetadataRoute.Sitemap {
             changeFrequency: 'yearly' as const,
             priority: 0.3,
         },
+        {
+            url: `${baseUrl}/careers`,
+            lastModified: new Date().toISOString(),
+            changeFrequency: 'weekly' as const,
+            priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/karta`,
+            lastModified: new Date().toISOString(),
+            changeFrequency: 'monthly' as const,
+            priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/audit-gratuito`,
+            lastModified: new Date().toISOString(),
+            changeFrequency: 'monthly' as const,
+            priority: 0.85,
+        },
     ];
 
-    return [...routes, ...blogs, ...cases];
+    const serviziLanding = SERVICE_SLUGS.map((slug) => ({
+        url: `${baseUrl}/servizi/${slug}`,
+        lastModified: new Date().toISOString(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.8,
+    }));
+
+    return [...routes, ...serviziLanding, ...blogs, ...cases];
 }

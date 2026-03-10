@@ -14,7 +14,12 @@ import CTABanner from "@/components/CTABanner";
 import TechStack from "@/components/TechStack";
 import BlogPreview from "@/components/BlogPreview";
 import FounderCard from "@/components/FounderCard";
+import NewsletterSection from "@/components/NewsletterSection";
 import { getAllPosts } from "@/utils/mdx";
+
+export const metadata = {
+    alternates: { canonical: "https://rayo.consulting" },
+};
 
 export default function Home() {
   const allCases = getAllPosts("cases");
@@ -38,6 +43,7 @@ export default function Home() {
       <Testimonials />
       <FounderCard />
       <BlogPreview posts={latestPosts} />
+      <NewsletterSection />
       <ContactForm />
     </main>
   );

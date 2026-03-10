@@ -55,9 +55,6 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  alternates: {
-    canonical: './',
-  },
   other: {
     "google-adsense-account": "ca-pub-4372911380864795",
   },
@@ -72,8 +69,7 @@ const jsonLd = {
       "image": "https://rayo.consulting/favicon.svg",
       "@id": "https://rayo.consulting/#organization",
       "url": "https://rayo.consulting",
-      "telephone": "",
-      "priceRange": "€€€",
+      "telephone": "+39 327 174 6038",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "Vocabolo Marcheggiane 56/C",

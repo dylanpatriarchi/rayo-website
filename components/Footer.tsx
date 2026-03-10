@@ -25,6 +25,9 @@ export default function Footer() {
                     >
                         info@rayo.consulting
                     </a>
+                    <a href="tel:+393271746038" className="mt-2 block text-lg text-foreground/70 hover:text-primary transition-colors">
+                        +39 327 174 6038
+                    </a>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-12 text-left">
@@ -34,6 +37,7 @@ export default function Footer() {
                         <p>Vocabolo Marcheggiane 56/C</p>
                         <p>Breccione Zona Industriale, Città di Castello (PG)</p>
                         <a href="mailto:info@rayo.consulting" className="hover:text-primary transition-colors mt-2">info@rayo.consulting</a>
+                        <a href="tel:+393271746038" className="block hover:text-primary transition-colors mt-1">+39 327 174 6038</a>
                     </div>
 
                     <div className="flex flex-col gap-2 text-sm font-light text-foreground/60">

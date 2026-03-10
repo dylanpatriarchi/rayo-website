@@ -34,8 +34,12 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
             <header className="mb-16">
                 <div className="flex flex-wrap gap-4 mb-6 text-sm font-medium tracking-wide opacity-60">
                     <span className="uppercase">{post.metadata.type}</span>
-                    <span>•</span>
-                    <span>{post.metadata.rate}</span>
+                    {post.metadata.rate != null && post.metadata.rate !== "" && (
+                        <>
+                            <span>•</span>
+                            <span>{post.metadata.rate}</span>
+                        </>
+                    )}
                 </div>
                 <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-none mb-8">
                     {post.metadata.title}

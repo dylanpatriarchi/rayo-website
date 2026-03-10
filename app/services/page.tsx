@@ -1,3 +1,16 @@
+import Link from "next/link";
+
+export const metadata = {
+    title: "Servizi",
+    description: "Enterprise RAG, LLM Fine-Tuning, AI Agents e Tech Advisory. Soluzioni AI su misura per ridurre costi operativi e automatizzare processi business-critical.",
+    openGraph: {
+        title: "Servizi AI Enterprise | Rayo Consulting",
+        description: "RAG, Fine-Tuning, AI Agents e CTO as a Service.",
+        url: "https://rayo.consulting/services",
+    },
+    alternates: { canonical: "https://rayo.consulting/services" },
+};
+
 export default function ServicesPage() {
     return (
         <main className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
@@ -27,7 +40,10 @@ export default function ServicesPage() {
                             <li>Supporto tecnico su manualistica complessa</li>
                             <li>Onboarding HR automatizzato</li>
                         </ul>
-                        <div className="text-lg font-bold">da €1.500</div>
+                        <div className="mt-6 flex flex-wrap gap-4">
+                            <Link href="/servizi/rag" className="text-sm font-bold text-primary hover:underline">Scopri di più →</Link>
+                            <Link href="/contact" className="text-sm font-bold text-foreground/60 hover:text-primary hover:underline">Parliamone →</Link>
+                        </div>
                     </div>
                 </section>
 
@@ -51,7 +67,10 @@ export default function ServicesPage() {
                             <li>Agenti di vendita con script specifici</li>
                             <li>Classificazione ticket di supporto</li>
                         </ul>
-                        <div className="text-lg font-bold">da €3.000</div>
+                        <div className="mt-6 flex flex-wrap gap-4">
+                            <Link href="/servizi/addestramento-llm" className="text-sm font-bold text-primary hover:underline">Scopri di più →</Link>
+                            <Link href="/contact" className="text-sm font-bold text-foreground/60 hover:text-primary hover:underline">Parliamone →</Link>
+                        </div>
                     </div>
                 </section>
 
@@ -75,7 +94,10 @@ export default function ServicesPage() {
                             <li>Qualificazione Lead</li>
                             <li>Data Entry e Data Scraping</li>
                         </ul>
-                        <div className="text-lg font-bold">Custom</div>
+                        <div className="mt-6 flex flex-wrap gap-4">
+                            <Link href="/servizi/agenti-ai" className="text-sm font-bold text-primary hover:underline">Scopri di più →</Link>
+                            <Link href="/contact" className="text-sm font-bold text-foreground/60 hover:text-primary hover:underline">Parliamone →</Link>
+                        </div>
                     </div>
                 </section>
 
@@ -99,7 +121,10 @@ export default function ServicesPage() {
                             <li>Preveniamo il debito tecnico</li>
                             <li>Ottimizziamo i costi cloud</li>
                         </ul>
-                        <div className="text-lg font-bold">€38/ora</div>
+                        <div className="mt-6 flex flex-wrap gap-4">
+                            <Link href="/servizi/consulenza-tecnica" className="text-sm font-bold text-primary hover:underline">Scopri di più →</Link>
+                            <Link href="/contact" className="text-sm font-bold text-foreground/60 hover:text-primary hover:underline">Parliamone →</Link>
+                        </div>
                     </div>
                 </section>
             </div>

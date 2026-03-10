@@ -52,6 +52,15 @@ const nextConfig: NextConfig = {
       { source: '/web-terni', destination: '/', permanent: true },
       { source: '/en/sansepolcro', destination: '/', permanent: true },
 
+      // --- Landing offerta ---
+      { source: '/poc-gratuito', destination: '/audit-gratuito', permanent: true },
+      { source: '/proof-of-concept', destination: '/audit-gratuito', permanent: true },
+
+      // --- Landing servizi (slug italiani): redirect da vecchi slug in inglese ---
+      { source: '/servizi/fine-tuning', destination: '/servizi/addestramento-llm', permanent: true },
+      { source: '/servizi/ai-agents', destination: '/servizi/agenti-ai', permanent: true },
+      { source: '/servizi/tech-advisory', destination: '/servizi/consulenza-tecnica', permanent: true },
+
       // --- Misc ---
       { source: '/newsletter', destination: '/', permanent: true },
       { source: '/en/unsubscribe', destination: '/', permanent: true },

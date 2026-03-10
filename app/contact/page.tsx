@@ -1,5 +1,16 @@
 import ContactForm from "@/components/ContactForm";
 
+export const metadata = {
+    title: "Contatti",
+    description: "Richiedi un audit gratuito o prenota una discovery call di 30 minuti. Nessun commerciale, solo soluzioni tecniche con un ingegnere Rayo.",
+    openGraph: {
+        title: "Contatti | Rayo Consulting",
+        description: "Audit gratuito e call con un ingegnere. Form e Calendly.",
+        url: "https://rayo.consulting/contact",
+    },
+    alternates: { canonical: "https://rayo.consulting/contact" },
+};
+
 export default function ContactPage() {
     return (
         <main className="pt-32 w-full min-h-screen">

@@ -9,28 +9,24 @@ const services = [
         id: "01",
         title: "ENTERPRISE RAG",
         description: "Il tuo 'Cervello Aziendale' centralizzato. Ricerca semantica istantanea su milioni di documenti. Zero perdite di tempo.",
-        price: "da €1.5k",
         tags: ["Knowledge Graph", "Vector DB", "Zero-Hallucination"]
     },
     {
         id: "02",
         title: "LLM FINE-TUNING",
         description: "Addestriamo l'AI a pensare come il tuo miglior dipendente. Modelli verticali proprietari (Llama 3, Mistral) sui tuoi dati.",
-        price: "da €3.0k",
         tags: ["Data Privacy", "Custom Models", "High Accuracy"]
     },
     {
         id: "03",
         title: "AI AGENTS",
         description: "Forza lavoro digitale attiva 24/7. Agenti autonomi che eseguono task complessi in Customer Service, Sales e Operations.",
-        price: "Custom",
         tags: ["Autonomy", "Multi-Agent", "Workflow Automation"]
     },
     {
         id: "04",
         title: "TECH ADVISORY",
         description: "CTO as a Service. Guidiamo la tua trasformazione digitale evitando sprechi di budget e debiti tecnici.",
-        price: "€38/ora",
         tags: ["Strategy", "Audit", "Architecture"]
     }
 ];
@@ -97,13 +93,6 @@ export default function Services() {
                                     >
                                         {service.title}
                                     </h3>
-
-                                    {/* Price Tag (Desktop) */}
-                                    <div className="hidden md:block min-w-[100px] text-right">
-                                        <span className="text-xs font-mono border border-foreground/20 rounded-full px-3 py-1">
-                                            {service.price}
-                                        </span>
-                                    </div>
                                 </div>
 
                                 {/* Animated Detail Reveal */}

@@ -1,4 +1,16 @@
 import Methodology from "@/components/Methodology";
+import Link from "next/link";
+
+export const metadata = {
+    title: "Metodologia",
+    description: "Il nostro processo: dal caos all'ordine. Discovery, design, build, deploy e ottimizzazione continua. Approccio ciclico per sistemi AI in produzione.",
+    openGraph: {
+        title: "Metodologia | Rayo Consulting",
+        description: "Dal caos all'ordine. Processo collaudato per RAG, Fine-Tuning e AI Agents.",
+        url: "https://rayo.consulting/methodology",
+    },
+    alternates: { canonical: "https://rayo.consulting/methodology" },
+};
 
 export default function MethodologyPage() {
     return (
@@ -16,6 +28,12 @@ export default function MethodologyPage() {
                     Il nostro approccio non è lineare, è ciclico. Ogni deployment fornisce dati per il ciclo successivo di ottimizzazione.
                     Non consegniamo codice morto, ma organismi viventi che evolvono con la tua azienda.
                 </p>
+            </div>
+            <div className="pb-24 px-6 md:px-12 text-center">
+                <p className="text-foreground/60 font-light mb-6">Pronto ad applicare questo metodo al tuo progetto?</p>
+                <Link href="/contact" className="inline-flex px-8 py-4 bg-primary text-white font-bold rounded-full hover:bg-primary/90 transition-colors text-sm">
+                    Richiedi un audit
+                </Link>
             </div>
         </main>
     );

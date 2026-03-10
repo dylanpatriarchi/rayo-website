@@ -1,4 +1,16 @@
 import FounderCard from "@/components/FounderCard";
+import Link from "next/link";
+
+export const metadata = {
+    title: "Chi Siamo",
+    description: "Rayo Consulting: ingegneri AI, non un'agenzia. Costruiamo sistemi RAG e LLM in produzione, non demo. Visione, metodo e risultati misurabili.",
+    openGraph: {
+        title: "Chi Siamo | Rayo Consulting",
+        description: "Ingegneri AI. Precisione assoluta o niente. Lavoriamo solo con chi vuole dominare il mercato.",
+        url: "https://rayo.consulting/about",
+    },
+    alternates: { canonical: "https://rayo.consulting/about" },
+};
 
 export default function About() {
     return (
@@ -44,6 +56,13 @@ export default function About() {
             </div>
 
             <FounderCard />
+
+            <div className="mt-24 pt-24 border-t border-foreground/10 text-center">
+                <p className="text-foreground/60 font-light mb-6">Vuoi lavorare con noi?</p>
+                <Link href="/contact" className="inline-flex px-8 py-4 bg-primary text-white font-bold rounded-full hover:bg-primary/90 transition-colors text-sm">
+                    Contattaci
+                </Link>
+            </div>
         </main>
     );
 }

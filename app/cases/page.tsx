@@ -18,6 +18,13 @@ export default function CasesPage() {
             </h2>
 
             <PostList initialPosts={posts} variant="cases" />
+
+            <section className="mt-24 pt-24 border-t border-foreground/10 text-center">
+                <p className="text-foreground/60 font-light mb-6">Vuoi risultati simili per la tua azienda?</p>
+                <Link href="/contact" className="inline-flex px-8 py-4 bg-primary text-white font-bold rounded-full hover:bg-primary/90 transition-colors text-sm">
+                    Richiedi un audit
+                </Link>
+            </section>
         </main>
     );
 }

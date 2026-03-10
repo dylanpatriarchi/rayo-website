@@ -44,8 +44,12 @@ export default function CareersPage() {
                                 </h4>
                                 <div className="flex gap-4 mt-2 text-sm opacity-60">
                                     <span>{job.metadata.type}</span>
-                                    <span>•</span>
-                                    <span>{job.metadata.rate}</span>
+                                    {job.metadata.rate != null && job.metadata.rate !== "" && (
+                                        <>
+                                            <span>•</span>
+                                            <span>{job.metadata.rate}</span>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                             <div className="mt-4 md:mt-0 px-4 py-2 bg-background rounded-full text-sm font-bold border border-foreground/10 group-hover:border-primary/50 transition-colors">
@@ -69,11 +73,18 @@ export default function CareersPage() {
                     scrivici comunque.
                 </p>
                 <a
-                    href="mailto:careers@rayo.consulting?subject=Spontaneous Application"
+                    href="mailto:info@rayo.consulting?subject=Spontaneous Application"
                     className="text-primary hover:underline underline-offset-4"
                 >
-                    careers@rayo.consulting
+                    info@rayo.consulting
                 </a>
+            </div>
+
+            <div className="mt-16 pt-16 border-t border-foreground/10 text-center">
+                <p className="text-foreground/60 font-light mb-4">Hai un progetto AI da realizzare?</p>
+                <Link href="/contact" className="inline-flex px-8 py-4 bg-primary text-white font-bold rounded-full hover:bg-primary/90 transition-colors text-sm">
+                    Contattaci per un progetto
+                </Link>
             </div>
         </main>
     );
