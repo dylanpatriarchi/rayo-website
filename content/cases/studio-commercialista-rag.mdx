@@ -1,0 +1,48 @@
+---
+title: "Assistente Documentale per Studio Commercialista"
+publishedAt: "2025-09-18"
+summary: "Uno studio commercialista con 8 professionisti usava ore al giorno per ricercare normative e circolari. Abbiamo costruito un sistema RAG interno che risponde in secondi."
+industry: "Consulenza Fiscale"
+stat: "-78%"
+statLabel: "Tempo ricerca normative"
+service: "rag"
+---
+
+## Il Problema
+
+Lo studio gestisce circa 120 clienti tra Srl, liberi professionisti e piccole imprese. Ogni giorno i commercialisti dovevano rispondere a domande su normative IVA, scadenze fiscali e circolari INPS — cercando manualmente tra PDF scaricati dall'Agenzia delle Entrate e archivi interni accumulati negli anni.
+
+Il problema non era la competenza: era il tempo. Trovare la circolare giusta in un archivio di 4.000+ documenti richiedeva in media 25 minuti per pratica.
+
+## La Soluzione
+
+Abbiamo costruito un sistema RAG (Retrieval-Augmented Generation) installato localmente, senza cloud esterno, con accesso esclusivo ai professionisti dello studio.
+
+### Indicizzazione del Corpus
+
+Il primo step è stato strutturare l'archivio esistente:
+- Parsing di 4.200 PDF (circolari, risoluzioni, interpelli, guide interne)
+- Chunking semantico per preservare il contesto normativo
+- Metadati per anno, tipo documento e area tematica (IVA, IRPEF, previdenza, ecc.)
+
+### Motore di Ricerca Ibrido
+
+Il sistema combina ricerca semantica (vector search su ChromaDB locale) e ricerca per keyword esatte — fondamentale quando si cercano codici tributo o riferimenti normativi precisi come "Art. 17-ter DPR 633/72".
+
+### Interfaccia di Interrogazione
+
+Un'interfaccia web semplice, accessibile da browser interno, dove il commercialista pone la domanda in linguaggio naturale e riceve la risposta con citazione precisa della fonte (documento, pagina, data circolare).
+
+## Stack Tecnologico
+
+- **LLM locale**: Mistral 7B quantizzato (4-bit), nessun dato esce dallo studio
+- **Vector store**: ChromaDB su server NAS esistente
+- **Orchestrazione**: LangChain con memory conversazionale
+- **Interfaccia**: Gradio (interna, non pubblica)
+
+## Risultati
+
+Dopo 6 settimane dall'attivazione:
+- Il tempo medio per rispondere a una domanda normativa è passato da 25 minuti a circa 5 minuti
+- I professionisti usano il sistema circa 15 volte al giorno
+- Zero dati trasmessi all'esterno — conformità GDPR garantita

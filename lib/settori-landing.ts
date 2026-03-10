@@ -1,4 +1,11 @@
-export const SETTORE_SLUGS = ["assicurazioni", "legale", "healthcare", "finance"] as const;
+export const SETTORE_SLUGS = [
+    "assicurazioni",
+    "legale",
+    "healthcare",
+    "finance",
+    "manifatturiero",
+    "ecommerce",
+] as const;
 export type SettoreSlug = (typeof SETTORE_SLUGS)[number];
 
 export interface SettoreLandingData {
@@ -27,8 +34,8 @@ export const SETTORI_LANDING: Record<SettoreSlug, SettoreLandingData> = {
         problemIntro:
             "Polizze complesse, documentazione in continuo aggiornamento, contact center sotto pressione. Il RAG enterprise permette agli operatori di avere risposte precise in tempo reale e di classificare i sinistri con accuratezza.",
         proofTitle: "Case study",
-        proofCaseSlug: "compagnia-assicurativa-rag",
-        proofCaseTitle: "RAG per consulenza su polizze e pre-istruttoria sinistri",
+        proofCaseSlug: "pmi-manifatturiera-report",
+        proofCaseTitle: "Report automatici per PMI manifatturiera",
         ctaTitle: "Vuoi risultati simili per la tua compagnia?",
         ctaSubtitle: "Audit gratuito e stima in 48 ore.",
     },
@@ -43,8 +50,8 @@ export const SETTORI_LANDING: Record<SettoreSlug, SettoreLandingData> = {
         problemIntro:
             "Migliaia di documenti, clausole da confrontare, tempi di ricerca che erodono margini. Un sistema RAG dedicato al dominio legale restituisce la risposta con citazione della fonte in secondi.",
         proofTitle: "Case study",
-        proofCaseSlug: "studio-legale-rag",
-        proofCaseTitle: "Sistema RAG per analisi contratti e consulenza legale",
+        proofCaseSlug: "studio-commercialista-rag",
+        proofCaseTitle: "Assistente documentale per studio commercialista",
         ctaTitle: "Vuoi portare il RAG nel tuo studio?",
         ctaSubtitle: "Una call per capire obiettivi e volumi.",
     },
@@ -59,8 +66,8 @@ export const SETTORI_LANDING: Record<SettoreSlug, SettoreLandingData> = {
         problemIntro:
             "Dati sanitari richiedono massima sicurezza e conformità. Costruiamo sistemi che rispettano normative e data residency, con audit trail e controllo degli accessi.",
         proofTitle: "Case study",
-        proofCaseSlug: "gruppo-sanitario-ai-agents",
-        proofCaseTitle: "AI Agents per gruppo sanitario",
+        proofCaseSlug: "agenzia-selezione-cv",
+        proofCaseTitle: "Screening CV automatico per agenzia di selezione",
         ctaTitle: "Hai un progetto AI in ambito sanitario?",
         ctaSubtitle: "Parliamone: valutiamo insieme compliance e architettura.",
     },
@@ -75,10 +82,42 @@ export const SETTORI_LANDING: Record<SettoreSlug, SettoreLandingData> = {
         problemIntro:
             "Regolamentazione stringente e volumi alti. I nostri progetti in ambito finance puntano su modelli controllati, tracciabilità e integrazione con i vostri sistemi core.",
         proofTitle: "Case study",
-        proofCaseSlug: "istituto-bancario-llm",
-        proofCaseTitle: "LLM per istituto bancario",
+        proofCaseSlug: "agenzia-ecommerce-llm",
+        proofCaseTitle: "Generazione schede prodotto con LLM",
         ctaTitle: "Vuoi esplorare l'AI per la tua banca o fintech?",
         ctaSubtitle: "Discovery call e roadmap senza impegno.",
+    },
+    manifatturiero: {
+        slug: "manifatturiero",
+        title: "AI per Manifattura e PMI",
+        headline: "Report automatizzati, qualità e documentazione tecnica.",
+        description:
+            "Automazione di report di produzione, analisi anomalie, documentazione tecnica. Integrazione con ERP e sistemi MES già in uso.",
+        metaDescription:
+            "AI per manifattura e PMI: report automatizzati, qualità, documenti tecnici. Case study e soluzioni su misura. Rayo Consulting.",
+        problemIntro:
+            "Report manuali, documentazione sparsa, dati produttivi non sfruttati. Automatizziamo la generazione di report operativi e la classificazione di anomalie, liberando ore ingegneristiche ogni settimana.",
+        proofTitle: "Case study",
+        proofCaseSlug: "pmi-manifatturiera-report",
+        proofCaseTitle: "Report automatici per PMI manifatturiera",
+        ctaTitle: "Vuoi automatizzare la reportistica della tua fabbrica?",
+        ctaSubtitle: "Audit gratuito e stima in 48 ore.",
+    },
+    ecommerce: {
+        slug: "ecommerce",
+        title: "AI per E-commerce e Retail",
+        headline: "Schede prodotto, SEO e contenuti generati con LLM.",
+        description:
+            "LLM fine-tunati per generare descrizioni prodotto, copy SEO e contenuti marketing in modo coerente con il brand. Scalabile su cataloghi di migliaia di SKU.",
+        metaDescription:
+            "AI per e-commerce e retail: generazione schede prodotto, copy SEO, LLM. Case study e soluzioni. Rayo Consulting.",
+        problemIntro:
+            "Cataloghi enormi, contenuti da aggiornare, SEO da mantenere. Un LLM fine-tunato sul tuo brand genera schede prodotto ottimizzate in secondi, riducendo drasticamente i costi editoriali.",
+        proofTitle: "Case study",
+        proofCaseSlug: "agenzia-ecommerce-llm",
+        proofCaseTitle: "Generazione schede prodotto con LLM",
+        ctaTitle: "Vuoi scalare la produzione di contenuti con l'AI?",
+        ctaSubtitle: "Mostraci il tuo catalogo: stimiamo insieme tempi e costi.",
     },
 };
 

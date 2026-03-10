@@ -1,0 +1,475 @@
+---
+title: "LLMOps: Come Monitorare i Tuoi Sistemi AI in Produzione"
+publishedAt: "2026-01-14"
+summary: "Guida pratica all'osservabilità per sistemi LLM in produzione: metriche critiche, tracing distribuito, rilevamento del drift, e strumenti come Langfuse e Arize AI con esempi di implementazione."
+---
+
+# LLMOps: Come Monitorare i Tuoi Sistemi AI in Produzione
+
+Un sistema LLM in produzione senza monitoring è come guidare di notte senza fari. Funziona — fino a quando non funziona più, e in quel momento non sai né quando ha iniziato a degradare né perché.
+
+MLOps è diventato un campo maturo. LLMOps — l'applicazione degli stessi principi ai sistemi LLM — è ancora agli inizi, ma i pattern fondamentali sono chiari.
+
+---
+
+## Cosa è Diverso nei LLM rispetto ai Modelli ML Tradizionali
+
+Con i modelli ML classici, monitori:
+- Distribuzione dell'input (feature drift)
+- Accuracy su un test set
+- Latenza di inferenza
+
+Con i LLM, questi strumenti sono insufficienti:
+
+1. **Output non deterministico**: Lo stesso input può produrre output diversi. Non puoi fare regression testing classico.
+2. **Output non strutturato**: Come misuri la "qualità" di una risposta in linguaggio naturale?
+3. **Prompt è codice**: Cambiare il system prompt è come cambiare il modello. Devi versionarlo e testarlo.
+4. **Catene di componenti**: Un sistema RAG ha retrieval, re-ranking, e generazione — devi monitorare ogni step separatamente.
+5. **Costo variabile**: Il costo per query varia enormemente a seconda del context.
+
+---
+
+## Le Metriche Fondamentali da Monitorare
+
+### Livello Infrastruttura
+
+```python
+from dataclasses import dataclass
+from typing import Optional
+import time
+
+@dataclass
+class InfraMetrics:
+    # Latenza
+    time_to_first_token_ms: float
+    total_latency_ms: float
+    tokens_per_second: float
+
+    # Token usage
+    input_tokens: int
+    output_tokens: int
+    total_tokens: int
+
+    # Costo
+    cost_usd: float
+
+    # Affidabilità
+    model_used: str
+    provider: str
+    success: bool
+    error_type: Optional[str]
+    retry_count: int
+
+    # Context
+    cache_hit: bool
+    context_length: int
+```
+
+### Livello Qualità
+
+```python
+@dataclass
+class QualityMetrics:
+    # Faithfulness: l'output è supportato dal contesto?
+    faithfulness_score: float  # 0-1
+
+    # Relevance: l'output risponde alla domanda?
+    answer_relevance_score: float  # 0-1
+
+    # Hallucination: il modello ha inventato fatti?
+    hallucination_detected: bool
+    hallucination_confidence: float
+
+    # User feedback
+    explicit_feedback: Optional[str]  # "positive", "negative", "neutral"
+    implicit_feedback: Optional[str]  # "copied", "ignored", "regenerated"
+
+    # RAG-specific
+    context_precision: float  # Documenti recuperati rilevanti / totale recuperati
+    context_recall: float     # Documenti rilevanti trovati / totale rilevanti
+```
+
+---
+
+## 1. Implementazione con Langfuse
+
+Langfuse è lo strumento open source più maturo per il tracing LLM. Si può self-hostare o usare il cloud.
+
+### Setup
+
+```python
+from langfuse import Langfuse
+from langfuse.decorators import observe, langfuse_context
+
+langfuse = Langfuse(
+    public_key="pk-lf-...",
+    secret_key="sk-lf-...",
+    host="https://cloud.langfuse.com"  # o il tuo self-hosted
+)
+
+# Decoratore per tracciare automaticamente le funzioni
+@observe()  # Crea un "span" automaticamente
+def retrieve_documents(query: str) -> list[str]:
+    # Il tuo codice di retrieval
+    results = vector_db.search(query, top_k=5)
+
+    # Puoi aggiungere metadata personalizzati
+    langfuse_context.update_current_observation(
+        metadata={
+            "query": query,
+            "n_results": len(results),
+            "retrieval_strategy": "hybrid"
+        }
+    )
+
+    return results
+
+@observe()
+def generate_response(query: str, context: list[str]) -> str:
+    from openai import OpenAI
+    client = OpenAI()
+
+    messages = [
+        {"role": "system", "content": "Rispondi basandoti solo sul contesto fornito."},
+        {"role": "user", "content": f"Contesto:\n{chr(10).join(context)}\n\nDomanda: {query}"}
+    ]
+
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=messages
+    )
+
+    # Langfuse cattura automaticamente il costo se usi OpenAI
+    return response.choices[0].message.content
+
+@observe(name="rag_pipeline")
+def rag_pipeline(query: str) -> dict:
+    """
+    Pipeline RAG completa con tracing automatico.
+    Ogni sotto-funzione @observe() diventa un sotto-span.
+    """
+    start = time.perf_counter()
+
+    docs = retrieve_documents(query)
+    answer = generate_response(query, docs)
+
+    elapsed = time.perf_counter() - start
+
+    # Aggiungi score di qualità alla trace
+    langfuse_context.score_current_trace(
+        name="answer_quality",
+        value=evaluate_answer_quality(query, answer, docs),
+        comment="Automated quality evaluation"
+    )
+
+    return {
+        "answer": answer,
+        "sources": docs,
+        "latency_ms": elapsed * 1000
+    }
+```
+
+### Valutazione Automatica con LLM-as-Judge
+
+```python
+from langfuse import Langfuse
+
+langfuse = Langfuse()
+
+def setup_automated_evaluation():
+    """
+    Configura valutatori automatici che girano su ogni trace.
+    """
+
+    # Definisci il template di valutazione
+    langfuse.create_prompt(
+        name="faithfulness-eval",
+        prompt="""Sei un valutatore di qualità per sistemi RAG.
+
+Contesto fornito: {{context}}
+Risposta generata: {{answer}}
+
+La risposta è completamente supportata dal contesto? Non contiene informazioni inventate?
+Dai un punteggio da 0 a 1:
+- 1.0: completamente fedele al contesto
+- 0.5: parzialmente fedele (alcune informazioni non nel contesto)
+- 0.0: allucinazione evidente
+
+Rispondi con SOLO il numero decimale.""",
+        labels=["production"],
+        config={"model": "gpt-4o-mini", "temperature": 0}
+    )
+```
+
+---
+
+## 2. Rilevamento del Drift
+
+Il "drift" nei sistemi LLM si manifesta in modi diversi dai ML tradizionali:
+
+### Drift della Distribuzione delle Query
+
+```python
+import numpy as np
+from scipy import stats
+from collections import defaultdict
+from datetime import datetime, timedelta
+
+class QueryDriftDetector:
+    """
+    Monitora se la distribuzione delle query sta cambiando nel tempo.
+    Usa embedding delle query per confrontare distribuzioni temporali.
+    """
+
+    def __init__(self, embedding_model, window_days=7):
+        self.embedding_model = embedding_model
+        self.window_days = window_days
+        self.query_log = []  # Lista di (timestamp, embedding)
+
+    def log_query(self, query: str):
+        embedding = self.embedding_model.encode(query)
+        self.query_log.append((datetime.utcnow(), embedding))
+
+    def detect_drift(self) -> dict:
+        now = datetime.utcnow()
+        window = timedelta(days=self.window_days)
+
+        # Split: ultima settimana vs settimana precedente
+        recent = [e for t, e in self.query_log if t > now - window]
+        previous = [e for t, e in self.query_log if now - 2*window < t <= now - window]
+
+        if len(recent) < 100 or len(previous) < 100:
+            return {"drift_detected": False, "reason": "Dati insufficienti"}
+
+        recent_matrix = np.array(recent)
+        previous_matrix = np.array(previous)
+
+        # Confronto tramite Maximum Mean Discrepancy (MMD)
+        # Versione semplificata: confronto statistico per dimensione
+        drift_scores = []
+        for dim in range(min(50, recent_matrix.shape[1])):  # Controlla prime 50 dimensioni
+            stat, p_value = stats.ks_2samp(recent_matrix[:, dim], previous_matrix[:, dim])
+            drift_scores.append(p_value)
+
+        # Se molte dimensioni mostrano drift significativo
+        significant_drift = sum(1 for p in drift_scores if p < 0.05)
+        drift_ratio = significant_drift / len(drift_scores)
+
+        return {
+            "drift_detected": drift_ratio > 0.3,
+            "drift_score": drift_ratio,
+            "n_recent_queries": len(recent),
+            "n_previous_queries": len(previous),
+        }
+```
+
+### Drift della Qualità delle Risposte
+
+```python
+class QualityTrendMonitor:
+    """
+    Monitora il trend della qualità delle risposte nel tempo.
+    Rileva degradazioni graduali (più difficili da notare dei crash).
+    """
+
+    def __init__(self, alert_threshold=-0.05, window_size=100):
+        self.quality_log = []
+        self.alert_threshold = alert_threshold  # -5% = alert
+        self.window_size = window_size
+
+    def log_quality_score(self, score: float, timestamp: datetime = None):
+        self.quality_log.append({
+            "score": score,
+            "timestamp": timestamp or datetime.utcnow()
+        })
+
+    def check_trend(self) -> dict:
+        if len(self.quality_log) < self.window_size * 2:
+            return {"trend": "insufficient_data"}
+
+        recent = [e["score"] for e in self.quality_log[-self.window_size:]]
+        previous = [e["score"] for e in self.quality_log[-self.window_size*2:-self.window_size]]
+
+        recent_avg = sum(recent) / len(recent)
+        previous_avg = sum(previous) / len(previous)
+        delta = recent_avg - previous_avg
+
+        return {
+            "recent_avg": recent_avg,
+            "previous_avg": previous_avg,
+            "delta": delta,
+            "trend": "degrading" if delta < self.alert_threshold else "stable",
+            "alert": delta < self.alert_threshold
+        }
+```
+
+---
+
+## 3. Dashboard di Monitoring con Prometheus + Grafana
+
+```python
+from prometheus_client import Counter, Histogram, Gauge, start_http_server
+
+# Metriche Prometheus
+llm_requests_total = Counter(
+    "llm_requests_total",
+    "Numero totale di richieste LLM",
+    ["model", "provider", "status"]
+)
+
+llm_latency_histogram = Histogram(
+    "llm_latency_seconds",
+    "Latenza delle richieste LLM in secondi",
+    ["model", "provider"],
+    buckets=[0.1, 0.5, 1.0, 2.0, 5.0, 10.0, 30.0]
+)
+
+llm_tokens_total = Counter(
+    "llm_tokens_total",
+    "Token totali consumati",
+    ["model", "token_type"]  # token_type: input/output
+)
+
+llm_cost_total = Counter(
+    "llm_cost_dollars_total",
+    "Costo totale in USD",
+    ["model"]
+)
+
+llm_quality_gauge = Gauge(
+    "llm_response_quality",
+    "Score di qualità medio delle risposte (rolling 100)",
+    ["evaluation_type"]
+)
+
+def instrument_llm_call(func):
+    """
+    Decorator per instrumentare automaticamente le chiamate LLM.
+    """
+    def wrapper(*args, **kwargs):
+        model = kwargs.get("model", "unknown")
+        provider = "openai"  # o da kwargs
+        start = time.perf_counter()
+
+        try:
+            result = func(*args, **kwargs)
+            status = "success"
+
+            # Registra metriche di successo
+            tokens = result.get("usage", {})
+            llm_tokens_total.labels(model=model, token_type="input").inc(
+                tokens.get("input_tokens", 0)
+            )
+            llm_tokens_total.labels(model=model, token_type="output").inc(
+                tokens.get("output_tokens", 0)
+            )
+
+        except Exception as e:
+            status = type(e).__name__
+            raise
+        finally:
+            elapsed = time.perf_counter() - start
+            llm_requests_total.labels(model=model, provider=provider, status=status).inc()
+            llm_latency_histogram.labels(model=model, provider=provider).observe(elapsed)
+
+        return result
+    return wrapper
+```
+
+---
+
+## 4. Alerting: Quando Svegliare il Team di Notte
+
+Non tutto richiede di svegliare qualcuno alle 3 di notte. Definisci livelli:
+
+```yaml
+# alert_rules.yaml
+
+alerts:
+  - name: LLMErrorRateHigh
+    condition: "llm_error_rate_5m > 0.05"  # > 5% error rate
+    severity: critical
+    action: page_oncall
+    message: "Error rate LLM > 5% negli ultimi 5 minuti"
+
+  - name: LLMLatencyHigh
+    condition: "llm_latency_p95 > 10"  # > 10 secondi
+    severity: warning
+    action: slack_alert
+    message: "Latenza P95 LLM > 10s - possibile degradazione provider"
+
+  - name: LLMCostSpike
+    condition: "llm_hourly_cost > daily_avg * 3"
+    severity: warning
+    action: slack_alert
+    message: "Spike di costo LLM: 3x superiore alla media giornaliera"
+
+  - name: LLMQualityDegraded
+    condition: "llm_quality_rolling_100 < 0.75"
+    severity: critical
+    action: page_oncall
+    message: "Qualità media risposte < 75% - probabile regressione"
+
+  - name: LLMProviderDown
+    condition: "llm_success_rate_5m < 0.90"  # < 90% success
+    severity: critical
+    action: page_oncall
+    message: "Provider LLM potenzialmente down (< 90% success rate)"
+```
+
+---
+
+## 5. Arize AI per Monitoring Avanzato
+
+Per team che necessitano di monitoring LLM enterprise con funzionalità avanzate:
+
+```python
+from arize.otel import register
+from opentelemetry import trace
+
+# Setup Arize Phoenix (self-hosted, open source)
+register(
+    project_name="rayo-production",
+    endpoint="http://your-arize-phoenix:4317"
+)
+
+tracer = trace.get_tracer(__name__)
+
+def monitored_rag_call(query: str) -> str:
+    with tracer.start_as_current_span("rag_pipeline") as span:
+        span.set_attribute("input.value", query)
+        span.set_attribute("input.mime_type", "text/plain")
+
+        # Retrieval
+        with tracer.start_as_current_span("retrieval") as retrieval_span:
+            docs = retrieve_documents(query)
+            retrieval_span.set_attribute("retrieval.num_docs", len(docs))
+
+        # Generation
+        with tracer.start_as_current_span("llm_call") as llm_span:
+            response = generate_response(query, docs)
+            llm_span.set_attribute("llm.model_name", "gpt-4o")
+            llm_span.set_attribute("output.value", response)
+
+        span.set_attribute("output.value", response)
+        return response
+```
+
+---
+
+## Conclusioni: La Stack di Monitoring Minima
+
+Per iniziare senza over-engineering:
+
+1. **Langfuse** (self-hosted o cloud): Tracing, costi, quality evaluation — copre l'80% dei bisogni
+2. **Prometheus + Grafana**: Metriche infrastruttura, latency, error rate
+3. **Alerting su Slack**: Error rate > 5%, costo spike, quality degradation
+4. **Weekly review**: Rivedi i trend di qualità ogni settimana, non solo quando si rompe qualcosa
+
+Aggiungi Arize AI o altri strumenti enterprise solo quando hai bisogno di funzionalità specifiche che Langfuse non offre.
+
+Il monitoring più costoso è quello che non esiste.
+
+---
+
+**Vuoi implementare un sistema di monitoring per il tuo LLM in produzione?** [Contattaci](mailto:info@rayo.consulting).

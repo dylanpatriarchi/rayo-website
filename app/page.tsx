@@ -14,6 +14,8 @@ import CTABanner from "@/components/CTABanner";
 import TechStack from "@/components/TechStack";
 import BlogPreview from "@/components/BlogPreview";
 import FounderCard from "@/components/FounderCard";
+import HowToStart from "@/components/HowToStart";
+import GdprTrustSection from "@/components/GdprTrustSection";
 import { getAllPosts } from "@/utils/mdx";
 
 export const metadata = {
@@ -34,13 +36,15 @@ export default function Home() {
       <Services />
       <CaseStudiesPreview posts={featuredCases} />
       <CTABanner />
+      <HowToStart />
       <WorkEthic />
       <Methodology />
       <TechStack />
+      <GdprTrustSection />
       <Comparison />
       <FAQ />
-      <Testimonials />
       <FounderCard />
+      <Testimonials />
       <BlogPreview posts={latestPosts} />
       <ContactForm />
     </main>

@@ -1,0 +1,289 @@
+---
+title: "On-Premise vs Cloud per AI Enterprise: L'Analisi Definitiva per il 2025"
+publishedAt: "2025-11-05"
+summary: "Analisi tecnico-economica completa per scegliere tra infrastruttura on-premise e cloud per sistemi AI enterprise: TCO, compliance GDPR, latenza, costi GPU, e scenari ibridi."
+---
+
+# On-Premise vs Cloud per AI Enterprise: L'Analisi Definitiva per il 2025
+
+Questa è la domanda che ogni CTO italiano si pone nel 2025: mando i dati ai server OpenAI/Google/Anthropic in US, o costruisco infrastruttura interna?
+
+La risposta non è ideologica — è economica, regolatoria, e operativa. Vediamo i numeri reali.
+
+---
+
+## Il Contesto Regolatorio Italiano: Il Fattore Che Cambia Tutto
+
+Prima di parlare di costi, la realtà italiana: il GDPR non impedisce l'uso di cloud provider americani, ma impone vincoli precisi che molti ignorano.
+
+### Cosa Permette il GDPR
+
+- Trasferimento dati personali in US con provider che aderiscono al **Data Privacy Framework** (DPF): ✓ OpenAI, Microsoft, Google ci aderiscono.
+- Uso di dati per fornire il servizio: ✓ permesso.
+
+### Cosa Richiede
+
+- **Data Processing Agreement (DPA)** firmato con ogni provider cloud: obbligatorio.
+- **Valutazione d'impatto (DPIA)** se i dati elaborati sono sensibili.
+- **Informativa aggiornata** agli interessati che menziona l'uso di AI.
+
+### Dove Alcuni Settori Hanno Restrizioni Aggiuntive
+
+- **Dati sanitari**: I dati del paziente (cartelle cliniche, diagnosi) richiedono massima cautela. Molte ASL italiane optano per on-premise non per GDPR puro ma per scelta di policy interna.
+- **Dati di indagini giudiziarie**: Prassi consolidata di no cloud US.
+- **Dati classificati**: Ovviamente on-premise.
+- **Banche**: La Banca d'Italia ha emanato linee guida specifiche sull'uso di AI con dati bancari sensibili.
+
+---
+
+## Total Cost of Ownership: I Numeri Reali
+
+### Scenario A: Cloud API (OpenAI / Anthropic)
+
+Il modello più semplice. Paghi per token.
+
+```
+Scenario: Team 50 persone, uso quotidiano moderato
+- 500.000 query/mese
+- Media 3.000 token per query (input + output)
+- Totale: 1,5 miliardi di token/mese
+
+Costi GPT-4o:
+- Input: 1.2B token * $15/M = $18.000
+- Output: 0.3B token * $60/M = $18.000
+- Totale mensile: $36.000
+
+Costi GPT-4o-mini (per task semplici, 70% del volume):
+- Input: 840M token * $0.15/M = $126
+- Output: 210M token * $0.60/M = $126
+- Totale mensile: $252
+
+Con model routing (70% mini, 30% 4o):
+- Mini: $252
+- 4o: $10.800
+- Totale mensile: ~$11.052/mese = ~$132.624/anno
+```
+
+### Scenario B: Cloud Self-Hosted (GPU su AWS/Azure)
+
+Affitti GPU nel cloud e runni il tuo modello. Più controllo, costo fisso.
+
+```
+Setup tipico per Llama 3.1 70B (qualità ~GPT-4o):
+
+AWS p3.2xlarge (1x V100 16GB): $3.06/ora → non sufficiente per 70B
+AWS p3.8xlarge (4x V100): $12.24/ora → sufficiente con quantizzazione
+AWS p4d.24xlarge (8x A100): $32.77/ora → confortevole, alta throughput
+
+Scelta pratica: 2x A10G (via AWS g5.12xlarge): $5.67/ora
+- Llama 3.1 70B 4-bit: throughput ~20 token/s
+- 500.000 query * 500 token output = 250M token output/mese
+- Tempo di inferenza: 250M / (20 * 3600) = 3.472 ore
+- Costo compute: 3.472 * $5.67 = $19.685
+
+Ma serve anche: storage (EFS), load balancer, monitoring...
+Costo totale stimato: ~$22.000-25.000/mese
+
+Risparmio vs API cloud (con model routing): -$13.000/mese ← più costoso!
+```
+
+**Realtà**: A meno di volumi molto alti, il cloud self-hosted spesso **costa di più** del cloud API, specialmente con model routing aggressivo.
+
+### Scenario C: On-Premise Hardware Dedicato
+
+```
+Hardware per 70B model in produzione (raccomandato):
+- 2x NVIDIA A100 80GB SXM: 2 * $15.000 = $30.000
+- Server (DGX Station o custom): $15.000-25.000
+- Networking, storage NVMe: $5.000
+- UPS, power upgrade: $3.000
+- Totale CAPEX: ~$73.000-83.000
+
+Costi operativi annuali:
+- Elettricità (2x A100 @ 400W + server): ~$6.000/anno
+- Manutenzione e supporto: ~$5.000/anno
+- Ops engineer (parziale): ~$20.000/anno
+- Totale OPEX: ~$31.000/anno
+
+TCO 3 anni: $83.000 + (3 * $31.000) = $176.000
+TCO 3 anni cloud API (con routing): $132.624 * 3 = $397.872
+
+On-premise risparmia ~$220.000 su 3 anni
+→ Solo se il volume rimane stabile e si dispone di Ops expertise
+```
+
+---
+
+## Confronto Latenza
+
+### Cloud API
+
+```
+Latenza tipica (P50/P95) per modelli cloud (Europa, Maggio 2025):
+- GPT-4o (OpenAI EU endpoint): 800ms / 2.100ms TTFT
+- Claude 3.5 Sonnet (Anthropic): 1.200ms / 3.000ms TTFT
+- Gemini 1.5 Pro (Google EU): 600ms / 1.800ms TTFT
+
+Variabilità: alta durante peak hours (9-17 US time)
+```
+
+### On-Premise / Self-Hosted
+
+```
+Latenza on-premise (Llama 3.1 70B, 2x A100):
+- TTFT: 150-300ms (nessun network overhead)
+- Generazione: 20-35 token/s
+- P95: 400ms TTFT
+
+Vantaggi:
+- Latenza predicibile (no thundering herd di altri utenti)
+- No rate limiting
+- Latenza di rete: 1-5ms (LAN) vs 50-150ms (internet verso US)
+```
+
+---
+
+## La Matrice di Decisione
+
+| Criterio | Cloud API | Cloud Self-Hosted | On-Premise |
+|----------|-----------|-------------------|------------|
+| **CAPEX iniziale** | $0 | $0 | $80K-200K |
+| **OPEX mensile (500K q/m)** | $8K-15K | $20K-25K | $2.5K |
+| **Break-even vs cloud API** | - | Mai (quasi) | 12-24 mesi |
+| **Latenza P50** | 600-1200ms | 200-400ms | 150-300ms |
+| **Controllo dati** | Basso | Medio | Totale |
+| **Compliance data residency** | Dipende | ✓ (EU region) | ✓ |
+| **Scalabilità burst** | Illimitata | Limitata (slot) | Rigida |
+| **Ops complexity** | Minima | Media | Alta |
+| **GPU shortage risk** | No | Sì | Sì (acquisto) |
+| **Aggiornamento modelli** | Automatico | Manuale | Manuale |
+
+---
+
+## Architettura Ibrida: La Scelta di Molti Enterprise
+
+La soluzione che adottiamo più frequentemente per clienti enterprise italiani:
+
+```
+Architettura Ibrida:
+
+Tier 1 - On-Premise (dati sensibili):
+- Llama 3.1 70B o Mistral large self-hosted
+- Per: dati sanitari, dati bancari, dati classificati
+- Latenza: < 300ms
+- Controllo: totale
+
+Tier 2 - Cloud EU-Hosted:
+- Azure OpenAI Service (EU West)
+  → I dati rimangono in EU
+  → Stesso modello GPT-4o ma su infrastruttura EU
+- Per: dati aziendali non critici
+- Latenza: 600ms-1.2s
+- Compliance: forte
+
+Tier 3 - Cloud API Standard:
+- OpenAI / Anthropic API dirette
+- Per: dati non personali, pubblici, o già pseudoanonimizzati
+- Massima qualità modelli, massima semplicità
+
+Router Intelligente:
+┌─────────────────────────────────────────────┐
+│            Data Classification Layer         │
+│  Input → Classifica sensitivity → Tier 1/2/3│
+└─────────────────────────────────────────────┘
+```
+
+### Implementazione del Router
+
+```python
+from enum import Enum
+
+class DataSensitivity(str, Enum):
+    HIGH = "high"       # Dati personali sensibili → On-premise
+    MEDIUM = "medium"   # Dati aziendali → Azure EU
+    LOW = "low"         # Dati pubblici o pseudoanonimizzati → API dirette
+
+class DataClassifier:
+    def classify(self, content: str, metadata: dict) -> DataSensitivity:
+        # Check espliciti dal metadata (impostato dal sistema upstream)
+        if metadata.get("contains_health_data") or metadata.get("contains_pii_sensitive"):
+            return DataSensitivity.HIGH
+
+        # Pattern matching per PII
+        if self._contains_fiscal_codes(content) or self._contains_medical_terms(content):
+            return DataSensitivity.HIGH
+
+        # Dati aziendali generici
+        if metadata.get("department") in ["legal", "hr", "finance"]:
+            return DataSensitivity.MEDIUM
+
+        return DataSensitivity.LOW
+
+    def _contains_fiscal_codes(self, text: str) -> bool:
+        import re
+        cf_pattern = r'\b[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]\b'
+        return bool(re.search(cf_pattern, text))
+
+    def _contains_medical_terms(self, text: str) -> bool:
+        medical_keywords = ["diagnosi", "terapia", "farmaco", "paziente", "cartella clinica"]
+        return any(kw in text.lower() for kw in medical_keywords)
+
+class HybridRouter:
+    def __init__(self):
+        self.classifier = DataClassifier()
+        self.endpoints = {
+            DataSensitivity.HIGH: OnPremiseClient(),
+            DataSensitivity.MEDIUM: AzureOpenAIEUClient(),
+            DataSensitivity.LOW: OpenAIDirectClient(),
+        }
+
+    def route(self, content: str, metadata: dict = {}) -> tuple[any, DataSensitivity]:
+        sensitivity = self.classifier.classify(content, metadata)
+        client = self.endpoints[sensitivity]
+        return client, sensitivity
+```
+
+---
+
+## La Questione GPU nel 2025
+
+Un fattore spesso sottovalutato: la **GPU shortage** non è finita. I tempi di consegna per A100/H100 rimangono lunghi (8-16 settimane per hardware enterprise). Le opzioni:
+
+1. **Acquisto diretto NVIDIA**: Disponibilità migliorata ma costi elevati
+2. **Lease GPU**: Fornitori come CoreWeave, Lambda Labs offrono GPU "reserved" a prezzi inferiori al cloud hyperscaler
+3. **Used/Refurbished**: A100 di seconda mano disponibili, ma attenzione alla garanzia
+4. **Cloud spot instances**: Per workload batch, i GPU spot possono costare il 60-80% in meno
+
+---
+
+## Raccomandazione per Settore
+
+| Settore | Raccomandazione | Motivo |
+|---------|-----------------|--------|
+| **Startup tech** | Cloud API con routing | Nessun CAPEX, scalabilità |
+| **PMI italiana** | Azure OpenAI EU | Compliance facile, no ops |
+| **Banca / Assicurazione** | Ibrido: on-premise + Azure EU | Compliance + flessibilità |
+| **Healthcare** | On-premise per dati clinici + Cloud per admin | Requisiti sanitari |
+| **PA / Governo** | On-premise o cloud certificato ACN | Sovranità dati |
+| **Manifatturiero** | Ibrido | Dati IP sensibili on-premise |
+
+---
+
+## Conclusioni
+
+Non esiste la risposta universale, ma esistono principi guida:
+
+1. **Inizia dal cloud**: Zero CAPEX, nessun rischio operativo, scalabilità immediata
+2. **Migra on-premise quando**: Volume alto (> 2M query/mese), dati altamente sensibili, o latenza SLA < 200ms
+3. **Sfrutta Azure OpenAI EU** come compromesso: stessa qualità GPT-4o, dati in EU, compliance semplificata
+4. **Costruisci sempre un router di sensitivity**: Separa i dati prima di decidere dove elaborarli
+
+Il costo di un'analisi sbagliata non è solo economico — una violazione GDPR su dati sanitari può costare fino al 4% del fatturato globale.
+
+---
+
+**Hai bisogno di una valutazione di architettura AI per la tua organizzazione?** [Contattaci](mailto:info@rayo.consulting).
+
+---
+
+**Stai valutando un'infrastruttura AI on-premise?** [Scopri il servizio Tech Advisory →](/servizi/consulenza-tecnica)

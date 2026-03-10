@@ -17,7 +17,7 @@ export const faqs = [
     },
     {
         question: "Quanto costa l'investimento iniziale e qual è il ROI?",
-        answer: "L'investimento dipende da obiettivi e scope. Il ROI medio misurato sui nostri clienti è del 300% nel primo anno, grazie al risparmio netto di ore-uomo e all'azzeramento degli errori manuali. Offriamo un audit gratuito per stimare costi e tempi.",
+        answer: "L'investimento dipende da obiettivi e scope. Il ROI dipende fortemente dal volume del processo automatizzato. Per sistemi RAG su processi documentali intensivi, i clienti tipicamente recuperano l'investimento in 3–6 mesi grazie al risparmio di ore-uomo. Usiamo il nostro ROI Calculator per stimare i numeri reali basandoci sui tuoi dati.",
     },
     {
         question: "Offrite manutenzione post-rilascio?",
@@ -42,5 +42,13 @@ export const faqs = [
     {
         question: "Gestite anche il deploy e l'hosting?",
         answer: "Sì. Possiamo occuparci del deploy su vostra infrastruttura (on-premise o cloud che già usate) o consigliare e configurare ambienti dedicati. Supportiamo anche la manutenzione e il monitoraggio post-go-live.",
+    },
+    {
+        question: "Costruite anche AI Agents? Come si differenziano dal RAG?",
+        answer: "Sì. Gli AI Agents sono sistemi che non si limitano a rispondere ma eseguono azioni: inviano email, compilano form, interrogano API, prendono decisioni condizionate. Il RAG è ideale per la ricerca documentale intelligente. Gli Agents sono ideali per automatizzare workflow multi-step. Spesso li combiniamo: un Agent che usa RAG per trovare le informazioni e poi agisce di conseguenza.",
+    },
+    {
+        question: "I sistemi che costruite sono conformi al GDPR?",
+        answer: "Sì. Progettiamo ogni sistema con la conformità GDPR come requisito non negoziabile, non come afterthought. Questo significa: data residency in Italia o EU, possibilità di deploy on-premise, zero trasmissione di dati a provider esterni senza consenso esplicito, audit trail completo, e documentazione per il DPO.",
     },
 ] as const;

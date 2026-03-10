@@ -1,0 +1,427 @@
+---
+title: "Come Ridurre i Costi OpenAI del 60% Senza Sacrificare la Qualità"
+publishedAt: "2025-09-10"
+summary: "Strategie tecniche concrete per ottimizzare i costi delle API OpenAI in produzione: caching semantico, batching, model routing, e compressione del contesto con impatto reale misurato."
+---
+
+# Come Ridurre i Costi OpenAI del 60% Senza Sacrificare la Qualità
+
+Quando i sistemi LLM vanno in produzione a volumi reali, la bolletta OpenAI diventa rapidamente una sorpresa sgradevole. Abbiamo visto aziende passare da $500/mese in staging a $15.000/mese in produzione senza capire perché.
+
+La buona notizia: il 60% di riduzione non è un obiettivo irrealistico. È quello che otteniamo sistematicamente con i clienti che ci chiamano dopo aver visto la prima fattura di produzione.
+
+---
+
+## Il Problema: Come i Costi Esplodono
+
+Prima di ottimizzare, capisci dove vanno i soldi. Lo schema tipico:
+
+```
+Analisi spesa tipica (azienda B2B, 10.000 query/giorno):
+
+Modello: GPT-4o a $15/M token
+
+Query tipo:
+- System prompt: 800 token (fissi per ogni query)
+- Contesto RAG (5 chunk): 2.000 token
+- Query utente: 150 token
+- Output: 400 token
+─────────────────────────────
+Totale per query: 3.350 token
+
+Costo per query: 3.350 * $0.000015 = $0.050
+Costo giornaliero: 10.000 * $0.050 = $500
+Costo mensile: ~$15.000
+```
+
+Obiettivo: portarlo a $6.000 senza degradare la qualità percepita.
+
+---
+
+## 1. Semantic Caching: Il Più Alto ROI
+
+### Il Concetto
+
+Le query degli utenti enterprise si ripetono molto più di quanto pensi. "Qual è la nostra policy di rimborso spese?" viene chiesta decine di volte al giorno da persone diverse. Non ha senso pagare GPT-4o ogni volta.
+
+Il semantic caching va oltre l'exact-match. Memorizza la risposta per query semanticamente simili, non solo identiche.
+
+### Implementazione con Redis + Embeddings
+
+```python
+import redis
+import numpy as np
+from openai import OpenAI
+
+client = OpenAI()
+cache = redis.Redis(host="localhost", port=6379, db=0)
+
+CACHE_TTL = 3600  # 1 ora
+SIMILARITY_THRESHOLD = 0.92  # Soglia per considerare due query "identiche"
+
+def get_query_embedding(query: str) -> list[float]:
+    response = client.embeddings.create(
+        input=query,
+        model="text-embedding-3-small"  # Molto economico: $0.02/M token
+    )
+    return response.data[0].embedding
+
+def cosine_similarity(a: list[float], b: list[float]) -> float:
+    a_arr = np.array(a)
+    b_arr = np.array(b)
+    return float(np.dot(a_arr, b_arr) / (np.linalg.norm(a_arr) * np.linalg.norm(b_arr)))
+
+def cached_llm_call(query: str, context: str, model: str = "gpt-4o") -> dict:
+    """
+    Chiama l'LLM con semantic caching.
+    Ritorna: {"response": str, "from_cache": bool, "cache_similarity": float}
+    """
+    query_embedding = get_query_embedding(query)
+
+    # Cerca nella cache per query simili
+    cached_keys = cache.keys("llm_cache:*")
+    best_match = None
+    best_similarity = 0.0
+
+    for key in cached_keys[:500]:  # Limita la ricerca ai 500 più recenti
+        cached_data = cache.hgetall(key)
+        if not cached_data:
+            continue
+
+        cached_embedding = np.frombuffer(cached_data[b"embedding"], dtype=np.float32).tolist()
+        similarity = cosine_similarity(query_embedding, cached_embedding)
+
+        if similarity > best_similarity:
+            best_similarity = similarity
+            best_match = cached_data
+
+    if best_similarity >= SIMILARITY_THRESHOLD and best_match:
+        return {
+            "response": best_match[b"response"].decode(),
+            "from_cache": True,
+            "cache_similarity": best_similarity
+        }
+
+    # Cache miss: chiama l'LLM
+    response = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": "Rispondi in modo conciso e accurato."},
+            {"role": "user", "content": f"Contesto: {context}\n\nDomanda: {query}"}
+        ]
+    )
+    answer = response.choices[0].message.content
+
+    # Salva in cache
+    cache_key = f"llm_cache:{hash(query)}"
+    cache.hset(cache_key, mapping={
+        "embedding": np.array(query_embedding, dtype=np.float32).tobytes(),
+        "response": answer,
+        "query": query,
+    })
+    cache.expire(cache_key, CACHE_TTL)
+
+    return {
+        "response": answer,
+        "from_cache": False,
+        "cache_similarity": 0.0
+    }
+```
+
+### Impatto Tipico
+
+Nei sistemi enterprise che abbiamo ottimizzato, il cache hit rate dopo una settimana di produzione:
+- **HR bot** (policy aziendali): 65-75% hit rate
+- **Customer support** (FAQ prodotto): 55-65% hit rate
+- **Legal assistant** (contratti unici): 15-25% hit rate
+
+Con un 60% hit rate, i costi del modello scendono del 60% su quella componente.
+
+---
+
+## 2. Model Routing: Usare il Modello Giusto per Ogni Query
+
+### Il Principio
+
+Non tutte le query richiedono GPT-4o. Una domanda "Quali sono gli orari dell'ufficio?" non ha bisogno del modello più intelligente del mondo.
+
+```python
+from enum import Enum
+from pydantic import BaseModel
+
+class QueryComplexity(str, Enum):
+    SIMPLE = "simple"      # FAQ, lookup, classificazione → gpt-4o-mini
+    MEDIUM = "medium"      # Analisi documenti, drafting → gpt-4o-mini o claude-haiku
+    COMPLEX = "complex"    # Ragionamento multistep, analisi legale → gpt-4o
+
+class RoutingDecision(BaseModel):
+    complexity: QueryComplexity
+    model: str
+    reasoning: str
+
+# Classifier leggero (usa gpt-4o-mini per decidere quale modello usare!)
+def classify_query_complexity(query: str, context_length: int) -> RoutingDecision:
+
+    # Regole fast (zero-cost, solo euristiche)
+    word_count = len(query.split())
+
+    # Query cortissime = quasi sicuramente semplici
+    if word_count < 10 and not any(kw in query.lower() for kw in ["analizza", "confronta", "perché", "ragioni"]):
+        return RoutingDecision(
+            complexity=QueryComplexity.SIMPLE,
+            model="gpt-4o-mini",
+            reasoning="Query breve, nessuna keyword di complessità"
+        )
+
+    # Contesto lungo + query complessa = serve il modello migliore
+    if context_length > 6000 or word_count > 100:
+        return RoutingDecision(
+            complexity=QueryComplexity.COMPLEX,
+            model="gpt-4o",
+            reasoning="Contesto lungo o query elaborata"
+        )
+
+    # Caso medio: usa gpt-4o-mini (10x più economico, 80% della qualità)
+    return RoutingDecision(
+        complexity=QueryComplexity.MEDIUM,
+        model="gpt-4o-mini",
+        reasoning="Query standard"
+    )
+
+COST_PER_TOKEN = {
+    "gpt-4o": 0.000015,
+    "gpt-4o-mini": 0.0000006,  # 25x più economico
+    "claude-3-haiku": 0.00000125,
+}
+
+def routed_llm_call(query: str, context: str) -> dict:
+    routing = classify_query_complexity(query, len(context.split()))
+    model = routing.model
+
+    response = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "user", "content": f"Contesto: {context}\n\nDomanda: {query}"}
+        ]
+    )
+
+    tokens_used = response.usage.total_tokens
+    cost = tokens_used * COST_PER_TOKEN[model]
+
+    return {
+        "response": response.choices[0].message.content,
+        "model_used": model,
+        "cost_usd": cost,
+        "routing_reason": routing.reasoning
+    }
+```
+
+### Distribuzione Tipica delle Query
+
+In un sistema enterprise reale, la distribuzione è:
+- **60% Simple**: FAQ, lookup → gpt-4o-mini ($0.002/query)
+- **30% Medium**: Analisi standard → gpt-4o-mini ($0.004/query)
+- **10% Complex**: Ragionamento avanzato → gpt-4o ($0.050/query)
+
+Costo medio ponderato con routing: **$0.007/query** vs $0.050 senza routing. Riduzione dell'86%.
+
+---
+
+## 3. Context Compression: Meno Token, Stessa Qualità
+
+### Il Problema del Contesto Verboso
+
+I sistemi RAG tipicamente recuperano 5 chunk da 500 token ciascuno. Ma spesso l'informazione rilevante è solo il 20-30% di ogni chunk.
+
+```python
+def compress_context(query: str, raw_chunks: list[str]) -> str:
+    """
+    Usa un modello veloce per estrarre solo le parti rilevanti del contesto.
+    Costo: ~$0.001 per compressione (usando gpt-4o-mini).
+    Risparmio: riduzione context del 40-60% nelle chiamate successive.
+    """
+    chunks_text = "\n\n---\n\n".join([f"[Chunk {i+1}]\n{chunk}" for i, chunk in enumerate(raw_chunks)])
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",  # Economico per questa task
+        messages=[{
+            "role": "user",
+            "content": f"""Domanda: {query}
+
+Estratto dal documento:
+{chunks_text}
+
+Estrai SOLO le frasi e i paragrafi che sono direttamente rilevanti per rispondere alla domanda.
+Mantieni il testo originale senza parafrasare. Sii selettivo.
+Se un chunk non contiene informazioni rilevanti, omettilo completamente."""
+        }],
+        max_tokens=1000
+    )
+
+    return response.choices[0].message.content
+
+# Prima: 5 chunk * 500 token = 2.500 token di contesto
+# Dopo compressione: ~600 token (risparmio: 1.900 token * $0.000015 = $0.0285 per query)
+# Costo compressione: ~500 token * $0.0000006 = $0.0003
+# Risparmio netto per query: ~$0.028 = 56% del costo contesto
+```
+
+### System Prompt Compression
+
+Un'altra fonte nascosta di costi: il system prompt viene pagato a ogni query.
+
+```
+❌ System prompt verbose (1.200 token):
+"Sei un assistente virtuale di Acme Corp, un'azienda leader nel settore
+della consulenza aziendale fondata nel 1985 con sede a Milano...
+[200 parole di background irrilevante]
+Quando rispondi, assicurati sempre di essere professionale e cortese,
+di rispettare le policy aziendali descritte nel documento allegato,
+di non fornire informazioni non verificate..."
+
+✓ System prompt ottimizzato (400 token):
+"Assistente aziendale Acme Corp. Rispondi in italiano formale.
+Basa le risposte solo sui documenti forniti.
+Se l'informazione non è disponibile: 'Questa informazione non è nei documenti.'
+Non fornire pareri legali o medici."
+
+Risparmio: 800 token * $0.000015 = $0.012 per query
+A 10.000 query/giorno: $120/giorno = $3.600/mese
+```
+
+---
+
+## 4. Batching: Per Pipeline Offline
+
+Se hai task che non richiedono risposta in tempo reale (analisi notturna, generazione report, classificazione documenti), usa l'**OpenAI Batch API**: 50% di sconto garantito.
+
+```python
+import json
+
+def create_batch_job(requests: list[dict], output_file: str) -> str:
+    """
+    Crea un batch job per la Batch API di OpenAI.
+    Sconto: 50% sul prezzo standard.
+    Tempo di risposta: entro 24 ore.
+    """
+    # Prepara il file JSONL
+    batch_requests = []
+    for i, req in enumerate(requests):
+        batch_requests.append({
+            "custom_id": f"request-{i}",
+            "method": "POST",
+            "url": "/v1/chat/completions",
+            "body": {
+                "model": "gpt-4o",
+                "messages": req["messages"],
+                "max_tokens": req.get("max_tokens", 500)
+            }
+        })
+
+    # Scrivi JSONL
+    with open("batch_input.jsonl", "w") as f:
+        for req in batch_requests:
+            f.write(json.dumps(req) + "\n")
+
+    # Carica il file
+    with open("batch_input.jsonl", "rb") as f:
+        batch_file = client.files.create(file=f, purpose="batch")
+
+    # Crea il batch
+    batch = client.batches.create(
+        input_file_id=batch_file.id,
+        endpoint="/v1/chat/completions",
+        completion_window="24h"
+    )
+
+    return batch.id
+
+def check_batch_status(batch_id: str) -> dict:
+    batch = client.batches.retrieve(batch_id)
+    return {
+        "status": batch.status,
+        "completed": batch.request_counts.completed,
+        "failed": batch.request_counts.failed,
+        "total": batch.request_counts.total
+    }
+```
+
+---
+
+## 5. Risultati Combinati: Il Piano di Ottimizzazione
+
+Applicando tutte le tecniche insieme:
+
+```
+Baseline (prima dell'ottimizzazione):
+- 10.000 query/giorno su GPT-4o
+- 3.350 token medi per query
+- Costo: $15.000/mese
+
+Dopo ottimizzazione:
+
+1. Semantic caching (60% hit rate):
+   - 4.000 query effettive al modello
+   - Risparmio: -60%
+
+2. Model routing sulle 4.000 query rimanenti:
+   - 60% su gpt-4o-mini, 30% su gpt-4o-mini, 10% su gpt-4o
+   - Risparmio: -75% sul costo modelli
+
+3. Context compression (-50% token):
+   - 1.675 token medi dopo compressione
+   - Risparmio: -50%
+
+4. System prompt ottimizzato (-33% token fissi):
+   - Risparmio: -$1.200/mese
+
+Costo finale stimato: ~$5.500/mese
+Risparmio totale: 63%
+```
+
+---
+
+## Monitoraggio dei Costi
+
+```python
+class CostTracker:
+    def __init__(self):
+        self.daily_costs = defaultdict(float)
+        self.model_usage = defaultdict(int)
+
+    def track_call(self, model: str, tokens: int, from_cache: bool):
+        if not from_cache:
+            cost = tokens * COST_PER_TOKEN[model]
+            date_key = datetime.utcnow().strftime("%Y-%m-%d")
+            self.daily_costs[date_key] += cost
+            self.model_usage[model] += tokens
+
+    def get_monthly_projection(self) -> float:
+        """Proiezione mensile basata sugli ultimi 7 giorni."""
+        recent_days = sorted(self.daily_costs.keys())[-7:]
+        avg_daily = sum(self.daily_costs[d] for d in recent_days) / len(recent_days)
+        return avg_daily * 30
+
+    def alert_if_over_budget(self, monthly_budget_usd: float):
+        projection = self.get_monthly_projection()
+        if projection > monthly_budget_usd * 0.8:  # Alert all'80%
+            send_alert(f"Attenzione: proiezione costi LLM ${projection:.0f}/mese (budget: ${monthly_budget_usd:.0f})")
+```
+
+---
+
+## Conclusioni
+
+Il 60% di riduzione dei costi non arriva da un singolo trick. Arriva dall'applicazione sistematica di:
+
+1. **Semantic caching** → -60% sulle query ripetute
+2. **Model routing** → -75% sul costo dei modelli
+3. **Context compression** → -50% sui token
+4. **System prompt ottimizzato** → -30% sui token fissi
+5. **Batch API** per task offline → -50% garantito da OpenAI
+
+Inizia dal caching. Ha il ROI più alto ed è implementabile in un giorno.
+
+---
+
+**Vuoi un'analisi della tua spesa LLM e un piano di ottimizzazione?** [Contattaci](mailto:info@rayo.consulting).

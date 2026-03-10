@@ -57,6 +57,50 @@ export default function About() {
 
             <FounderCard />
 
+            <div className="border-t border-foreground/10 pt-16 mt-8">
+                <p className="text-sm font-bold uppercase tracking-widest text-primary mb-4">
+                    Network
+                </p>
+                <h2 className="text-2xl md:text-3xl font-bold mb-6">Non lavoriamo soli.</h2>
+                <p className="text-foreground/60 font-light max-w-2xl mb-12 leading-relaxed">
+                    Rayo Consulting è guidata da Dylan Patriarchi. Per ogni progetto, costruiamo team
+                    ad-hoc con specialisti selezionati dalla nostra rete di ingegneri senior: ML
+                    engineers, data architects, DevOps e UX designers. Nessun generalista. Solo il
+                    profilo giusto per il problema specifico.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {[
+                        {
+                            title: "ML Engineering",
+                            description:
+                                "Fine-tuning, RAG, model optimization. Esperienza con Llama, Mistral, Qwen, Phi.",
+                        },
+                        {
+                            title: "Data Architecture",
+                            description:
+                                "Pipeline ETL, vector databases, knowledge graphs. Da Qdrant a Neo4j.",
+                        },
+                        {
+                            title: "Infrastructure & DevOps",
+                            description:
+                                "Deploy on-premise, GPU servers, Kubernetes, monitoring. Zero downtime.",
+                        },
+                        {
+                            title: "Backend & Integrations",
+                            description:
+                                "API design, ERP/CRM connectors, automazioni. Python e Node.js.",
+                        },
+                    ].map((card) => (
+                        <div key={card.title} className="bg-foreground/5 rounded-xl p-6">
+                            <h3 className="font-bold mb-2 text-base">{card.title}</h3>
+                            <p className="text-foreground/60 text-sm font-light leading-relaxed">
+                                {card.description}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
             <div className="mt-24 pt-24 border-t border-foreground/10 text-center">
                 <p className="text-foreground/60 font-light mb-6">Vuoi lavorare con noi?</p>
                 <Link href="/contact" className="inline-flex px-8 py-4 bg-primary text-white font-bold rounded-full hover:bg-primary/90 transition-colors text-sm">

@@ -16,9 +16,18 @@ export default function ContactPage() {
         <main className="pt-32 w-full min-h-screen">
             <div className="px-6 md:px-12 max-w-7xl mx-auto text-center mb-12">
                 <h1 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6">Parliamo.</h1>
-                <p className="text-xl text-foreground/60 font-light max-w-2xl mx-auto">
+                <p className="text-xl text-foreground/60 font-light max-w-2xl mx-auto mb-8">
                     Hai un problema complesso? Ottimo. È il nostro pane quotidiano.
                 </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center text-base">
+                    <a href="mailto:info@rayo.consulting" className="font-medium text-primary hover:text-blue-600 transition-colors">
+                        info@rayo.consulting
+                    </a>
+                    <span className="text-foreground/20 hidden sm:block">·</span>
+                    <a href="tel:+393271746038" className="font-medium text-foreground/60 hover:text-primary transition-colors">
+                        +39 327 174 6038
+                    </a>
+                </div>
             </div>
             <div className="max-w-7xl mx-auto items-start">
                 <ContactForm />

@@ -1,0 +1,298 @@
+---
+title: "Come Valutare un LLM per l'Uso Enterprise: Una Guida Tecnica"
+publishedAt: "2025-06-10"
+summary: "Una guida tecnica per scegliere il modello linguistico giusto per l'uso in produzione aziendale, con analisi di benchmark, tradeoff costo/performance e requisiti di latenza."
+---
+
+# Come Valutare un LLM per l'Uso Enterprise: Una Guida Tecnica
+
+Scegliere un LLM per l'enterprise non è come scegliere un'app. La differenza tra un modello che "funziona nella demo" e uno che regge la produzione con SLA del 99.9% è enorme — e spesso la paghi dopo il go-live.
+
+In Rayo Consulting, valutiamo LLM per i clienti enterprise ogni settimana. Questo è il processo che usiamo.
+
+---
+
+## 1. I Benchmark Standard: Cosa Misurano (e Cosa Non Dicono)
+
+### MMLU (Massive Multitask Language Understanding)
+
+MMLU testa la conoscenza in 57 domini accademici: diritto, medicina, matematica, storia. Un modello con MMLU di 90%+ ha una base di conoscenza molto ampia.
+
+**Cosa significa in pratica**: Utile per use case che richiedono ragionamento generale — chatbot assistenziali, supporto clienti complesso, analisi di documenti multidisciplinari.
+
+**Limite critico**: MMLU misura conoscenza statica. Se il tuo use case richiede conoscenza del tuo dominio specifico (es. i tuoi prodotti, la tua normativa interna), MMLU è quasi irrilevante.
+
+### HumanEval
+
+HumanEval (OpenAI, 164 problemi di coding) misura la capacità di generare codice Python funzionante. GPT-4o ottiene circa 90%, Claude 3.5 Sonnet circa 92%.
+
+**Quando conta**: Se stai costruendo un code assistant, un tool di analisi dati, o automazioni che generano script.
+
+**Quando non conta**: Per use case documentali o conversazionali puri.
+
+### HellaSwag
+
+Misura la comprensione del linguaggio naturale e il completamento di frasi in contesti quotidiani. I modelli top saturano questo benchmark (>95%), quindi discrimina poco tra modelli di fascia alta.
+
+### MMLU-Pro e GPQA: I Nuovi Standard
+
+I benchmark classici sono stati saturati. Nel 2024-2025 emergono:
+
+- **MMLU-Pro**: Versione più difficile con opzioni multiple da 10 invece di 4. Discrimina meglio tra modelli top.
+- **GPQA** (Graduate-Level Google-Proof Q&A): Domande che richiedono ragionamento da dottorato. Solo esperti umani del dominio rispondono correttamente >65%.
+- **SWE-bench**: Task reali di software engineering su GitHub issue. Misura capacità agentiche.
+
+```
+Benchmark comparison (Aprile 2025):
+Model               MMLU   HumanEval  MMLU-Pro  GPQA
+GPT-4o              88.7%  90.2%      74.4%     53.6%
+Claude 3.5 Sonnet   88.3%  92.0%      77.1%     59.4%
+Gemini 1.5 Pro      85.9%  84.1%      72.8%     46.2%
+Llama 3.1 70B       82.6%  80.5%      66.4%     39.5%
+```
+
+---
+
+## 2. I Benchmark che Contano Davvero per il Tuo Use Case
+
+Prima di guardare MMLU, definisci il tuo **Task-Specific Benchmark**. Ecco come costruirlo:
+
+### Step 1: Raccolta dei Golden Examples
+
+Prendi 100-200 esempi reali del task che vuoi automatizzare:
+- Input: le query/documenti reali degli utenti
+- Output atteso: le risposte che un esperto umano darebbe
+
+### Step 2: Definisci le Metriche
+
+Non tutte le metriche sono uguali:
+
+| Task | Metrica Primaria | Metrica Secondaria |
+|------|------------------|--------------------|
+| Estrazione info | Precision + Recall | Latency |
+| Generazione testo | Human preference score | Hallucination rate |
+| Classificazione | F1 score | Confidence calibration |
+| Coding | Pass@1 (test corretto al primo tentativo) | Token efficiency |
+
+### Step 3: LLM-as-Judge
+
+Per output non strutturati, usa un LLM come giudice:
+
+```python
+def evaluate_response(question, reference_answer, model_answer, judge_model="gpt-4o"):
+    prompt = f"""
+    Valuta la risposta del modello rispetto alla risposta di riferimento.
+
+    Domanda: {question}
+    Risposta di riferimento: {reference_answer}
+    Risposta del modello: {model_answer}
+
+    Assegna un punteggio da 1 a 5 per:
+    1. Accuratezza fattuale
+    2. Completezza
+    3. Concisione
+    4. Assenza di allucinazioni
+
+    Rispondi in JSON: {{"accuracy": X, "completeness": X, "conciseness": X, "no_hallucination": X}}
+    """
+
+    response = client.chat.completions.create(
+        model=judge_model,
+        messages=[{"role": "user", "content": prompt}],
+        response_format={"type": "json_object"}
+    )
+    return json.loads(response.choices[0].message.content)
+```
+
+---
+
+## 3. Tradeoff Costo/Performance
+
+### I Costi Reali
+
+I prezzi cambiano rapidamente, ma l'ordine di grandezza è stabile:
+
+```
+Costo per 1 milione di token (input + output, Maggio 2025):
+
+Tier TOP:
+- GPT-4o:          ~$7.50/M
+- Claude 3.5 Sonnet: ~$9.00/M
+- Gemini 1.5 Pro:  ~$7.00/M
+
+Tier MIDDLE:
+- GPT-4o-mini:     ~$0.30/M
+- Claude 3 Haiku:  ~$0.35/M
+- Gemini 1.5 Flash: ~$0.15/M
+
+Tier ECONOMICO (self-hosted):
+- Llama 3.1 70B (A100 x2): ~$0.80/M (stima infrastruttura)
+- Mistral 7B (A10G):       ~$0.08/M
+```
+
+### Il Framework di Decisione
+
+Non usare sempre il modello migliore. Usa **Model Routing**:
+
+```python
+def route_to_model(query, query_complexity_score):
+    """
+    Routing basato sulla complessità stimata della query.
+    """
+    if query_complexity_score < 0.3:
+        # Query semplice: FAQ, lookup, classificazioni banali
+        return "gpt-4o-mini"  # 40x meno costoso
+    elif query_complexity_score < 0.7:
+        # Query media: analisi documenti, drafting standard
+        return "claude-3-haiku"
+    else:
+        # Query complessa: ragionamento multistep, analisi legale
+        return "claude-3-5-sonnet"
+
+def estimate_complexity(query: str) -> float:
+    """
+    Stima euristica della complessità (0-1).
+    """
+    score = 0.0
+
+    # Lunghezza query
+    if len(query.split()) > 50:
+        score += 0.3
+
+    # Parole chiave che indicano complessità
+    complex_keywords = ["confronta", "analizza", "valuta", "perché", "ragioni"]
+    if any(kw in query.lower() for kw in complex_keywords):
+        score += 0.3
+
+    # Multi-step reasoning
+    if "prima" in query.lower() and "poi" in query.lower():
+        score += 0.2
+
+    return min(score, 1.0)
+```
+
+Con routing intelligente, i nostri clienti riducono i costi del 50-70% con meno del 2% di degradazione sulla qualità percepita.
+
+---
+
+## 4. Latenza: I Numeri che Contano in Produzione
+
+### Time-to-First-Token (TTFT)
+
+Per applicazioni interattive (chatbot, copilot), il TTFT è più importante della latency totale. L'utente percepisce la risposta dal primo token.
+
+```
+TTFT tipici (P50, provider cloud, Maggio 2025):
+- GPT-4o:            ~800ms
+- Claude 3.5 Sonnet: ~1200ms
+- Gemini 1.5 Flash:  ~400ms
+- Llama 3.1 70B (self-hosted, A100 x2): ~300ms
+```
+
+### Throughput per Batch Processing
+
+Per pipeline offline (analisi documenti notturna, generazione report), il throughput conta più del TTFT:
+
+```
+Token/secondo (generazione output):
+- GPT-4o:           ~80 tok/s
+- Claude 3.5 Sonnet: ~65 tok/s
+- Gemini 1.5 Flash: ~200 tok/s
+- Llama 3.1 70B:    ~30 tok/s (dipende dall'hardware)
+```
+
+### Come Misurare la Latenza in Modo Riproducibile
+
+```python
+import time
+import statistics
+
+def benchmark_latency(model, prompts, n_runs=50):
+    ttfts = []
+    total_latencies = []
+
+    for prompt in prompts[:n_runs]:
+        start = time.perf_counter()
+        first_token_time = None
+
+        stream = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            stream=True
+        )
+
+        for chunk in stream:
+            if first_token_time is None and chunk.choices[0].delta.content:
+                first_token_time = time.perf_counter()
+
+        end = time.perf_counter()
+
+        ttfts.append((first_token_time - start) * 1000)
+        total_latencies.append((end - start) * 1000)
+
+    return {
+        "ttft_p50": statistics.median(ttfts),
+        "ttft_p95": sorted(ttfts)[int(len(ttfts) * 0.95)],
+        "total_p50": statistics.median(total_latencies),
+        "total_p95": sorted(total_latencies)[int(len(total_latencies) * 0.95)],
+    }
+```
+
+---
+
+## 5. Context Window: Quanto Ti Serve Davvero
+
+### Il Mito del "Più è Meglio"
+
+Tutti i vendor pubblicizzano context window enormi (128K, 1M token). Ma in produzione:
+
+- **Lost in the middle**: I modelli perdono informazioni nel mezzo di context molto lunghi. Studi mostrano degradazione del 15-30% a 64K+ token rispetto a 8K.
+- **Costo quadratico**: Attenzione scala O(n²) con la lunghezza del contesto. 128K token può costare 16x rispetto a 32K.
+- **Latenza aumenta**: Context lungo → più tempo di processing.
+
+### Come Calcolare il Context Window Necessario
+
+```
+Formula pratica per RAG:
+- System prompt: ~500 token
+- Contesto recuperato (5 chunk): ~2.500 token
+- Storico conversazione (5 turni): ~1.000 token
+- Query utente: ~100 token
+- Output atteso: ~500 token
+───────────────────────────────
+Totale: ~4.600 token
+
+→ Un modello con 8K context window è sufficiente per il 95% dei casi RAG.
+```
+
+Per documenti lunghi (contratti, report annuali), valuta RAG invece di passare l'intero documento in context. È quasi sempre più economico e spesso più accurato.
+
+---
+
+## 6. Checklist di Valutazione Enterprise
+
+Prima di commitare un modello per la produzione:
+
+- [ ] **Task-specific benchmark**: Hai testato sul tuo golden dataset con almeno 100 esempi?
+- [ ] **Hallucination rate**: Hai misurato quante volte il modello inventa fatti non nel contesto?
+- [ ] **Latenza P95**: Hai misurato il caso peggiore, non solo la media?
+- [ ] **Costo proiettato**: Hai stimato il costo mensile a volume di produzione?
+- [ ] **Rate limits**: Hai verificato i limiti di throughput del provider per il tuo tier?
+- [ ] **Fallback strategy**: Cosa succede se il provider è down? Hai un fallback?
+- [ ] **Data residency**: I tuoi dati rimangono in UE? Necessario per GDPR.
+- [ ] **Fine-tuning availability**: Se in futuro vuoi fare fine-tuning, il modello lo permette?
+- [ ] **Structured output**: Il modello supporta JSON mode affidabile per le tue pipeline?
+
+---
+
+## Conclusioni
+
+Non esiste il modello "migliore" in assoluto. Esiste il modello migliore **per il tuo use case specifico, al tuo volume, con il tuo budget**.
+
+La scelta corretta si fa costruendo un benchmark interno rigoroso, misurando la latenza in condizioni reali, e progettando una strategia di routing che ottimizza costo e qualità.
+
+Investire 2 settimane in una valutazione strutturata prima di iniziare lo sviluppo ti fa risparmiare mesi di refactoring dopo.
+
+---
+
+**Hai bisogno di supporto nella valutazione di LLM per il tuo progetto enterprise?** [Parliamone](mailto:info@rayo.consulting).

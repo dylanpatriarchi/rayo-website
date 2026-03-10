@@ -1,7 +1,6 @@
 import { getPost, getAllPosts } from "@/utils/mdx";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import GoogleAdUnit from "@/components/GoogleAdUnit";
 import ContentCTA from "@/components/ContentCTA";
 import BlogServiceCTA from "@/components/BlogServiceCTA";
 
@@ -57,7 +56,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         description: post.metadata.summary,
         datePublished: post.metadata.publishedAt,
         dateModified: post.metadata.updatedAt || post.metadata.publishedAt,
-        author: { "@type": "Organization", name: "Rayo Consulting" },
+        author: { "@type": "Person", name: "Dylan Patriarchi", url: "https://www.linkedin.com/in/dylan-patriarchi/" },
         publisher: { "@type": "Organization", name: "Rayo Consulting", logo: { "@type": "ImageObject", url: `${BASE_URL}/logo.svg` } },
         url: `${BASE_URL}/blog/${slug}`,
         image: post.metadata.image ? `${BASE_URL}${post.metadata.image.startsWith("/") ? "" : "/"}${post.metadata.image}` : `${BASE_URL}/og-image.png`,
@@ -69,6 +68,9 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             <header className="mb-12">
                 <div className="text-sm font-bold uppercase tracking-widest text-primary mb-4">
                     {new Date(post.metadata.publishedAt).toLocaleDateString('it-IT')}
+                </div>
+                <div className="text-sm font-bold uppercase tracking-widest text-foreground/40 mt-1">
+                    Dylan Patriarchi
                 </div>
                 <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-tight mb-8">
                     {post.metadata.title}
@@ -84,10 +86,6 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
             <ContentCTA variant="blog" />
 
-            <div className="mt-16 border-t border-foreground/10 pt-12">
-                <p className="text-sm font-light text-foreground/50 text-center mb-6">Advertisement</p>
-                <GoogleAdUnit slot="2375828345" format="auto" responsive={true} />
-            </div>
         </article>
     );
 }

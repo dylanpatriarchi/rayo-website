@@ -14,14 +14,14 @@ const testimonials = [
         quote:
             "Abbiamo affidato a Rayo un PoC su RAG per i nostri documenti legali. Delivery puntuale, codice pulito e documentazione chiara. Consigliati per chi vuole evitare fumisterie e avere risultati concreti.",
         role: "Cliente",
-        company: "",
+        company: "Sinergia",
         name: null,
     },
     {
         quote:
             "Team tecnico serio, niente venditori. Hanno capito subito il nostro use case e proposto un approccio sensato invece di spingerci su soluzioni preconfezionate.",
         role: "Cliente",
-        company: "",
+        company: "Futura",
         name: null,
     },
 ];
@@ -36,7 +36,7 @@ export default function Testimonials() {
                             Track Record
                         </h2>
                         <h3 className="text-4xl md:text-6xl font-bold tracking-tighter leading-none">
-                            Risultati Confidenziali.
+                            Chi ci ha scelto.
                         </h3>
                     </div>
                     <p className="text-foreground/60 max-w-sm text-right hidden md:block">
@@ -68,7 +68,7 @@ export default function Testimonials() {
                                     </>
                                 ) : (
                                     <div className="text-sm font-medium text-foreground/50">
-                                        — {t.role}
+                                        — {t.role}{t.company ? `, ${t.company}` : ""}
                                     </div>
                                 )}
                             </div>

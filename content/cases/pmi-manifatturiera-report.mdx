@@ -1,0 +1,49 @@
+---
+title: "Report di Produzione Automatici per PMI Manifatturiera"
+publishedAt: "2026-02-18"
+summary: "Una piccola azienda metalmeccanica compilava a mano i report di produzione giornalieri. Un agente AI legge i dati dal gestionale e genera report pronti in 30 secondi."
+industry: "Manufacturing / PMI"
+stat: "30s"
+statLabel: "Tempo generazione report (da 2h)"
+service: "agenti-ai"
+---
+
+## Il Problema
+
+L'azienda produce componenti su commessa per il settore automotive. Ogni sera, il responsabile di produzione passava 1,5-2 ore a compilare il report giornaliero: pezzi prodotti per linea, scarti, fermi macchina, confronto con target settimanale.
+
+I dati erano già nel gestionale (Microsoft Dynamics NAV), ma estrarre, formattare e commentare richiedeva esportazioni manuali in Excel, copia-incolla, e la stesura di un testo sintetico per la direzione. Ogni venerdì, il report settimanale richiedeva ulteriori 3 ore.
+
+## La Soluzione
+
+Abbiamo sviluppato un agente che si connette al gestionale via API, recupera i dati di produzione, e genera automaticamente i report nei formati già in uso in azienda.
+
+### Connessione al Gestionale
+
+L'integrazione usa l'API OData di Dynamics NAV per leggere i dati in tempo reale: ordini di produzione, quantità, causali di scarto, log fermi macchina, e confronto con il piano settimanale caricato ogni lunedì.
+
+### Generazione del Report
+
+Un LLM (Claude 3.5 Haiku, per la velocità) riceve i dati strutturati e genera:
+- Il testo narrativo del report ("La linea A ha prodotto 1.240 pezzi, +8% sul target. Due fermi macchina per cambio utensile, totale 45 minuti.")
+- Le tabelle Excel formattate secondo il template aziendale
+- Un semaforo visivo (verde/giallo/rosso) per ogni KPI
+
+### Automazione
+
+Il report viene generato automaticamente alle 18:00 ogni giorno feriale e inviato via email alla direzione. Il venerdì include automaticamente il riepilogo settimanale. Il responsabile di produzione riceve una notifica se ci sono anomalie da segnalare.
+
+## Stack Tecnologico
+
+- **LLM**: Claude 3.5 Haiku (velocità e costo contenuto)
+- **Integrazione**: API OData Dynamics NAV
+- **Generazione file**: Python + openpyxl per Excel, ReportLab per PDF
+- **Scheduling**: Cron job su server Windows aziendale
+- **Notifiche**: Email SMTP aziendale
+
+## Risultati
+
+- Tempo di generazione report: da 1h 45min a 30 secondi
+- Il responsabile di produzione ha recuperato circa 10 ore a settimana
+- Zero errori di trascrizione (i dati vengono letti direttamente dal gestionale)
+- La direzione ha iniziato a leggere i report — prima arrivavano troppo tardi per essere utili

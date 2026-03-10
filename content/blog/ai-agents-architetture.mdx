@@ -1,0 +1,483 @@
+---
+title: "Architetture per AI Agents: ReAct, Plan-and-Execute e Multi-Agent Systems"
+publishedAt: "2025-09-25"
+summary: "Analisi tecnica dei pattern architetturali per AI agents: dal semplice ReAct ai sistemi multi-agent complessi, con focus su orchestrazione, gestione errori e casi d'uso enterprise."
+---
+
+# Architetture per AI Agents: ReAct, Plan-and-Execute e Multi-Agent Systems
+
+Costruire un AI agent che "funziona nella demo" è facile. Costruire uno che funziona in produzione, con errori reali, input inaspettati, e API instabili, è un problema di ingegneria serio.
+
+In questo articolo analizziamo i pattern architetturali fondamentali, con il codice che li implementa e le insidie che devi conoscere prima di andare in produzione.
+
+---
+
+## 1. ReAct: Il Pattern Fondamentale
+
+### Cos'è
+
+**ReAct** (Reasoning + Acting) è il pattern più semplice e diffuso per gli agenti LLM. Il ciclo è:
+
+```
+Pensiero → Azione → Osservazione → Pensiero → ...
+```
+
+Il modello ragiona su cosa fare, esegue un'azione (chiamata a uno strumento), osserva il risultato, e itera fino a completare il task.
+
+### Implementazione Base
+
+```python
+from openai import OpenAI
+import json
+
+client = OpenAI()
+
+TOOLS = [
+    {
+        "type": "function",
+        "function": {
+            "name": "search_documents",
+            "description": "Cerca documenti nel knowledge base aziendale",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Query di ricerca"},
+                    "max_results": {"type": "integer", "default": 5}
+                },
+                "required": ["query"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_customer_info",
+            "description": "Recupera informazioni su un cliente dal CRM",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "customer_id": {"type": "string"}
+                },
+                "required": ["customer_id"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "create_ticket",
+            "description": "Crea un ticket nel sistema di supporto",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "title": {"type": "string"},
+                    "description": {"type": "string"},
+                    "priority": {"type": "string", "enum": ["low", "medium", "high", "critical"]},
+                    "customer_id": {"type": "string"}
+                },
+                "required": ["title", "description", "priority"]
+            }
+        }
+    }
+]
+
+def execute_tool(tool_name: str, tool_args: dict) -> str:
+    """Dispatch delle chiamate strumento."""
+    if tool_name == "search_documents":
+        return search_documents(**tool_args)
+    elif tool_name == "get_customer_info":
+        return get_customer_info(**tool_args)
+    elif tool_name == "create_ticket":
+        return create_ticket(**tool_args)
+    else:
+        return f"Errore: strumento '{tool_name}' non trovato"
+
+def react_agent(task: str, max_iterations: int = 10) -> str:
+    messages = [
+        {
+            "role": "system",
+            "content": """Sei un agente di supporto aziendale. Hai accesso a strumenti per
+            cercare documenti, recuperare informazioni clienti, e gestire ticket.
+            Ragiona passo per passo prima di agire. Usa i tool necessari per completare il task."""
+        },
+        {"role": "user", "content": task}
+    ]
+
+    for iteration in range(max_iterations):
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=messages,
+            tools=TOOLS,
+            tool_choice="auto"
+        )
+
+        message = response.choices[0].message
+        messages.append(message)
+
+        # Stop condition: nessuna tool call = risposta finale
+        if not message.tool_calls:
+            return message.content
+
+        # Esegui tutte le tool calls
+        for tool_call in message.tool_calls:
+            tool_name = tool_call.function.name
+            tool_args = json.loads(tool_call.function.arguments)
+
+            result = execute_tool(tool_name, tool_args)
+
+            messages.append({
+                "role": "tool",
+                "tool_call_id": tool_call.id,
+                "content": str(result)
+            })
+
+    return "Errore: numero massimo di iterazioni raggiunto"
+```
+
+### Limiti di ReAct
+
+- **No planning globale**: L'agente decide il prossimo step solo guardando il contesto corrente
+- **Errori a cascata**: Un'azione sbagliata al passo 3 può compromettere tutto il workflow
+- **No parallelismo**: Esegue tool in sequenza anche quando potrebbero girare in parallelo
+
+---
+
+## 2. Plan-and-Execute: Prima Pianifica, Poi Agisci
+
+### Cos'è
+
+Plan-and-Execute separa la pianificazione dall'esecuzione. Un modello "planner" (tipicamente il più capace) crea un piano completo, poi un "executor" (può essere più economico) esegue ogni step.
+
+### Vantaggi rispetto a ReAct
+
+- **Visione globale**: Il planner vede l'intero task prima di iniziare
+- **Efficienza**: L'executor può essere un modello più economico
+- **Debugging**: Il piano è esplicito e ispezionabile
+- **Parallelismo**: Il planner può identificare step parallelizzabili
+
+### Implementazione
+
+```python
+from pydantic import BaseModel
+from typing import Literal
+import asyncio
+
+class PlanStep(BaseModel):
+    step_id: str
+    description: str
+    tool_name: str
+    tool_args: dict
+    depends_on: list[str] = []  # Step IDs che devono completare prima
+    is_critical: bool = True    # Se fallisce, si ferma tutto?
+
+class ExecutionPlan(BaseModel):
+    objective: str
+    steps: list[PlanStep]
+    estimated_tools_calls: int
+
+def create_plan(task: str) -> ExecutionPlan:
+    """
+    Il planner usa un modello potente per creare il piano completo.
+    """
+    response = client.beta.chat.completions.parse(
+        model="gpt-4o",  # Modello migliore per pianificazione
+        messages=[
+            {
+                "role": "system",
+                "content": """Crea un piano dettagliato per completare il task.
+                Identifica step paralleli dove possibile (depends_on vuoto = può partire subito).
+                Sii conservativo: preferisci più step semplici a meno step complessi."""
+            },
+            {"role": "user", "content": f"Task: {task}\nStrumenti disponibili: {[t['function']['name'] for t in TOOLS]}"}
+        ],
+        response_format=ExecutionPlan
+    )
+    return response.choices[0].message.parsed
+
+async def execute_step(step: PlanStep) -> tuple[str, str]:
+    """Esegue un singolo step del piano."""
+    try:
+        result = execute_tool(step.tool_name, step.tool_args)
+        return step.step_id, result
+    except Exception as e:
+        if step.is_critical:
+            raise RuntimeError(f"Step critico {step.step_id} fallito: {e}")
+        return step.step_id, f"Step non critico fallito: {e}"
+
+async def execute_plan(plan: ExecutionPlan) -> dict[str, str]:
+    """
+    Esegue il piano rispettando le dipendenze e parallelizzando dove possibile.
+    """
+    results = {}
+    pending = {step.step_id: step for step in plan.steps}
+
+    while pending:
+        # Trova step pronti (tutte le dipendenze completate)
+        ready = [
+            step for step in pending.values()
+            if all(dep in results for dep in step.depends_on)
+        ]
+
+        if not ready:
+            raise RuntimeError("Deadlock nel piano: dipendenze circolari o step bloccati")
+
+        # Esegui step pronti in parallelo
+        tasks = [execute_step(step) for step in ready]
+        completed = await asyncio.gather(*tasks)
+
+        for step_id, result in completed:
+            results[step_id] = result
+            del pending[step_id]
+
+    return results
+
+def plan_and_execute_agent(task: str) -> str:
+    """Entry point del pattern Plan-and-Execute."""
+
+    # Step 1: Pianificazione
+    plan = create_plan(task)
+    print(f"Piano creato: {len(plan.steps)} step")
+
+    # Step 2: Esecuzione
+    results = asyncio.run(execute_plan(plan))
+
+    # Step 3: Sintesi dei risultati
+    synthesis_prompt = f"""
+    Task originale: {task}
+
+    Risultati degli step:
+    {json.dumps(results, indent=2, ensure_ascii=False)}
+
+    Sintetizza i risultati in una risposta coerente e completa per l'utente.
+    """
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",  # Modello economico per sintesi
+        messages=[{"role": "user", "content": synthesis_prompt}]
+    )
+    return response.choices[0].message.content
+```
+
+---
+
+## 3. Multi-Agent Systems: Quando un Agente Non Basta
+
+### Quando Usare Multi-Agent
+
+- **Task complessi**: Che richiedono expertise specialistiche diverse
+- **Parallelismo spinto**: Workflow con molti task indipendenti
+- **Affidabilità**: Un agente "reviewer" che controlla l'output di un "worker"
+- **Specializzazione**: Agenti fine-tuned su domini specifici
+
+### Pattern: Supervisor + Worker
+
+```python
+class AgentRole(BaseModel):
+    name: str
+    description: str
+    system_prompt: str
+    available_tools: list[str]
+
+AGENTS = {
+    "research_agent": AgentRole(
+        name="Research Agent",
+        description="Specializzato nella ricerca di informazioni e analisi documenti",
+        system_prompt="Sei un ricercatore aziendale. Il tuo compito è trovare e analizzare informazioni rilevanti.",
+        available_tools=["search_documents", "web_search", "read_file"]
+    ),
+    "crm_agent": AgentRole(
+        name="CRM Agent",
+        description="Gestisce le operazioni CRM: clienti, ticket, contratti",
+        system_prompt="Sei specializzato nel CRM aziendale. Gestisci clienti, ticket e contratti.",
+        available_tools=["get_customer_info", "create_ticket", "update_contract"]
+    ),
+    "communication_agent": AgentRole(
+        name="Communication Agent",
+        description="Gestisce comunicazioni: email, notifiche, report",
+        system_prompt="Sei specializzato nelle comunicazioni aziendali. Scrivi email, report e notifiche.",
+        available_tools=["send_email", "create_report", "send_notification"]
+    ),
+}
+
+class SupervisorDecision(BaseModel):
+    next_agent: str | None  # None = task completato
+    task_for_agent: str
+    reason: str
+
+def supervisor(task: str, agent_outputs: list[dict]) -> SupervisorDecision:
+    """
+    Il supervisor decide quale agente deve agire e cosa deve fare.
+    """
+    agent_descriptions = "\n".join([
+        f"- {name}: {agent.description}"
+        for name, agent in AGENTS.items()
+    ])
+
+    history_summary = "\n".join([
+        f"[{o['agent']}]: {o['output'][:200]}..."
+        for o in agent_outputs
+    ]) if agent_outputs else "Nessuna azione ancora eseguita."
+
+    response = client.beta.chat.completions.parse(
+        model="gpt-4o",
+        messages=[{
+            "role": "user",
+            "content": f"""
+            Task: {task}
+
+            Agenti disponibili:
+            {agent_descriptions}
+
+            Storia esecuzione:
+            {history_summary}
+
+            Qual è il prossimo agente da coinvolgere?
+            Se il task è completato, imposta next_agent a null.
+            """
+        }],
+        response_format=SupervisorDecision
+    )
+    return response.choices[0].message.parsed
+
+def multi_agent_workflow(task: str, max_steps: int = 20) -> str:
+    agent_outputs = []
+
+    for step in range(max_steps):
+        decision = supervisor(task, agent_outputs)
+
+        if decision.next_agent is None:
+            # Task completato: genera risposta finale
+            final_response = synthesize_results(task, agent_outputs)
+            return final_response
+
+        # Esegui l'agente selezionato
+        agent_config = AGENTS[decision.next_agent]
+        output = run_agent(
+            agent_config=agent_config,
+            task=decision.task_for_agent
+        )
+
+        agent_outputs.append({
+            "agent": decision.next_agent,
+            "task": decision.task_for_agent,
+            "output": output,
+            "step": step
+        })
+
+    return "Errore: numero massimo di step raggiunto"
+```
+
+---
+
+## 4. Error Handling: Il Dettaglio che Separa Demo e Produzione
+
+### Retry con Backoff Esponenziale
+
+```python
+import time
+from functools import wraps
+
+def retry_with_backoff(max_retries=3, base_delay=1.0, exceptions=(Exception,)):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            for attempt in range(max_retries + 1):
+                try:
+                    return func(*args, **kwargs)
+                except exceptions as e:
+                    if attempt == max_retries:
+                        raise
+
+                    delay = base_delay * (2 ** attempt)
+                    print(f"Tentativo {attempt + 1} fallito: {e}. Retry tra {delay}s")
+                    time.sleep(delay)
+        return wrapper
+    return decorator
+
+@retry_with_backoff(max_retries=3, base_delay=2.0, exceptions=(RateLimitError, APIConnectionError))
+def call_llm_with_retry(messages, model="gpt-4o"):
+    return client.chat.completions.create(model=model, messages=messages)
+```
+
+### Fallback Tool Graceful Degradation
+
+```python
+class ResilientToolExecutor:
+    def __init__(self):
+        self.fallbacks = {
+            "search_documents": ["search_documents_cache", "search_documents_basic"],
+            "get_customer_info": ["get_customer_info_readonly"],
+        }
+
+    def execute(self, tool_name: str, tool_args: dict) -> str:
+        tools_to_try = [tool_name] + self.fallbacks.get(tool_name, [])
+
+        for tool in tools_to_try:
+            try:
+                result = execute_tool(tool, tool_args)
+                if tool != tool_name:
+                    result = f"[Risposta da fallback '{tool}']: {result}"
+                return result
+            except Exception as e:
+                print(f"Tool '{tool}' fallito: {e}, provo fallback...")
+                continue
+
+        return f"Tutti i fallback per '{tool_name}' hanno fallito. Procedo senza questo dato."
+```
+
+---
+
+## 5. Osservabilità: Tracciare gli Agent in Produzione
+
+```python
+import time
+from dataclasses import dataclass, field
+
+@dataclass
+class AgentTrace:
+    trace_id: str
+    task: str
+    pattern: str  # "react", "plan_execute", "multi_agent"
+    steps: list[dict] = field(default_factory=list)
+    total_tokens: int = 0
+    total_cost_usd: float = 0.0
+    success: bool = False
+    error: str = ""
+    duration_ms: float = 0.0
+
+    def add_step(self, step_type: str, input_data: str, output: str,
+                 tokens: int, model: str):
+        self.steps.append({
+            "step_id": len(self.steps) + 1,
+            "type": step_type,
+            "model": model,
+            "input_preview": input_data[:100],
+            "output_preview": output[:100],
+            "tokens": tokens,
+            "timestamp": time.time()
+        })
+        self.total_tokens += tokens
+        # Costo approssimativo
+        cost_per_token = {"gpt-4o": 0.000015, "gpt-4o-mini": 0.0000006}
+        self.total_cost_usd += tokens * cost_per_token.get(model, 0.000010)
+```
+
+---
+
+## Conclusioni: Quale Pattern Scegliere?
+
+| Pattern | Quando usarlo | Complessità | Affidabilità |
+|---------|--------------|-------------|--------------|
+| **ReAct** | Task semplici, prototipazione rapida | Bassa | Media |
+| **Plan-and-Execute** | Task multi-step con struttura nota | Media | Alta |
+| **Multi-Agent** | Task complessi, expertise multiple | Alta | Molto Alta |
+
+Inizia sempre con il pattern più semplice che risolve il problema. L'over-engineering degli agenti è reale e costoso.
+
+---
+
+**Vuoi costruire un sistema agente per la tua azienda?** [Contattaci per una valutazione](mailto:info@rayo.consulting).
+
+---
+
+**Vuoi automatizzare un workflow con AI Agents?** [Scopri il servizio AI Agents →](/servizi/agenti-ai)

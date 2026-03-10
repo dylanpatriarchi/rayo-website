@@ -1,0 +1,47 @@
+---
+title: "Screening CV Automatico per Agenzia di Selezione"
+publishedAt: "2026-01-22"
+summary: "Un'agenzia di recruiting con 5 consulenti riceveva 300+ candidature a settimana. L'AI agent ora filtra, valuta e prepara un brief per ogni candidato in pochi minuti."
+industry: "HR / Recruiting"
+stat: "4x"
+statLabel: "Candidature processate per ora"
+service: "agenti-ai"
+---
+
+## Il Problema
+
+L'agenzia gestisce selezioni per posizioni tecniche (sviluppatori, data analyst, tecnici industriali) e ruoli commerciali. A picco di attività, arrivavano 60-80 CV al giorno da portali come Indeed, LinkedIn e invii diretti via email.
+
+Il processo manuale richiedeva che ogni consulente leggesse ogni CV, lo confrontasse con il job description, assegnasse un punteggio e redigesse un breve profilo da inviare al cliente. Con 5 consulenti e 300+ CV settimanali, i tempi di risposta ai candidati si allungavano fino a 12 giorni.
+
+## La Soluzione
+
+Abbiamo costruito un AI agent che prende in input CV (PDF o DOCX) e job description, e restituisce una scheda valutazione strutturata per ogni candidato.
+
+### Parsing e Estrazione
+
+Il sistema estrae automaticamente da ogni CV: competenze tecniche, anni di esperienza per ruolo, titoli di studio, lingue, e segnali qualitativi (progressione di carriera, coerenza del percorso).
+
+Questo passo usa un LLM con structured output — il risultato è sempre JSON valido, pronto per essere elaborato.
+
+### Scoring e Matching
+
+La job description viene analizzata per estrarre i requisiti obbligatori e preferenziali. Il sistema assegna uno score di compatibilità (0-100) e una lista di punti di forza e gap per ogni candidato.
+
+### Output per il Consulente
+
+Ogni consulente riceve una dashboard con i candidati ordinati per score, il brief testuale già scritto e un flag di allerta se il CV contiene segnali anomali (lacune temporali, incoerenze di ruolo).
+
+## Stack Tecnologico
+
+- **LLM**: GPT-4o mini (costo contenuto, alta velocità)
+- **Orchestrazione**: LangGraph con nodi separati per parsing, scoring e output
+- **Interfaccia**: App web interna Next.js con upload drag-and-drop
+- **Storage**: Supabase per storico candidature e audit trail
+
+## Risultati
+
+- Tempo medio per valutare un CV: da 18 minuti a 4 minuti (revisione consulente inclusa)
+- Candidature processabili per ora: da 3-4 a 15+
+- Tempi di risposta ai candidati: da 12 giorni a 3 giorni
+- I consulenti si concentrano ora sui colloqui, non sulla carta

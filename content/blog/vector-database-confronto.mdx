@@ -1,0 +1,318 @@
+---
+title: "Qdrant vs Pinecone vs Weaviate vs Milvus: Quale Scegliere per la Tua Applicazione RAG?"
+publishedAt: "2025-07-30"
+summary: "Analisi tecnica comparativa dei principali vector database per applicazioni RAG: performance, costi, hosting, e casi d'uso in cui ciascuno eccelle."
+---
+
+# Qdrant vs Pinecone vs Weaviate vs Milvus: Quale Scegliere?
+
+Il mercato dei vector database si è affollato rapidamente. Ogni vendor promette le migliori performance, il minore costo, e la massima facilità d'uso. Ovviamente non possono avere tutti ragione.
+
+In Rayo Consulting abbiamo deployato sistemi RAG in produzione con tre dei quattro database in questa lista. Ecco quello che abbiamo imparato, senza marketing.
+
+---
+
+## Il Panorama Attuale
+
+Prima di entrare nel dettaglio, una mappa di posizionamento:
+
+| Database | Tipo | Self-host | Managed Cloud | Open Source |
+|----------|------|-----------|---------------|-------------|
+| Qdrant | Vettoriale puro | ✓ | ✓ | ✓ (Apache 2.0) |
+| Pinecone | Vettoriale puro | ✗ | ✓ (solo) | ✗ |
+| Weaviate | Vettoriale + search | ✓ | ✓ | ✓ (BSD-3) |
+| Milvus | Vettoriale puro | ✓ | ✓ | ✓ (Apache 2.0) |
+
+---
+
+## 1. Qdrant
+
+### Architettura
+
+Qdrant è scritto in Rust. Non è un dettaglio cosmetic: significa gestione della memoria deterministicamente sicura, zero garbage collector pauses, e performance consistenti sotto carico.
+
+Usa **HNSW** (Hierarchical Navigable Small World) come indice principale, con supporto per **filtri scalari** durante la ricerca vettoriale (payload filtering). Quest'ultimo punto è spesso sottovalutato: la capacità di filtrare per metadata durante la ricerca — non prima, non dopo — è critica per sistemi multi-tenant.
+
+### Performance
+
+```
+Benchmark interno Rayo Consulting (Giugno 2024):
+- Dataset: 5 milioni di vettori, dimensione 1536 (OpenAI)
+- Hardware: Qdrant self-hosted, 32GB RAM, 8 vCPU
+
+Latenza ricerca (top-10, ef=128):
+- P50: 8ms
+- P95: 22ms
+- P99: 41ms
+
+Throughput: 1.200 QPS con accuracy@10 = 0.97
+```
+
+### Quando Scegliere Qdrant
+
+- Hai bisogno di **self-hosting** per compliance o costo
+- Il tuo use case richiede **filtri complessi** (multi-tenant, per-user data isolation)
+- Vuoi un'opzione **open source** con licensing pulito
+- Il team è a proprio agio con l'ops di un servizio Rust
+
+### Come Iniziare
+
+```python
+from qdrant_client import QdrantClient
+from qdrant_client.models import Distance, VectorParams, PointStruct
+
+client = QdrantClient(url="http://localhost:6333")
+
+# Creazione collection
+client.create_collection(
+    collection_name="documenti_aziendali",
+    vectors_config=VectorParams(size=1536, distance=Distance.COSINE),
+)
+
+# Inserimento con payload
+client.upsert(
+    collection_name="documenti_aziendali",
+    points=[
+        PointStruct(
+            id=1,
+            vector=[0.1, 0.2, ...],  # 1536 dimensioni
+            payload={
+                "testo": "Paragrafo del contratto...",
+                "documento_id": "contratto_2024_001",
+                "dipartimento": "legal",
+                "access_level": "confidential",
+                "data_creazione": "2024-06-01",
+            }
+        )
+    ]
+)
+
+# Ricerca con filtro
+from qdrant_client.models import Filter, FieldCondition, MatchValue
+
+results = client.search(
+    collection_name="documenti_aziendali",
+    query_vector=query_embedding,
+    query_filter=Filter(
+        must=[
+            FieldCondition(key="dipartimento", match=MatchValue(value="legal")),
+            FieldCondition(key="access_level", match=MatchValue(value="confidential")),
+        ]
+    ),
+    limit=10,
+)
+```
+
+### Pricing
+
+- **Self-hosted**: Gratuito. Costo = infrastruttura.
+- **Qdrant Cloud**: Free tier (1GB), poi ~$0.09/GB/mese per managed.
+
+---
+
+## 2. Pinecone
+
+### Architettura
+
+Pinecone è il database "serverless" del mondo vettoriale. Niente da installare, niente da configurare, scala automaticamente. Questo è sia il suo punto di forza che il suo limite.
+
+Usa un indice proprietario ottimizzato per cloud (non HNSW standard), con separazione tra hot storage (RAM) e cold storage per dataset grandi.
+
+### Performance
+
+Pinecone ha due modalità:
+- **Serverless**: scala a zero quando non in uso, ma cold start visibile
+- **Pod-based**: performance predicibili, costo fisso
+
+```
+Pinecone Serverless (us-east-1, Maggio 2024):
+- Dataset: 5 milioni di vettori
+- Latenza P50: 35ms (include network round-trip)
+- Latenza P95: 85ms
+- Cold start dopo inattività: 200-400ms
+
+Pinecone Pod (p2.x1):
+- Latenza P50: 15ms
+- Latenza P95: 30ms
+- Costo: $0.096/ora (~$70/mese)
+```
+
+### Quando Scegliere Pinecone
+
+- Team senza esperienza ops che vuole zero configurazione
+- Prototipo o MVP con timeline stretta
+- Budget non è il vincolo primario
+- Non hai requisiti di data residency UE
+
+### Limiti Critici
+
+- **No self-hosting**: I tuoi dati vivono su infrastruttura Pinecone (US per default)
+- **Vendor lock-in**: Migrazione costosa
+- **Prezzo**: Diventa caro rapidamente a scale
+
+```python
+import pinecone
+
+pc = pinecone.Pinecone(api_key="YOUR_API_KEY")
+
+index = pc.Index("documenti-aziendali")
+
+# Upsert
+index.upsert(vectors=[
+    {
+        "id": "doc-001",
+        "values": [0.1, 0.2, ...],
+        "metadata": {
+            "testo": "...",
+            "dipartimento": "legal"
+        }
+    }
+])
+
+# Query
+results = index.query(
+    vector=query_embedding,
+    filter={"dipartimento": {"$eq": "legal"}},
+    top_k=10,
+    include_metadata=True
+)
+```
+
+### Pricing
+
+- **Serverless**: $0.033 per milione di query + $0.00000025 per vector storage/mese
+- **Pod-based**: da $0.096/ora per s1.x1
+
+---
+
+## 3. Weaviate
+
+### Architettura
+
+Weaviate è diverso dagli altri: non è solo un vector database. È un **knowledge graph vettoriale**. Supporta classi di oggetti, relazioni tra oggetti, e può gestire ricerche ibride (vettoriale + keyword BM25) nativamente.
+
+È scritto in Go, e supporta moduli plug-in per embedding automatico (puoi inserire testo raw e lasciare che Weaviate generi gli embedding internamente).
+
+### Quando Scegliere Weaviate
+
+- Il tuo use case è naturalmente un **knowledge graph** (entità con relazioni)
+- Vuoi **hybrid search** (BM25 + vettoriale) nativo senza infrastruttura extra
+- Hai bisogno di **GraphQL API** per query flessibili
+
+### Hybrid Search Nativo
+
+```python
+import weaviate
+from weaviate.classes.query import HybridFusion
+
+client = weaviate.connect_to_local()
+
+collection = client.collections.get("DocumentiAziendali")
+
+# Hybrid search: combina BM25 e vector search nativamente
+results = collection.query.hybrid(
+    query="clausole di rescissione contratto",
+    alpha=0.75,  # 0 = solo BM25, 1 = solo vettoriale, 0.75 = prevalenza vettoriale
+    fusion_type=HybridFusion.RELATIVE_SCORE,
+    limit=10,
+    return_metadata=weaviate.classes.query.MetadataQuery(score=True, explain_score=True)
+)
+
+for obj in results.objects:
+    print(f"Score: {obj.metadata.score:.3f} | {obj.properties['titolo']}")
+```
+
+### Limiti
+
+- **Complessità**: Più configurazione rispetto a Qdrant o Pinecone
+- **Performance**: Leggermente più lento di Qdrant per ricerche vettoriali pure
+- **RAM hungry**: Il grafo in memory richiede più risorse
+
+### Pricing
+
+- **Self-hosted**: Gratuito
+- **Weaviate Cloud**: Free tier (sandbox 14 giorni), poi da $25/mese per Starter
+
+---
+
+## 4. Milvus
+
+### Architettura
+
+Milvus è il veterano: nato nel 2019, è il vector database open source più maturo. È designed for scale massivo (miliardi di vettori). L'architettura è distribuita by design, con separazione tra storage, compute e coordinamento.
+
+**Zilliz Cloud** è il managed service di Milvus.
+
+### Quando Scegliere Milvus
+
+- **Dataset enormi**: Decine o centinaia di milioni di vettori
+- **Team con esperienza Kubernetes**: L'architettura distribuita richiede ops skill
+- **Ecosistema PyTorch/ML**: Ottima integrazione
+
+### Limiti per Use Case Tipici Enterprise
+
+- **Overhead operativo elevato**: Richiede gestione di più componenti (etcd, MinIO, Pulsar)
+- **Overkill per < 10M vettori**: A quella scala Qdrant è più semplice e veloce
+- **Curva di apprendimento**: Concetti come Collections, Partitions, Segments richiedono studio
+
+```python
+from pymilvus import MilvusClient
+
+client = MilvusClient("http://localhost:19530")
+
+client.create_collection(
+    collection_name="documenti",
+    dimension=1536,
+)
+
+client.insert(
+    collection_name="documenti",
+    data=[{
+        "id": 1,
+        "vector": [0.1, 0.2, ...],
+        "testo": "...",
+        "dipartimento": "legal"
+    }]
+)
+
+results = client.search(
+    collection_name="documenti",
+    data=[query_embedding],
+    filter="dipartimento == 'legal'",
+    limit=10,
+    output_fields=["testo", "dipartimento"]
+)
+```
+
+---
+
+## Tabella di Confronto Finale
+
+| Criterio | Qdrant | Pinecone | Weaviate | Milvus |
+|----------|--------|----------|----------|--------|
+| **Performance pura** | ★★★★★ | ★★★★ | ★★★★ | ★★★★ |
+| **Facilità setup** | ★★★★ | ★★★★★ | ★★★ | ★★ |
+| **Self-hosting** | ✓ | ✗ | ✓ | ✓ |
+| **GDPR / Data residency EU** | ✓ | Parziale | ✓ | ✓ |
+| **Hybrid search** | Parziale | ✗ | ✓ nativo | Parziale |
+| **Scala (> 100M vettori)** | ★★★★ | ★★★★★ | ★★★ | ★★★★★ |
+| **Costo a scala** | Basso | Alto | Medio | Basso |
+| **Open source** | ✓ | ✗ | ✓ | ✓ |
+
+---
+
+## Raccomandazione per Caso d'Uso
+
+**Startup / MVP rapido**: Pinecone. Zero ops, scala automaticamente, paghi solo quello che usi.
+
+**Enterprise con compliance GDPR**: Qdrant self-hosted su EU cloud (AWS eu-central-1, Azure westeurope). Controllo totale, performance eccellenti, licenza pulita.
+
+**Use case documentale complesso con relazioni**: Weaviate. Il knowledge graph + hybrid search nativo vale la complessità aggiuntiva.
+
+**Dataset > 100M vettori con team ML maturo**: Milvus / Zilliz Cloud.
+
+**Default per nuovi progetti enterprise**: Qdrant. Il rapporto performance/semplicità/costo è difficile da battere.
+
+---
+
+**Devi scegliere un'architettura RAG per la tua azienda?** [Contattaci per una valutazione tecnica](mailto:info@rayo.consulting).

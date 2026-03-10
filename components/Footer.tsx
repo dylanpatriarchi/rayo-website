@@ -1,77 +1,88 @@
 import Image from "next/image";
+import NewsletterSignup from "./NewsletterSignup";
 
 export default function Footer() {
     return (
-        <footer id="contact" className="py-24 px-6 md:px-12 bg-background border-t border-foreground/10">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
-                <div>
-                    <div className="mb-12">
-                        <Image
-                            src="/logo.svg"
-                            alt="Rayo Consulting Logo"
-                            width={280}
-                            height={96}
-                            className="h-24 w-auto"
-                        />
-                    </div>
-                    <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-8">
-                        Let&apos;s build <br />
-                        intelligence.
-                    </h2>
-
-                    <a
-                        href="mailto:info@rayo.consulting"
-                        className="text-xl md:text-2xl text-primary hover:text-blue-600 transition-colors underline underline-offset-4 decoration-1"
-                    >
-                        info@rayo.consulting
-                    </a>
-                    <a href="tel:+393271746038" className="mt-2 block text-lg text-foreground/70 hover:text-primary transition-colors">
-                        +39 327 174 6038
-                    </a>
+        <footer id="contact" className="bg-background border-t border-foreground/10">
+            {/* Newsletter Bar */}
+            <div className="border-b border-foreground/10 py-16 px-6 md:px-12">
+                <div className="max-w-7xl mx-auto">
+                    <NewsletterSignup />
                 </div>
+            </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 text-left">
-                    <div className="flex flex-col gap-1 text-sm font-light text-foreground/60">
-                        <p className="font-bold text-foreground">Rayo Consulting di Patriarchi Dylan</p>
-                        <p>P.IVA 03988190546</p>
-                        <p>Vocabolo Marcheggiane 56/C</p>
-                        <p>Breccione Zona Industriale, Città di Castello (PG)</p>
-                        <a href="mailto:info@rayo.consulting" className="hover:text-primary transition-colors mt-2">info@rayo.consulting</a>
-                        <a href="tel:+393271746038" className="block hover:text-primary transition-colors mt-1">+39 327 174 6038</a>
-                    </div>
-
-                    <div className="flex flex-col gap-2 text-sm font-light text-foreground/60">
-                        <p className="font-bold text-foreground mb-2">Menu</p>
-                        <a href="/audit-gratuito" className="hover:text-primary transition-colors text-primary font-medium">Audit gratuito</a>
-                        <a href="/services" className="hover:text-primary transition-colors">Servizi</a>
-                        <a href="/cases" className="hover:text-primary transition-colors">Casi Studio</a>
-                        <a href="/blog" className="hover:text-primary transition-colors">Blog</a>
-                        <a href="/about" className="hover:text-primary transition-colors">Chi siamo</a>
-                        <a href="/contact" className="hover:text-primary transition-colors">Contatti</a>
-                        <a href="/careers" className="hover:text-primary transition-colors">Lavora con noi</a>
-                    </div>
-
-                    <div className="flex flex-col gap-2 text-sm font-light text-foreground/60">
-                        <p className="font-bold text-foreground mb-2">Risorse</p>
-                        <a href="/risorse" className="hover:text-primary transition-colors">Risorse</a>
-                        <a href="/rayo-vs" className="hover:text-primary transition-colors">Perché Rayo</a>
-                        <a href="/karta" className="hover:text-primary transition-colors">Karta</a>
-                        <a href="/methodology" className="hover:text-primary transition-colors">Metodologia</a>
-                    </div>
-
-                    <div className="flex flex-col items-start gap-4">
-                        <div className="flex gap-4 text-sm font-medium">
-                            <a href="https://www.linkedin.com/company/rayoconsulting" target="_blank" rel="noopener noreferrer" className="hover:opacity-50">LinkedIn</a>
-                            <a href="https://www.instagram.com/rayo.consulting/" target="_blank" rel="noopener noreferrer" className="hover:opacity-50">Instagram</a>
+            <div className="py-24 px-6 md:px-12">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
+                    <div>
+                        <div className="mb-12">
+                            <Image
+                                src="/logo.svg"
+                                alt="Rayo Consulting Logo"
+                                width={280}
+                                height={96}
+                                className="h-24 w-auto"
+                            />
                         </div>
-                        <div className="flex gap-4 text-xs font-light text-foreground/40">
-                            <a href="/privacy-policy" className="hover:opacity-70">Privacy Policy</a>
-                            <a href="/cookie-policy" className="hover:opacity-70">Cookie Policy</a>
-                            <a href="/terms" className="hover:opacity-70">Termini e Condizioni</a>
+                        <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-8">
+                            Costruiamo <br />
+                            intelligenza.
+                        </h2>
+
+                        <a
+                            href="mailto:info@rayo.consulting"
+                            className="text-xl md:text-2xl text-primary hover:text-blue-600 transition-colors underline underline-offset-4 decoration-1"
+                        >
+                            info@rayo.consulting
+                        </a>
+                        <a href="tel:+393271746038" className="mt-2 block text-lg text-foreground/70 hover:text-primary transition-colors">
+                            +39 327 174 6038
+                        </a>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 text-left">
+                        <div className="flex flex-col gap-1 text-sm font-light text-foreground/60">
+                            <p className="font-bold text-foreground">Rayo Consulting di Patriarchi Dylan</p>
+                            <p>P.IVA 03988190546</p>
+                            <p>Vocabolo Marcheggiane 56/C</p>
+                            <p>Breccione Zona Industriale, Città di Castello (PG)</p>
+                            <a href="mailto:info@rayo.consulting" className="hover:text-primary transition-colors mt-2">info@rayo.consulting</a>
+                            <a href="tel:+393271746038" className="block hover:text-primary transition-colors mt-1">+39 327 174 6038</a>
                         </div>
-                        <p className="text-xs font-light text-foreground/30 mt-auto">
-                            © {new Date().getFullYear()} Rayo Consulting. All rights reserved.
-                        </p>
+
+                        <div className="flex flex-col gap-2 text-sm font-light text-foreground/60">
+                            <p className="font-bold text-foreground mb-2">Menu</p>
+                            <a href="/audit-gratuito" className="hover:text-primary transition-colors text-primary font-medium">Audit gratuito</a>
+                            <a href="/services" className="hover:text-primary transition-colors">Servizi</a>
+                            <a href="/cases" className="hover:text-primary transition-colors">Casi Studio</a>
+                            <a href="/blog" className="hover:text-primary transition-colors">Blog</a>
+                            <a href="/about" className="hover:text-primary transition-colors">Chi siamo</a>
+                            <a href="/contact" className="hover:text-primary transition-colors">Contatti</a>
+                            <a href="/careers" className="hover:text-primary transition-colors">Lavora con noi</a>
+                        </div>
+
+                        <div className="flex flex-col gap-2 text-sm font-light text-foreground/60">
+                            <p className="font-bold text-foreground mb-2">Risorse</p>
+                            <a href="/roi-calculator" className="hover:text-primary transition-colors">ROI Calculator</a>
+                            <a href="/risorse" className="hover:text-primary transition-colors">Glossario AI</a>
+                            <a href="/rayo-vs" className="hover:text-primary transition-colors">Perché Rayo</a>
+                            <a href="/methodology" className="hover:text-primary transition-colors">Metodologia</a>
+                            <a href="/karta" className="hover:text-primary transition-colors text-foreground/40">Karta ↗</a>
+                        </div>
+
+                        <div className="flex flex-col items-start gap-4">
+                            <div className="flex gap-4 text-sm font-medium">
+                                <a href="https://www.linkedin.com/company/rayoconsulting" target="_blank" rel="noopener noreferrer" className="hover:opacity-50">LinkedIn</a>
+                                <a href="https://www.instagram.com/rayo.consulting/" target="_blank" rel="noopener noreferrer" className="hover:opacity-50">Instagram</a>
+                            </div>
+                            <div className="flex gap-4 text-xs font-light text-foreground/40">
+                                <a href="/privacy-policy" className="hover:opacity-70">Privacy Policy</a>
+                                <a href="/cookie-policy" className="hover:opacity-70">Cookie Policy</a>
+                                <a href="/terms" className="hover:opacity-70">Termini e Condizioni</a>
+                            </div>
+                            <p className="text-xs font-light text-foreground/30 mt-auto">
+                                © {new Date().getFullYear()} Rayo Consulting. All rights reserved.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

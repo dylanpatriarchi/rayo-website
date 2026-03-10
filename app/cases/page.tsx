@@ -3,8 +3,16 @@ import { getAllPosts } from "@/utils/mdx";
 import PostList from "@/components/PostList";
 
 export const metadata = {
-    title: "Casi Studio | Rayo Consulting",
-    description: "Esempi reali di implementazione AI Enterprise.",
+    title: "Casi Studio AI | Rayo Consulting",
+    description: "Implementazioni AI reali su PMI italiane: RAG, fine-tuning, AI Agents. Risultati misurabili, stack tecnologico trasparente.",
+    alternates: { canonical: "https://rayo.consulting/cases" },
+    openGraph: {
+        title: "Casi Studio | Rayo Consulting",
+        description: "Progetti AI reali con metriche reali. Dai documenti fiscali all'e-commerce.",
+        url: "https://rayo.consulting/cases",
+        type: "website",
+    },
+    twitter: { card: "summary_large_image" as const, title: "Casi Studio | Rayo Consulting" },
 };
 
 export default function CasesPage() {

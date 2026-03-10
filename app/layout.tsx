@@ -7,7 +7,6 @@ import Analytics from "@/components/Analytics";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
-import AdSenseLoader from "@/components/AdSenseLoader";
 import GradualBlur from "@/components/GradualBlur";
 
 const manrope = Manrope({
@@ -62,9 +61,6 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
-  },
-  other: {
-    "google-adsense-account": "ca-pub-4372911380864795",
   },
 };
 
@@ -144,6 +140,21 @@ const jsonLd = {
           "text": faq.answer,
         },
       }))
+    },
+    {
+      "@type": "Person",
+      "@id": "https://rayo.consulting/#dylan-patriarchi",
+      "name": "Dylan Patriarchi",
+      "jobTitle": "Founder & AI Architect",
+      "url": "https://rayo.consulting/about",
+      "sameAs": [
+        "https://www.linkedin.com/in/dylan-patriarchi/",
+        "https://instagram.com/dpatriarchi"
+      ],
+      "worksFor": {
+        "@id": "https://rayo.consulting/#organization"
+      },
+      "knowsAbout": ["Retrieval-Augmented Generation", "LLM Fine-Tuning", "AI Agents", "Enterprise AI Architecture", "LangChain", "Python"]
     }
   ]
 };
@@ -178,7 +189,6 @@ export default function RootLayout({
           zIndex={50}
         />
         <CookieBanner />
-        <AdSenseLoader />
       </body>
     </html>
   );

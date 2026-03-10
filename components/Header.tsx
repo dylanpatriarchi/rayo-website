@@ -10,7 +10,7 @@ export default function Header() {
             links: [
                 { label: "Chi siamo", ariaLabel: "Chi siamo", href: "/about" },
                 { label: "Blog", ariaLabel: "Blog", href: "/blog" },
-                { label: "Karta", ariaLabel: "Karta", href: "/karta" }
+                { label: "ROI Calculator", ariaLabel: "ROI Calculator", href: "/roi-calculator" }
             ]
         },
         {

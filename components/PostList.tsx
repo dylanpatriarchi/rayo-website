@@ -49,7 +49,7 @@ export default function PostList({ initialPosts, variant }: PostListProps) {
                             onFocus={() => setIsFocused(true)}
                             onBlur={() => setIsFocused(false)}
                             onChange={(e) => setQuery(e.target.value)}
-                            placeholder={`Cerca in ${variant === "blog" ? "trasmissioni" : "casi studio"
+                            placeholder={`Cerca in ${variant === "blog" ? "articoli" : "casi studio"
                                 }...`}
                             className="w-full bg-transparent text-sm font-light placeholder:text-foreground/30 focus:outline-none"
                         />

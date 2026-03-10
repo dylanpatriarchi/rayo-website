@@ -1,0 +1,49 @@
+---
+title: "Generazione Automatica di Schede Prodotto per E-commerce"
+publishedAt: "2025-11-04"
+summary: "Un negozio online di arredamento con 3.000 SKU passava 2 ore per scheda prodotto. Con un modello fine-tuned sul loro stile editoriale, il tempo è sceso a 4 minuti."
+industry: "E-commerce / Retail"
+stat: "-96%"
+statLabel: "Tempo per scheda prodotto"
+service: "addestramento-llm"
+---
+
+## Il Problema
+
+Il team marketing gestisce un catalogo di circa 3.000 prodotti tra sedie, tavoli, complementi d'arredo e illuminazione. Ogni scheda richiede: titolo SEO, descrizione lunga, elenco caratteristiche tecniche, meta description e tag categorie.
+
+Con il team ridotto a 2 copywriter, il ritmo era di 4-5 schede al giorno. Per aggiornare l'intero catalogo ci sarebbero voluti 18 mesi. I prodotti nuovi si accumulavano senza descrizione, visibili in shop ma senza contenuto — con effetti negativi sul posizionamento organico.
+
+## La Soluzione
+
+Abbiamo addestrato un modello fine-tuned partendo da un LLM open-source (Llama 3.1 8B) sullo stile editoriale già approvato dall'azienda.
+
+### Creazione del Dataset
+
+Il team ha selezionato 400 schede prodotto già scritte e approvate come "best-of". Queste sono diventate le coppie di training: `(dati tecnici grezzi → scheda finale).`
+
+Il dataset includeva varianti per tipologia di prodotto (seduta, illuminazione, tessili) per insegnare al modello le sfumature stilistiche per categoria.
+
+### Fine-Tuning con LoRA
+
+Abbiamo usato LoRA (Low-Rank Adaptation) per addestrare il modello senza modificare i pesi base — più veloce, meno costoso, e aggiornabile quando lo stile editoriale cambia.
+
+Training su GPU cloud (A100 40GB), 3 ore di addestramento, poi modello deployato su istanza propria.
+
+### Pipeline di Generazione
+
+Il flusso è semplice: il buyer inserisce i dati tecnici del fornitore (misure, materiali, colori) in un foglio Excel → il sistema genera automaticamente tutte le varianti di testo → il copywriter revisiona e approva.
+
+## Stack Tecnologico
+
+- **Modello base**: Llama 3.1 8B
+- **Training**: LoRA via Axolotl su GPU cloud
+- **Inference**: vLLM su server dedicato
+- **Integrazione**: API REST collegata al CMS del negozio (WooCommerce)
+
+## Risultati
+
+- Tempo per scheda: da 2 ore a circa 4 minuti (revisione inclusa)
+- Output giornaliero: da 5 a 80+ schede
+- Il catalogo è stato aggiornato completamente in 5 settimane
+- Qualità validata internamente: 91% delle schede approvate senza modifiche sostanziali
