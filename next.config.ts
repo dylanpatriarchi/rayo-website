@@ -60,8 +60,9 @@ const nextConfig: NextConfig = {
       { source: '/servizi/ai-agents', destination: '/servizi/agenti-ai', permanent: true },
       { source: '/servizi/tech-advisory', destination: '/servizi/consulenza-tecnica', permanent: true },
 
-      // --- Misc ---
+      // --- Misc (newsletter rimossa: redirect per vecchi link) ---
       { source: '/newsletter', destination: '/', permanent: true },
+      { source: '/thank-you-newsletter', destination: '/', permanent: true },
       { source: '/en/unsubscribe', destination: '/', permanent: true },
       { source: '/en/thank-you', destination: '/', permanent: true },
       { source: '/konnekt', destination: 'https://docs.google.com/forms/d/e/1FAIpQLSeCWVbr0zlJ_ccvsn2Uk0sFuSDUAkLQwLHfo_Nk7xlYzCZCOw/viewform?usp=publish-editor', permanent: true },
