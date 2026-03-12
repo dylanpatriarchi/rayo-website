@@ -60,7 +60,9 @@ const nextConfig: NextConfig = {
       { source: '/servizi/ai-agents', destination: '/servizi/agenti-ai', permanent: true },
       { source: '/servizi/tech-advisory', destination: '/servizi/consulenza-tecnica', permanent: true },
 
-      // --- Misc (newsletter rimossa: redirect per vecchi link) ---
+      // --- Misc ---
+      { source: '/karta', destination: '/', permanent: true },
+      { source: '/karta/privacy', destination: '/privacy-policy', permanent: true },
       { source: '/newsletter', destination: '/', permanent: true },
       { source: '/thank-you-newsletter', destination: '/', permanent: true },
       { source: '/en/unsubscribe', destination: '/', permanent: true },

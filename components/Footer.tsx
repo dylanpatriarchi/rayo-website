@@ -66,7 +66,6 @@ export default function Footer() {
                             <a href="/risorse" className="hover:text-primary transition-colors">Glossario AI</a>
                             <a href="/rayo-vs" className="hover:text-primary transition-colors">Perché Rayo</a>
                             <a href="/methodology" className="hover:text-primary transition-colors">Metodologia</a>
-                            <a href="/karta" className="hover:text-primary transition-colors text-foreground/40">Karta ↗</a>
                         </div>
 
                         <div className="flex flex-col items-start gap-4">

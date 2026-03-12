@@ -91,12 +91,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.7,
         },
         {
-            url: `${baseUrl}/karta`,
-            lastModified: new Date().toISOString(),
-            changeFrequency: 'monthly' as const,
-            priority: 0.7,
-        },
-        {
             url: `${baseUrl}/audit-gratuito`,
             lastModified: new Date().toISOString(),
             changeFrequency: 'monthly' as const,

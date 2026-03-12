@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 const categories = [
     {
         label: "Foundation Models",
-        tools: ["GPT-4o", "Claude 3.5 Sonnet", "LLaMA 3.1", "DeepSeek V3", "Mistral Large"],
+        tools: ["GPT-5.4", "Claude Sonnet 4.6", "Llama 4", "DeepSeek V3.2", "Mistral Large 3"],
     },
     {
         label: "Orchestration",
