@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 
 export default function NewsletterSignup() {
     const [email, setEmail] = useState("");
@@ -13,94 +12,72 @@ export default function NewsletterSignup() {
         e.preventDefault();
         setLoading(true);
         setError(false);
-
         try {
-            const response = await fetch("/api/newsletter", {
+            const res = await fetch("/api/newsletter", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),
             });
-
-            if (response.ok) {
-                setSuccess(true);
-                setEmail("");
-            } else {
-                setError(true);
-            }
-        } catch {
-            setError(true);
-        } finally {
-            setLoading(false);
-        }
+            if (res.ok) { setSuccess(true); setEmail(""); }
+            else setError(true);
+        } catch { setError(true); }
+        finally { setLoading(false); }
     };
 
-    return (
-        <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-foreground/40 mb-4">
-                Newsletter
-            </p>
-            <h3 className="text-xl font-bold tracking-tight mb-2">
-                Aggiornamenti tecnici ogni 2 settimane.
-            </h3>
-            <p className="text-sm text-foreground/60 font-light mb-6">
-                RAG, LLM, AI Agents. Solo contenuti utili, zero spam.
-            </p>
-
-            {success ? (
-                <div className="flex items-center gap-3 text-foreground/80">
-                    <svg
-                        className="w-5 h-5 text-primary shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                    >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-sm font-medium">Iscritto. Grazie.</span>
+    if (success) {
+        return (
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+                <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-foreground/30 mb-3">Newsletter</p>
+                    <p className="text-2xl md:text-3xl font-bold tracking-tight">Sei dentro.</p>
                 </div>
-            ) : (
-                <form onSubmit={handleSubmit} className="flex items-end gap-3">
-                    <div className="flex-1">
-                        <label htmlFor="newsletter-email" className="sr-only">
-                            Email
-                        </label>
-                        <input
-                            id="newsletter-email"
-                            type="email"
-                            required
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="nome@azienda.com"
-                            className="w-full bg-transparent border-b border-foreground/20 py-3 focus:border-primary focus:outline-none transition-colors text-sm placeholder:text-foreground/30"
-                        />
-                    </div>
+                <p className="text-foreground/50 font-light text-sm max-w-xs">
+                    Ogni 2 settimane nella tua inbox. Zero hype, solo sistemi che funzionano.
+                </p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
+            {/* Left: copy */}
+            <div className="flex-1 max-w-sm">
+                <p className="text-xs font-bold uppercase tracking-widest text-foreground/30 mb-4">Newsletter</p>
+                <h3 className="text-2xl md:text-3xl font-bold tracking-tight leading-snug mb-3">
+                    RAG, LLM, Agents.<br />Ogni 2 settimane.
+                </h3>
+                <p className="text-sm text-foreground/50 font-light">
+                    Casi reali, architetture, errori da evitare. Solo contenuti che usi — niente hype, niente spam.
+                </p>
+            </div>
+
+            {/* Right: form */}
+            <form onSubmit={handleSubmit} className="flex-1 max-w-md w-full">
+                <div className="flex gap-0 border border-foreground/15 rounded-full overflow-hidden focus-within:border-foreground/40 transition-colors">
+                    <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="nome@azienda.com"
+                        className="flex-1 bg-transparent px-6 py-4 text-sm font-light placeholder:text-foreground/30 focus:outline-none min-w-0"
+                    />
                     <button
                         type="submit"
                         disabled={loading}
-                        className={cn(
-                            "bg-foreground text-background text-sm font-bold px-6 py-3 rounded-full hover:bg-foreground/90 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 shrink-0",
-                            loading && "opacity-70 cursor-wait"
-                        )}
+                        className="bg-foreground text-background text-sm font-bold px-7 py-4 hover:bg-foreground/85 transition-colors disabled:opacity-60 whitespace-nowrap rounded-full"
                     >
                         {loading ? "..." : "Iscriviti"}
                     </button>
-                </form>
-            )}
-
-            {error && (
-                <p className="mt-3 text-sm text-red-500 font-light">
-                    Qualcosa è andato storto. Riprova.
+                </div>
+                {error && (
+                    <p className="mt-3 text-xs text-red-500 font-light pl-4">Qualcosa è andato storto. Riprova.</p>
+                )}
+                <p className="mt-3 text-xs text-foreground/30 font-light pl-4">
+                    Disiscriviti quando vuoi.{" "}
+                    <a href="/privacy-policy" className="underline hover:text-foreground/50 transition-colors">Privacy Policy</a>.
                 </p>
-            )}
-
-            <p className="mt-4 text-xs text-foreground/40 font-light leading-relaxed">
-                Disiscriviti in qualsiasi momento. Dati trattati secondo la nostra{" "}
-                <a href="/privacy-policy" className="underline hover:text-foreground/60 transition-colors">
-                    Privacy Policy
-                </a>
-                .
-            </p>
+            </form>
         </div>
     );
 }

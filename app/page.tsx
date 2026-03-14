@@ -16,6 +16,7 @@ import BlogPreview from "@/components/BlogPreview";
 import FounderCard from "@/components/FounderCard";
 import HowToStart from "@/components/HowToStart";
 import GdprTrustSection from "@/components/GdprTrustSection";
+import RoiCTA from "@/components/RoiCTA";
 import { getAllPosts } from "@/utils/mdx";
 
 export const metadata = {
@@ -32,6 +33,7 @@ export default function Home() {
       <Hero />
       <LogoStrip />
       <StatsSection />
+      <RoiCTA />
       <InternationalSection />
       <Services />
       <CaseStudiesPreview posts={featuredCases} />

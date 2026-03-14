@@ -1,5 +1,4 @@
 import { GlobeDemo } from "@/components/ui/globe-demo";
-import { MoveRight } from "lucide-react";
 
 export default function InternationalSection() {
     return (

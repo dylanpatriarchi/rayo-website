@@ -23,11 +23,11 @@ export default function MethodologyPage() {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
             />
             <div className="pt-32 px-6 md:px-12 max-w-7xl mx-auto mb-12">
-                <h1 className="text-sm font-bold uppercase tracking-widest text-primary mb-6">Il Nostro Processo</h1>
-                <h2 className="text-4xl md:text-7xl font-bold tracking-tighter leading-none">
+                <p className="text-sm font-bold uppercase tracking-widest text-primary mb-6">Il Nostro Processo</p>
+                <h1 className="text-4xl md:text-7xl font-bold tracking-tighter leading-none">
                     Dal Caos <br />
                     all&apos;Ordine.
-                </h2>
+                </h1>
             </div>
             <Methodology />
             <div className="py-24 px-6 md:px-12 max-w-4xl mx-auto prose prose-lg md:prose-xl dark:prose-invert">

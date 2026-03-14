@@ -5,6 +5,8 @@ export const SETTORE_SLUGS = [
     "finance",
     "manifatturiero",
     "ecommerce",
+    "manifattura",
+    "hr",
 ] as const;
 export type SettoreSlug = (typeof SETTORE_SLUGS)[number];
 
@@ -82,8 +84,8 @@ export const SETTORI_LANDING: Record<SettoreSlug, SettoreLandingData> = {
         problemIntro:
             "Regolamentazione stringente e volumi alti. I nostri progetti in ambito finance puntano su modelli controllati, tracciabilità e integrazione con i vostri sistemi core.",
         proofTitle: "Case study",
-        proofCaseSlug: "agenzia-ecommerce-llm",
-        proofCaseTitle: "Generazione schede prodotto con LLM",
+        proofCaseSlug: "studio-commercialista-rag",
+        proofCaseTitle: "Assistente documentale per studio commercialista",
         ctaTitle: "Vuoi esplorare l'AI per la tua banca o fintech?",
         ctaSubtitle: "Discovery call e roadmap senza impegno.",
     },
@@ -118,6 +120,38 @@ export const SETTORI_LANDING: Record<SettoreSlug, SettoreLandingData> = {
         proofCaseTitle: "Generazione schede prodotto con LLM",
         ctaTitle: "Vuoi scalare la produzione di contenuti con l'AI?",
         ctaSubtitle: "Mostraci il tuo catalogo: stimiamo insieme tempi e costi.",
+    },
+    manifattura: {
+        slug: "manifattura",
+        title: "AI per Manifattura & PMI",
+        headline: "Report automatici, controllo qualità e integrazione ERP.",
+        description:
+            "Automazione di report di produzione, rilevazione anomalie e documentazione tecnica. Integrazione nativa con ERP e sistemi MES già in uso in fabbrica.",
+        metaDescription:
+            "AI per manifattura e PMI: report automatici, controllo qualità, ERP. Case study e soluzioni su misura. Rayo Consulting.",
+        problemIntro:
+            "Report manuali, documentazione sparsa, dati produttivi non sfruttati. Automatizziamo la generazione di report operativi e la classificazione di anomalie, liberando ore ingegneristiche ogni settimana.",
+        proofTitle: "Case study",
+        proofCaseSlug: "pmi-manifatturiera-report",
+        proofCaseTitle: "Report automatici per PMI manifatturiera",
+        ctaTitle: "Vuoi automatizzare la reportistica della tua fabbrica?",
+        ctaSubtitle: "Audit gratuito e stima in 48 ore.",
+    },
+    hr: {
+        slug: "hr",
+        title: "AI per HR & Recruiting",
+        headline: "Screening CV, onboarding e knowledge base interna automatizzati.",
+        description:
+            "LLM e RAG per risorse umane: screening automatico dei curriculum, flussi di onboarding guidati e knowledge base aziendale interrogabile in linguaggio naturale.",
+        metaDescription:
+            "AI per HR e recruiting: screening CV, onboarding, knowledge base. Case study e soluzioni su misura. Rayo Consulting.",
+        problemIntro:
+            "Centinaia di candidature, onboarding da standardizzare, procedure interne difficili da reperire. L'AI riduce il tempo di screening CV del 70% e rende la knowledge base aziendale interrogabile in secondi.",
+        proofTitle: "Case study",
+        proofCaseSlug: "agenzia-selezione-cv",
+        proofCaseTitle: "Screening CV automatico per agenzia di selezione",
+        ctaTitle: "Vuoi portare l'AI nel tuo reparto HR?",
+        ctaSubtitle: "Una call per capire volumi e obiettivi.",
     },
 };
 

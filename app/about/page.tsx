@@ -16,11 +16,11 @@ export default function About() {
     return (
         <main className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
             <div className="max-w-4xl">
-                <h1 className="text-sm font-bold uppercase tracking-widest text-primary mb-6">Chi Siamo</h1>
-                <h2 className="text-4xl md:text-7xl font-bold tracking-tighter leading-none mb-12">
+                <p className="text-sm font-bold uppercase tracking-widest text-primary mb-6">Chi Siamo</p>
+                <h1 className="text-4xl md:text-7xl font-bold tracking-tighter leading-none mb-12">
                     Non siamo <br />
                     un&apos;altra agenzia.
-                </h2>
+                </h1>
 
                 <div className="prose prose-lg md:prose-xl dark:prose-invert font-light text-foreground/80 space-y-8 leading-relaxed mb-24">
                     <p>
