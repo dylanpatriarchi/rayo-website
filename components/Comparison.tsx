@@ -1,98 +1,115 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, X, Code2, Clock, DollarSign, ShieldAlert } from "lucide-react";
+
+const rows = [
+    {
+        criterion: "Time to Market",
+        rayo: "4 – 6 Settimane",
+        inHouse: "6 – 12 Mesi",
+    },
+    {
+        criterion: "Costo Operativo",
+        rayo: "Zero costi fissi",
+        inHouse: "Costi fissi elevati",
+    },
+    {
+        criterion: "Livello Expertise",
+        rayo: "Senior specializzati in RAG, LLM, Agenti",
+        inHouse: "Generalist, learning curve lunga",
+    },
+    {
+        criterion: "Garanzia & Rischio",
+        rayo: "PoC Gratuito — Zero Rischio",
+        inHouse: "Rischio e costi di fallimento elevati",
+    },
+    {
+        criterion: "Ownership",
+        rayo: "Codice sorgente tuo al 100%",
+        inHouse: "Dipendenza da vendor o team interno",
+    },
+];
 
 export default function Comparison() {
     return (
-        <section className="py-24 px-6 md:px-12 bg-background border-t border-foreground/5">
-            <div className="max-w-6xl mx-auto">
-                <div className="mb-16 md:text-center max-w-3xl mx-auto">
-                    <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-6">
-                        Perché scegliere Rayo?
+        <section className="py-24 md:py-40 px-6 md:px-12 bg-background border-t border-foreground/5 overflow-hidden">
+            <div className="max-w-7xl mx-auto">
+                {/* Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="mb-16 md:mb-20"
+                >
+                    <p className="text-xs font-bold uppercase tracking-widest text-primary mb-5">Perché Rayo</p>
+                    <h2 className="text-4xl md:text-6xl font-bold tracking-tighter leading-none max-w-2xl">
+                        Nessun confronto<br />possibile.
                     </h2>
-                    <p className="text-lg text-foreground/60 font-light">
-                        Costruire un team AI interno richiede tempo e budget importanti.
-                        Con Rayo puoi partire da subito con competenze specializzate.
+                </motion.div>
+
+                {/* Comparison Table */}
+                <div className="relative">
+                    {/* Column Headers */}
+                    <div className="grid grid-cols-3 mb-4 text-xs font-bold uppercase tracking-widest">
+                        <div className="text-foreground/25 col-span-1">Criterio</div>
+                        <div className="text-primary col-span-1 text-center">Rayo Consulting</div>
+                        <div className="text-foreground/25 col-span-1 text-center">Team Interno</div>
+                    </div>
+
+                    {/* Rows */}
+                    <div className="divide-y divide-foreground/8">
+                        {rows.map((row, i) => (
+                            <motion.div
+                                key={row.criterion}
+                                initial={{ opacity: 0, x: -10 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.08, duration: 0.5, ease: "easeOut" }}
+                                className="group grid grid-cols-3 py-6 md:py-7 hover:bg-foreground/[0.02] transition-colors duration-200 -mx-4 px-4 rounded-xl"
+                            >
+                                {/* Criterion */}
+                                <div className="col-span-1 flex items-center">
+                                    <span className="text-sm font-medium text-foreground/40 group-hover:text-foreground/60 transition-colors">
+                                        {row.criterion}
+                                    </span>
+                                </div>
+
+                                {/* Rayo */}
+                                <div className="col-span-1 flex items-center justify-center">
+                                    <span className="text-sm md:text-base font-bold text-foreground group-hover:text-primary transition-colors duration-300 text-center leading-snug">
+                                        {row.rayo}
+                                    </span>
+                                </div>
+
+                                {/* InHouse */}
+                                <div className="col-span-1 flex items-center justify-center">
+                                    <span className="text-sm text-foreground/30 font-light text-center leading-snug line-through decoration-foreground/15">
+                                        {row.inHouse}
+                                    </span>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    {/* Blue highlight column behind Rayo */}
+                    <div className="absolute top-8 left-1/3 right-1/3 bottom-0 bg-primary/[0.03] rounded-2xl border border-primary/10 pointer-events-none" />
+                </div>
+
+                {/* Bottom note */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.6, duration: 0.6 }}
+                    className="mt-12 flex items-center gap-3"
+                >
+                    <span className="w-8 h-px bg-primary/40" />
+                    <p className="text-sm text-foreground/40 font-light">
+                        Il PoC è gratuito. Se non funziona, non paghi. Punto.
                     </p>
-                </div>
-
-                <div className="flex flex-col gap-8">
-                    {/* Desktop Header - Hidden on Mobile */}
-                    <div className="hidden md:grid grid-cols-12 gap-4 px-6 text-xs font-mono uppercase tracking-widest text-foreground/40">
-                        <div className="col-span-4">Criterio</div>
-                        <div className="col-span-4 text-center text-primary font-bold">Rayo Consulting</div>
-                        <div className="col-span-4 text-center">In-House Team</div>
-                    </div>
-
-                    <div className="space-y-6 md:space-y-2">
-                        {/* Row 1 */}
-                        <ComparisonRow
-                            icon={<Clock size={18} />}
-                            criterion="Time to Market"
-                            rayo="4 - 6 Settimane"
-                            inHouse="6 - 12 Mesi"
-                            delay={0}
-                        />
-                        {/* Row 2 */}
-                        <ComparisonRow
-                            icon={<DollarSign size={18} />}
-                            criterion="Costo Operativo"
-                            rayo="Preventivo su misura, zero costi fissi"
-                            inHouse="Costi fissi elevati (team interno)"
-                            delay={0.1}
-                        />
-                        {/* Row 3 */}
-                        <ComparisonRow
-                            icon={<Code2 size={18} />}
-                            criterion="Livello Expertise"
-                            rayo="Ingegneri senior specializzati in RAG, LLM e agenti"
-                            inHouse="Generalist, learning curve lunga"
-                            delay={0.2}
-                        />
-                        {/* Row 4 */}
-                        <ComparisonRow
-                            icon={<ShieldAlert size={18} />}
-                            criterion="Garanzia & Rischio"
-                            rayo="PoC Gratuito (Zero Rischio)"
-                            inHouse="Rischio e costi di fallimento elevati"
-                            highlightRayo={true}
-                            delay={0.3}
-                        />
-                    </div>
-                </div>
+                </motion.div>
             </div>
         </section>
-    );
-}
-
-function ComparisonRow({ icon, criterion, rayo, inHouse, highlightRayo = false, delay }: any) {
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay, duration: 0.4 }}
-            className="flex flex-col md:grid md:grid-cols-12 gap-4 items-start md:items-center p-6 rounded-2xl bg-foreground/[0.02] md:bg-transparent hover:bg-foreground/[0.03] transition-colors duration-300 border border-transparent hover:border-foreground/5"
-        >
-            <div className="w-full md:col-span-4 flex items-center gap-4 mb-2 md:mb-0">
-                <div className="p-3 bg-foreground/5 rounded-xl text-foreground/60 group-hover:text-primary group-hover:bg-primary/10 transition-colors shrink-0">
-                    {icon}
-                </div>
-                <span className="font-medium text-lg md:text-base">{criterion}</span>
-            </div>
-
-            <div className="w-full md:col-span-4 flex flex-row md:justify-center items-center justify-between md:text-center">
-                <span className="md:hidden text-xs font-mono uppercase text-primary font-bold mr-4">Rayo</span>
-                <div className={`inline-block px-4 py-2 rounded-lg font-bold transition-all duration-300 ${highlightRayo ? 'bg-primary/10 text-primary scale-105 shadow-sm' : 'text-foreground group-hover:text-primary'} text-sm md:text-base`}>
-                    {rayo}
-                </div>
-            </div>
-
-            <div className="w-full md:col-span-4 flex flex-row md:justify-center items-center justify-between md:text-center font-light text-foreground/50 group-hover:text-foreground/70 transition-colors pt-2 md:pt-0 border-t border-foreground/5 md:border-0 mt-2 md:mt-0">
-                <span className="md:hidden text-xs font-mono uppercase text-foreground/40 mr-4">In-House</span>
-                <span className="text-sm md:text-base">{inHouse}</span>
-            </div>
-        </motion.div>
     );
 }

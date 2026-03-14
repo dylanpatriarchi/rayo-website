@@ -2,30 +2,35 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import clsx from "clsx";
 
 const services = [
     {
         id: "01",
         title: "ENTERPRISE RAG",
+        href: "/servizi/rag",
         description: "Il tuo 'Cervello Aziendale' centralizzato. Ricerca semantica istantanea su milioni di documenti. Zero perdite di tempo.",
         tags: ["Knowledge Graph", "Vector DB", "Zero-Hallucination"]
     },
     {
         id: "02",
         title: "LLM FINE-TUNING",
+        href: "/servizi/addestramento-llm",
         description: "Addestriamo l'AI a pensare come il tuo miglior dipendente. Modelli verticali proprietari (Llama 3, Mistral) sui tuoi dati.",
         tags: ["Data Privacy", "Custom Models", "High Accuracy"]
     },
     {
         id: "03",
         title: "AI AGENTS",
+        href: "/servizi/agenti-ai",
         description: "Forza lavoro digitale attiva 24/7. Agenti autonomi che eseguono task complessi in Customer Service, Sales e Operations.",
         tags: ["Autonomy", "Multi-Agent", "Workflow Automation"]
     },
     {
         id: "04",
         title: "TECH ADVISORY",
+        href: "/servizi/consulenza-tecnica",
         description: "CTO as a Service. Guidiamo la tua trasformazione digitale evitando sprechi di budget e debiti tecnici.",
         tags: ["Strategy", "Audit", "Architecture"]
     }
@@ -50,13 +55,12 @@ export default function Services() {
                             </p>
                         </div>
 
-                        <div className="flex flex-col items-end gap-3">
-                            {/* Premium Badge */}
-                            <div className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-full backdrop-blur-sm">
-                                <span className="text-lg">🛡️</span>
+                        <div className="flex flex-col items-start md:items-end gap-3">
+                            <div className="flex items-center gap-3 px-5 py-2.5 border border-primary/20 rounded-full">
+                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                                 <div className="flex flex-col">
-                                    <span className="text-[10px] uppercase font-bold text-primary/60 tracking-wider">Garanzia Rayo</span>
-                                    <span className="text-sm font-bold text-primary">PoC Gratuito: Soddisfatti o Rimborsati</span>
+                                    <span className="text-[10px] uppercase font-bold text-primary tracking-widest">Garanzia Rayo</span>
+                                    <span className="text-xs font-medium text-foreground/60">PoC Gratuito — soddisfatti o rimborsati</span>
                                 </div>
                             </div>
                         </div>
@@ -109,12 +113,18 @@ export default function Services() {
                                                 <p className="text-lg md:text-xl text-foreground font-light leading-relaxed mb-6">
                                                     {service.description}
                                                 </p>
-                                                <div className="flex flex-wrap gap-2">
+                                                <div className="flex flex-wrap items-center gap-3">
                                                     {service.tags.map(tag => (
-                                                        <span key={tag} className="text-[10px] uppercase tracking-wider font-bold text-foreground/50 bg-foreground/5 px-2 py-1 rounded-sm">
+                                                        <span key={tag} className="text-[10px] uppercase tracking-wider font-bold text-foreground/40 bg-foreground/5 px-3 py-1.5 rounded-full">
                                                             {tag}
                                                         </span>
                                                     ))}
+                                                    <Link
+                                                        href={service.href}
+                                                        className="ml-auto text-sm font-bold text-primary hover:underline underline-offset-4"
+                                                    >
+                                                        Scopri di più →
+                                                    </Link>
                                                 </div>
                                             </div>
                                         </motion.div>
