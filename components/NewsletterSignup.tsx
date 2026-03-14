@@ -4,19 +4,21 @@ import { useState } from "react";
 
 export default function NewsletterSignup() {
     const [email, setEmail] = useState("");
+    const [consent, setConsent] = useState(false);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (!consent) return;
         setLoading(true);
         setError(false);
         try {
             const res = await fetch("/api/newsletter", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email }),
+                body: JSON.stringify({ email, consent: true }),
             });
             if (res.ok) { setSuccess(true); setEmail(""); }
             else setError(true);
@@ -39,7 +41,7 @@ export default function NewsletterSignup() {
     }
 
     return (
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-10">
             {/* Left: copy */}
             <div className="flex-1 max-w-sm">
                 <p className="text-xs font-bold uppercase tracking-widest text-foreground/30 mb-4">Newsletter</p>
@@ -53,7 +55,7 @@ export default function NewsletterSignup() {
 
             {/* Right: form */}
             <form onSubmit={handleSubmit} className="flex-1 max-w-md w-full">
-                <div className="flex gap-0 border border-foreground/15 rounded-full overflow-hidden focus-within:border-foreground/40 transition-colors">
+                <div className="flex gap-0 border border-foreground/15 rounded-full overflow-hidden focus-within:border-foreground/40 transition-colors mb-4">
                     <input
                         type="email"
                         required
@@ -64,19 +66,42 @@ export default function NewsletterSignup() {
                     />
                     <button
                         type="submit"
-                        disabled={loading}
-                        className="bg-foreground text-background text-sm font-bold px-7 py-4 hover:bg-foreground/85 transition-colors disabled:opacity-60 whitespace-nowrap rounded-full"
+                        disabled={loading || !consent}
+                        className="bg-foreground text-background text-sm font-bold px-7 py-4 hover:bg-foreground/85 transition-colors disabled:opacity-40 whitespace-nowrap rounded-full"
                     >
                         {loading ? "..." : "Iscriviti"}
                     </button>
                 </div>
+
+                {/* GDPR Consent — obbligatorio per legge */}
+                <label className="flex items-start gap-3 cursor-pointer group px-1">
+                    <div className="relative flex shrink-0 mt-0.5">
+                        <input
+                            type="checkbox"
+                            checked={consent}
+                            onChange={(e) => setConsent(e.target.checked)}
+                            required
+                            className="peer sr-only"
+                        />
+                        <div className="w-4 h-4 border border-foreground/30 rounded-sm flex items-center justify-center group-hover:border-foreground/60 peer-checked:border-primary peer-checked:bg-primary transition-colors">
+                            {consent && (
+                                <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 12 12" stroke="currentColor" strokeWidth={2.5}>
+                                    <path d="M2 6l3 3 5-5" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            )}
+                        </div>
+                    </div>
+                    <span className="text-xs text-foreground/40 font-light leading-snug">
+                        Acconsento a ricevere comunicazioni commerciali e informative via email da Rayo Consulting (newsletter).
+                        Potrò disiscrivermi in qualsiasi momento con un click. I dati saranno trattati secondo la{" "}
+                        <a href="/privacy-policy" className="underline hover:text-foreground/70 transition-colors">Privacy Policy</a>.
+                        Il consenso è libero e revocabile.
+                    </span>
+                </label>
+
                 {error && (
-                    <p className="mt-3 text-xs text-red-500 font-light pl-4">Qualcosa è andato storto. Riprova.</p>
+                    <p className="mt-3 text-xs text-red-500 font-light pl-1">Qualcosa è andato storto. Riprova.</p>
                 )}
-                <p className="mt-3 text-xs text-foreground/30 font-light pl-4">
-                    Disiscriviti quando vuoi.{" "}
-                    <a href="/privacy-policy" className="underline hover:text-foreground/50 transition-colors">Privacy Policy</a>.
-                </p>
             </form>
         </div>
     );

@@ -78,8 +78,7 @@ export default function StatsSection() {
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.1, duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
                             className={[
-                                "flex flex-col justify-between py-10 px-2 md:px-10 group",
-                                "first:pl-0 last:pr-0",
+                                "flex flex-col justify-between py-8 px-3 md:px-8 group",
                                 i < stats.length - 1 ? "border-r border-foreground/8" : "",
                                 i < 2 ? "border-b border-foreground/8 md:border-b-0" : "",
                             ].filter(Boolean).join(" ")}
@@ -90,7 +89,7 @@ export default function StatsSection() {
                                 </span>
                             )}
                             <div className="flex items-baseline gap-0 leading-none mb-5">
-                                <span className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-foreground group-hover:text-primary transition-colors duration-500">
+                                <span className="text-4xl md:text-5xl font-bold tracking-tighter text-foreground group-hover:text-primary transition-colors duration-500">
                                     <AnimatedNumber value={stat.value} prefix={stat.prefix} suffix={stat.suffix} decimals={stat.decimals} />
                                 </span>
                             </div>
